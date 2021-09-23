@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Switch, BrowserRouter as Router } from "react-router-dom";
+import { Switch, Redirect, BrowserRouter as Router } from "react-router-dom";
 import { connect } from "react-redux";
 
 // Import Routes all
@@ -17,6 +17,8 @@ import NonAuthLayout from "./components/NonAuthLayout";
 
 // Import scss
 import "./assets/scss/theme.scss";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 // import fakeBackend from "./helpers/AuthType/fakeBackend";
 
@@ -37,6 +39,13 @@ const App = (props) => {
     }
     return layoutCls;
   }
+
+  useEffect(() => {
+    if (cookies.get("rememberMe") === "false") {
+      localStorage.removeItem("authUser");
+      <Redirect to={{ pathname: "/login", state: { from: props.location } }} />;
+    }
+  }, []);
 
   const Layout = getLayout();
   return (

@@ -12,15 +12,3 @@ export * from "./users/actions";
 export * from "./privilages/actions";
 export * from "./branches/actions";
 export * from "./companies/actions";
-export * from "./categories/actions";
-export * from "./subcategories/actions";
-export * from "./thirdcategories/actions";
-export * from "./sliders/actions";
-
-// Brands
-
-export * from "./brands/actions";
-// unit
-export * from "./unit/actions";
-// tax
-export * from "./tax/actions";

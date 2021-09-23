@@ -4,6 +4,9 @@ import {
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
   API_ERROR,
+  CHECK_AUTH,
+  CHECK_AUTH_SUCCESS,
+  CHECK_AUTH_FAILURE,
 } from "./actionTypes";
 
 export const loginUser = (user, history) => {
@@ -16,6 +19,27 @@ export const loginUser = (user, history) => {
 export const loginSuccess = (user) => {
   return {
     type: LOGIN_SUCCESS,
+    payload: user,
+  };
+};
+
+export const checkAuth = (history) => {
+  return {
+    type: CHECK_AUTH,
+    payload: history,
+  };
+};
+
+export const checkAuthSuccess = (user) => {
+  return {
+    type: CHECK_AUTH_SUCCESS,
+    payload: user,
+  };
+};
+
+export const checkAuthFailure = (user) => {
+  return {
+    type: CHECK_AUTH_FAILURE,
     payload: user,
   };
 };

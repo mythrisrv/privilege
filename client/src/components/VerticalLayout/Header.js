@@ -73,6 +73,12 @@ const Header = (props) => {
   }
 
   function tToggle() {
+    if (!isMobile) {
+      var body = document.body;
+      body.classList.toggle("vertical-collpsed");
+      body.classList.toggle("sidebar-enable");
+    }
+
     props.toggleLeftmenu(!props.leftMenu);
     if (props.leftSideBarType === "default") {
       props.changeSidebarType("condensed", isMobile);

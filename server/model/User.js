@@ -4,6 +4,11 @@ const bcrypt = require("bcryptjs");
 
 let userSchema = new Schema(
   {
+    userId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     firstName: {
       type: String,
       required: true,
@@ -26,9 +31,40 @@ let userSchema = new Schema(
       required: true,
       unique: true,
     },
+    dob: {
+      type: String,
+    },
+    privilage: {
+      type: Schema.Types.ObjectId,
+      ref: "privilage",
+    },
+    devision: {
+      type: Number,
+    },
+    company: {
+      type: Schema.Types.ObjectId,
+      ref: "company",
+    },
+    branch: {
+      type: Schema.Types.ObjectId,
+      ref: "branch",
+    },
+    address: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
+    },
+    browserToken: {
+      type: String,
+    },
+    appToken: {
+      type: String,
+    },
+    superAdmin: {
+      type: Boolean,
+      default: false,
     },
     isListed: {
       type: Boolean,

@@ -1,12 +1,3 @@
-/*
-Template Name: Minible - Admin & Dashboard Template
-Author: Themesbrand
-Version: 2.0.0
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
-File: Main Css Dark File
-*/
-
 //Fonts
 @import "custom/fonts/fonts";
 
@@ -38,7 +29,6 @@ File: Main Css Dark File
 @import "custom/components/demos";
 @import "custom/components/print";
 
-
 // Plugins
 @import "custom/plugins/custom-scrollbar";
 @import "custom/plugins/calendar";
@@ -46,7 +36,7 @@ File: Main Css Dark File
 @import "custom/plugins/range-slider";
 @import "custom/plugins/sweatalert2";
 @import "custom/plugins/rating";
-@import "custom/plugins/toastr";;
+@import "custom/plugins/toastr";
 @import "custom/plugins/parsley";
 @import "custom/plugins/select2";
 @import "custom/plugins/switch";

@@ -27,6 +27,7 @@ export async function get(url, config) {
 }
 
 export async function post(url, data, config) {
+  console.log("ch");
   return axiosApi
     .post(
       url,
@@ -42,6 +43,7 @@ export async function post(url, data, config) {
 }
 
 export async function put(url, data, config) {
+  console.log(data, "datauser");
   return axiosApi
     .put(
       url,

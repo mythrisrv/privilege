@@ -16,15 +16,22 @@ import { loginUser, apiError } from "../../store/actions";
 // import images
 import logo from "../../assets/images/logo-dark.png";
 import logolight from "../../assets/images/logo-light.png";
+import { checkAuth } from "../../store/actions";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const { loading, error, loginResponse } = useSelector((state) => state.Login);
 
+  useEffect(() => {
+    props.checkAuth(props.history);
+  }, []);
+
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
+    console.log(values, "values");
     props.loginUser(values, props.history);
   };
 
@@ -115,11 +122,14 @@ const Login = (props) => {
 
                         <Row className="mt-4">
                           <Col lg={6}>
-                            <div className="form-check">
-                              <input
+                            <div style={{ display: "flex" }}>
+                              <AvField
                                 type="checkbox"
                                 className="form-check-input"
                                 id="customControlInline"
+                                name="rememberMe"
+                                value={rememberMe}
+                                onChange={() => setRememberMe(!rememberMe)}
                               />
                               <label
                                 className="form-check-label"
@@ -176,11 +186,12 @@ const mapStateToProps = (state) => {
 };
 
 export default withRouter(
-  connect(mapStateToProps, { loginUser, apiError })(Login)
+  connect(mapStateToProps, { loginUser, checkAuth, apiError })(Login)
 );
 
 Login.propTypes = {
   error: PropTypes.any,
   history: PropTypes.object,
   loginUser: PropTypes.func,
+  checkAuth: PropTypes.func,
 };

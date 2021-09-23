@@ -53,7 +53,6 @@ const User = (state = INIT_STATE, action) => {
 
     case ADD_USER_SUCCESS:
       let newUers = [...state.users, action.payload.data];
-
       return {
         ...state,
         addingUser: false,
@@ -80,8 +79,8 @@ const User = (state = INIT_STATE, action) => {
       };
 
     case DELETE_USER_SUCCESS:
-      let newUsers = state.users.filter((user) => {
-        return user._id != state.userIdToBeDeleted;
+      let newUsers = state.users.filter((item) => {
+        return item._id != state.userIdToBeDeleted;
       });
       return {
         ...state,
@@ -114,11 +113,11 @@ const User = (state = INIT_STATE, action) => {
       };
 
     case UPDATE_USER_SUCCESS:
-      let newUsers1 = state.users.filter((user) => {
-        if (user._id == state.user._id) {
+      let newUsers1 = state.users.map((item) => {
+        if (item._id == state.user._id) {
           return action.payload.data;
         } else {
-          return user;
+          return item;
         }
       });
       return {

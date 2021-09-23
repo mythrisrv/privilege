@@ -7,14 +7,6 @@ import User from "../pages/User/index";
 
 import Company from "../pages/MasterSettings/Company";
 import Privilage from "../pages/MasterSettings/Privilage";
-import Category from "../pages/Products/Category";
-import subCategory from "../pages/Products/subCategory";
-import Thirdcategory from "../pages/Products/Thirdcategory";
-import Slider from "../pages/Website/Slider";
-
-import Brands from "../pages/Products/Brands"; 
-import Unit from "../pages/Products/Unit";
-import Tax from "../pages/Products/Tax";
 
 //Pages
 import PagesStarter from "../pages/Utility/pages-starter";
@@ -109,15 +101,6 @@ const userRoutes = [
 
   { path: "/company", component: Company },
   { path: "/privilage", component: Privilage },
-   { path: "/category", component: Category},
-   { path: "/subcategory", component: subCategory},
-   { path: "/thirdcategory", component: Thirdcategory},
-   { path: "/slider", component: Slider},
-   
-
-  { path: "/brands", component: Brands},
-  { path: "/unit", component: Unit},
-  { path: "/tax", component : Tax},
 
   //Utility
   { path: "/pages-starter", component: PagesStarter },
@@ -210,5 +193,4 @@ const authRoutes = [
   { path: "/auth-lock-screen", component: LockScreen },
 ];
 
-export { userRoutes, authRoutes  }
-
+export { userRoutes, authRoutes };

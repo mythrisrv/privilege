@@ -1,38 +1,40 @@
 let models = require("../model");
 const jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
-const config = require("../../config")[env];
+const config = require("../config")[env];
 
 registerUser = (req) => {
+  console.log(req.body, "i");
   return new Promise(async (resolve, reject) => {
     try {
-      let { firstName, lastName, email, username, mobile, password } = req.body;
+      let { email, username, mobile, password } = req.body;
       userExists = await models.User.findOne({
         $or: [{ email: email }, { mobile: mobile }, { username: username }],
       });
+
       if (userExists) {
         reject({
-          message: "Email/Password already exist",
+          message: "Email/Mobile/Username already exist",
         });
       } else {
-        let user = new models.User();
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.email = email;
-        user.username = username;
-        user.mobile = mobile;
+        let numberOfUsers = await models.User.countDocuments();
+        let user = new models.User(req.body);
+        user.userId = numberOfUsers + 1;
         user.password = user.generatePasswordHash(password);
         user = await user.save();
-        user = user;
         user.token = jwt.sign(
           {
             _id: user._id,
           },
           config.secret,
           {
-            expiresIn: "10d",
+            expiresIn: "30m",
           }
         );
+        user = models.User.findById(user._id)
+          .populate("privilage")
+          .populate("company")
+          .populate("branch");
         resolve(user);
       }
     } catch (err) {
@@ -47,10 +49,11 @@ registerUser = (req) => {
 loginUser = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let { username, mobile } = req.body;
+      let { username } = req.body;
 
       let user = await models.User.findOne({
-        $or: [{ username: username }, { mobile: mobile }],
+        $or: [{ username: username }, { mobile: username }],
+        isListed: true,
       });
       // .select(["-password"]);
       if (user) {

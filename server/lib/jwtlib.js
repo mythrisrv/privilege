@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const models = require("../model");
-const config = require("../../config");
+const env = process.env.NODE_ENV || "development";
+const config = require("../config")[env];
 const _ = require("lodash");
 
 let verifyToken = (token, next) => {
@@ -25,39 +26,44 @@ let tokenValidation = async (req, res, next) => {
     req.token = token;
     try {
       const decodedToken = verifyToken(req.token, next);
-      console.log(decodedToken);
       if (!decodedToken) {
         res.status(400).json({
           status: 400,
           message: "User does not have  token",
         });
       } else if (decodedToken.expired) {
-        let decoded = jwt.decode(token);
+        // let decoded = jwt.decode(token);
 
-        let user = await models.User.findOne({
-          _id: decoded._id,
+        // let user = await models.User.findOne({
+        //   _id: decoded._id,
+        // });
+
+        // user.token = jwt.sign(
+        //   {
+        //     id: user._id,
+        //   },
+        //   config.secret,
+        //   {
+        //     expiresIn: "20s",
+        //   }
+        // );
+        // req.user = { user, userType: decoded.userType };
+        // next();
+        res.status(400).json({
+          status: 400,
+          message: "Token expired",
         });
-
-        user.token = jwt.sign(
-          {
-            id: user._id,
-          },
-          config.secret,
-          {
-            expiresIn: "20s",
-          }
-        );
-        req.user = { user, userType: decoded.userType };
-        next();
       } else {
         let user = await models.User.findOne({
           _id: decodedToken._id,
         });
         user.token = req.token;
-        req.user = _.pick(user, models.User.returnable);
+        req.user = user;
         next();
       }
     } catch (err) {
+      console.log(err);
+
       res.status(400).json({
         status: 400,
         message: "Error with your token",

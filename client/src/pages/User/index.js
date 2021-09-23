@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
-//SweetAlert
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
@@ -33,12 +32,12 @@ const Users = (props) => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [userObject, setUserObject] = useState({});
-  const [usersTemp, setUsersTemp] = useState([]);
-
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [usersForTable, setUsersForTable] = useState([]);
+
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -81,6 +80,9 @@ const Users = (props) => {
   useEffect(() => {
     if (addUserResponse.type === "success") {
       toastr.success(addUserResponse.message);
+      setSelectedPrivilage({});
+      setSelectedCompany(null);
+      setSelectedBranch(null);
     } else if (addUserResponse.type === "failure") {
       toastr.error(error.data.message, addUserResponse.message);
     }
@@ -89,6 +91,7 @@ const Users = (props) => {
   useEffect(() => {
     if (deleteUserResponse.type === "success") {
       toastr.success(deleteUserResponse.message);
+      setUserIdToBeDeleted(null);
     } else if (deleteUserResponse.type === "failure") {
       toastr.error(error.data.message, deleteUserResponse.message);
     }
@@ -99,7 +102,6 @@ const Users = (props) => {
       setShowModal(false);
       setUserIdToBeUpdated(null);
       setPasswordObject({});
-      setUserIdToBeUpdated(null);
       toastr.success(updateUserResponse.message);
     } else if (updateUserResponse.type === "failure") {
       toastr.error(error.data.message, updateUserResponse.message);
@@ -107,34 +109,30 @@ const Users = (props) => {
   }, [updateUserResponse]);
 
   let preUpdateUser = (item) => {
-    users.map((user) => {
-      if (user._id == item._id) {
-        if (user.privilage) {
-          let privilage = {
-            label: user.privilage.name,
-            value: user.privilage._id,
-          };
-          handleSelectedPrivilage(privilage);
-        }
-        if (user.company) {
-          let company = {
-            label: user.company.name,
-            value: user.company._id,
-          };
-          handleSelectedCompany(company);
-        }
-        if (user.branch) {
-          let branch = {
-            label: user.branch.name,
-            value: user.branch._id,
-          };
-          handleSelectedBranch(branch);
-        }
-      }
-    });
+    if (item.privilage) {
+      let privilage = {
+        label: item.privilage.name,
+        value: item.privilage._id,
+      };
+      handleSelectedPrivilage(privilage);
+    }
+    if (item.company) {
+      let company = {
+        label: item.company.name,
+        value: item.company._id,
+      };
+      handleSelectedCompany(company);
+    }
+    if (item.branch) {
+      let branch = {
+        label: item.branch.name,
+        value: item.branch._id,
+      };
+      handleSelectedBranch(branch);
+    }
 
     setUserIdToBeUpdated(item._id);
-    setUserObject({ ...item, password: "" });
+    setUserObject({ ...item, password: null });
   };
 
   let preUpdateUserPassword = (item) => {
@@ -143,9 +141,9 @@ const Users = (props) => {
   };
 
   useEffect(() => {
-    let usersDuplicate = JSON.parse(JSON.stringify(users));
     let userData = [];
-    usersDuplicate.map((item, index) => {
+
+    users.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
@@ -174,19 +172,18 @@ const Users = (props) => {
               setUserIdToBeDeleted(item._id);
               setConfirmDeleteAlert(true);
             }}
-            
           ></i>
-        
         </div>
       );
       item.id = index + 1;
-      item.name = <div>{`${item.firstName} ${item.lastName}`}</div>;
-      item.privilage = <div>{item.privilage && item.privilage.name}</div>;
-      item.company = <div>{item.company && item.company.name}</div>;
-      item.branch = <div>{item.branch && item.branch.name}</div>;
+      item.name1 = `${item.firstName} ${item.lastName}`;
+
+      item.privilage1 = item.privilage && item.privilage.name;
+      item.company1 = item.company && item.company.name;
+      item.branch1 = item.branch && item.branch.name;
       userData.push(item);
     });
-    setUsersTemp(userData);
+    setUsersForTable(userData);
   }, [users]);
 
   const data = {
@@ -199,7 +196,7 @@ const Users = (props) => {
       },
       {
         label: "Name",
-        field: "name",
+        field: "name1",
         sort: "asc",
         width: 400,
       },
@@ -223,19 +220,19 @@ const Users = (props) => {
       },
       {
         label: "Privilage",
-        field: "privilage",
+        field: "privilage1",
         sort: "asc",
         width: 150,
       },
       {
         label: "Company",
-        field: "company",
+        field: "company1",
         sort: "asc",
         width: 150,
       },
       {
         label: "Branch",
-        field: "branch",
+        field: "branch1",
         sort: "asc",
         width: 100,
       },
@@ -245,7 +242,7 @@ const Users = (props) => {
         width: 300,
       },
     ],
-    rows: usersTemp,
+    rows: usersForTable,
   };
 
   let privilagesOptionsData =
@@ -303,17 +300,29 @@ const Users = (props) => {
   }
 
   function handleSelectedPrivilage(value) {
+    let newValue = {
+      name: value.label,
+      _id: value.value,
+    };
     setSelectedPrivilage(value);
-    setUserObject({ ...userObject, privilage: value.value });
+    setUserObject({ ...userObject, privilage: newValue });
   }
 
   function handleSelectedCompany(value) {
+    let newValue = {
+      name: value.label,
+      _id: value.value,
+    };
     setSelectedCompany(value);
-    setUserObject({ ...userObject, company: value.value });
+    setUserObject({ ...userObject, company: newValue });
   }
   function handleSelectedBranch(value) {
+    let newValue = {
+      name: value.label,
+      _id: value.value,
+    };
     setSelectedBranch(value);
-    setUserObject({ ...userObject, branch: value.value });
+    setUserObject({ ...userObject, branch: newValue });
   }
 
   function handleChangePassword(e) {
@@ -322,14 +331,12 @@ const Users = (props) => {
     setPasswordObject({ ...passwordObject, [name]: value });
   }
 
-  // handleValidSubmit
   const handleValidSubmit = (event, values) => {
     userIdTobeUpdated
       ? dispatch(updateUser(userObject))
       : dispatch(addUser(userObject));
   };
 
-  // handleValidSubmit
   const handleValidSubmitPassword = (event, values) => {
     if (passwordObject.password == passwordObject.confirmPassword) {
       let item = {
@@ -346,8 +353,6 @@ const Users = (props) => {
     setShowModal(false);
     setUserIdToBeUpdated(null);
   };
-
-  console.log(userObject, "UO");
 
   return (
     <React.Fragment>
@@ -603,24 +608,6 @@ const Users = (props) => {
                       )}
                     </Row>
 
-                    {/* <p
-                      style={{
-                        color:
-                          addUserResponse.type === "success" ? "green" : "red",
-                      }}
-                    >
-                      {addUserResponse.message}
-                    </p>
-                    {error.data && error.data.message ? (
-                      <li
-                        style={{
-                          color: "red",
-                          marginBottom: "1rem",
-                        }}
-                      >
-                        {error.data.message}
-                      </li>
-                    ) : null} */}
                     {userIdTobeUpdated ? (
                       <Button
                         color="primary"
@@ -665,10 +652,7 @@ const Users = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  // const { error } = state.Users;
-  // return { error };
-};
+const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(Users));
 
@@ -676,6 +660,3 @@ Users.propTypes = {
   error: PropTypes.any,
   users: PropTypes.array,
 };
-
-
-

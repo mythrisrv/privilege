@@ -13,14 +13,6 @@ import users from "./users/reducer";
 import privilages from "./privilages/reducer";
 import companies from "./companies/reducer";
 import branches from "./branches/reducer";
-import categories from "./categories/reducer";
-import subcategories from "./subcategories/reducer";
-import thirdcategories from "./thirdcategories/reducer";
-import sliders from "./sliders/reducer";
-import brands from "./brands/reducer";
-import units from "./unit/reducer";
-import taxes from "./tax/reducer";
-
 
 const rootReducer = combineReducers({
   // public
@@ -33,13 +25,6 @@ const rootReducer = combineReducers({
   privilages,
   companies,
   branches,
-  categories,
-  subcategories,
-  thirdcategories,
-  sliders,
-  brands,
-  units,
-  taxes
 });
 
 export default rootReducer;

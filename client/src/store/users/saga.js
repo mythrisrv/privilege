@@ -58,7 +58,22 @@ function* onAddUser({ payload: user }) {
 }
 
 function* onUpdateUser({ payload: user }) {
+  delete user.name1;
+  delete user.privilage1;
+  delete user.company1;
+  delete user.branch1;
+  delete user.action;
   console.log(user);
+  if (user.privilage) {
+    user.privilage = user.privilage._id;
+  }
+  if (user.company) {
+    user.company = user.company._id;
+  }
+  if (user.branch) {
+    user.branch = user.branch._id;
+  }
+
   try {
     const response = yield call(updateUser, user);
     yield put(updateUserSuccess(response));
