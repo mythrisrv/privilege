@@ -9,7 +9,7 @@ const Footer = () => {
           <Row>
             <Col sm={6}>
               <p>
-                ©{new Date().getFullYear()} Cococa Ecommerce Private Limited.
+                ©{new Date().getFullYear()} Hazel Green.
               </p>
             </Col>
             <Col sm={6}>

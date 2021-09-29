@@ -81,7 +81,7 @@ const Login = (props) => {
                     <div className="text-center mt-2">
                       <h5>Welcome Back !</h5>
                       <p className="text-muted">
-                        Sign in to continue to Cocoa.
+                        Sign in to continue to Hazel Green.
                       </p>
                     </div>
                     <div className="p-2 mt-4">
@@ -164,8 +164,7 @@ const Login = (props) => {
                 </Card>
                 <div className="mt-5 text-center text-dark">
                   <p>
-                    ©{new Date().getFullYear()} Cococa Ecommerce Private
-                    Limited.
+                    ©{new Date().getFullYear()} Hazel Green.
                     <a href="https://srvinfotech.com" target="_blank">
                       &nbsp;Powered by SRV InfoTech
                     </a>
