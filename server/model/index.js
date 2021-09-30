@@ -3,6 +3,8 @@ const Privilage = require("./Privilage");
 const Company = require("./Company");
 const Branch = require("./Branch");
 const Supplier = require("./Supplier");
+const District= require("./Districts");
+
 
 module.exports = {
   User,
@@ -10,4 +12,6 @@ module.exports = {
   Company,
   Branch,
   Supplier,
+  District,
+ 
 };
