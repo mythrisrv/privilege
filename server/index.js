@@ -19,8 +19,6 @@ const privilage = require("./routes/privilage");
 const supplier = require("./routes/supplier");
 const common = require("./routes/common");
 const auth = require("./routes/auth");
-const district = require("./routes/district");
-
 
 app.use(logger("dev"));
 
@@ -52,8 +50,6 @@ app.use("/supplier", supplier);
 app.use("/common", common);
 
 app.use("/user", user);
-app.use("/district", district);
-
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
