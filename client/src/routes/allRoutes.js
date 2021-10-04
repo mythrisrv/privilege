@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 // Dashboard
 import Dashboard from "../pages/Dashboard/index";
 import User from "../pages/User/index";
+import Customer from "../pages/Customers/index";
+
 
 import Company from "../pages/MasterSettings/Company";
 import Privilage from "../pages/MasterSettings/Privilage";
@@ -94,10 +96,18 @@ import LockScreen from "../pages/AuthenticationInner/auth-lock-screen";
 // Profile
 import UserProfile from "../pages/Authentication/user-profile";
 
+// DIstrict
+import District from "../pages/Manage/District";
+
+// LocalBody
+import Localbody from "../pages/Manage/Localbody";
+// ward
+import Ward from "../pages/Manage/Ward";
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   { path: "/user", component: User },
+  { path: "/customer", component: Customer },
 
   { path: "/company", component: Company },
   { path: "/privilage", component: Privilage },
@@ -170,6 +180,11 @@ const userRoutes = [
 
   // //profile
   { path: "/profile", component: UserProfile },
+
+   // //manage
+   { path: "/District", component: District },
+   { path: "/Localbody", component: Localbody },
+   { path: "/Ward", component: Ward },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

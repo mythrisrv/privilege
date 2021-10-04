@@ -108,6 +108,21 @@ const SidebarContent = (props) => {
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-user"></i>
+                <span>{props.t("Customer")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/customer">
+                    <i className="uil-plus"></i>
+                    {props.t("Add Customer")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
                 <span>{props.t("User")}</span>
               </Link>
               <ul className="sub-menu">
@@ -175,6 +190,45 @@ const SidebarContent = (props) => {
                   <Link to="/tables-datatable">
                     <i className="uil-newspaper"></i>
                     {props.t("Rules")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-setting"></i>
+                <span>{props.t("Manage")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/district">
+                    <i className="uil-plus"></i>
+                    {props.t("District")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/localbody">
+                    <i className="uil-plus"></i>
+                    {props.t("Local Body")}
+                  </Link>
+                </li>
+                <li>-
+                  <Link to="/ward">
+                    <i className="uil-plus"></i>
+                    {props.t("Ward")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/group">
+                    <i className="uil-plus"></i>
+                    {props.t("Group")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/group">
+                    <i className="uil-plus"></i>
+                    {props.t("Customer category")}
                   </Link>
                 </li>
               </ul>
