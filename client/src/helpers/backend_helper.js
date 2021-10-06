@@ -38,40 +38,6 @@ export const getUser = (userId) => get(url.GET_USER, userId);
 export const updateUser = (user) => put(`${url.UPDATE_USER}/${user._id}`, user);
 export const deleteUser = (userId) => del(url.DELETE_USER, userId);
 
-
-// get users
-export const getDistricts = () => get(url.GET_DISTRICTS);
-
-// add user
-export const addDistrict = (district) => post(url.ADD_DISTRICT, district);
-export const getDistrict = (userId) => get(url.GET_DISTRICT, userId);
-export const updateDistrict = (district) => put(`${url.UPDATE_DISTRICT}/${district._id}`, district);
-export const deleteDistrict = (userId) => del(url.DELETE_DISTRICT, userId);
-
-// get wards
-export const getWards  = () => get(url.GET_WARDS);
-
-// add ward
-export const addWard = (ward) => post(url.ADD_WARD, ward);
-export const getWard = (wardId) => get(url.GET_WARD, wardId);
-export const updateWard = (ward) => put(`${url.UPDATE_WARD}/${ward._id}`, ward);
-export const deleteWard = (wardId) => del(url.DELETE_WARD, wardId);
-
-
-// get localbodies
-export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
-
-// add localbodies
-export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
-export const getLocalbody = (localbodyId) => get(url.GET_LOCALBODY, localbodyId);
-export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
-export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
-
-
-
-
-
-
 // get privilages options
 export const getPrivilagesOptions = () => get(url.GET_PRIVILAGES_OPTIONS);
 

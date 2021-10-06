@@ -13,12 +13,6 @@ import users from "./users/reducer";
 import privilages from "./privilages/reducer";
 import companies from "./companies/reducer";
 import branches from "./branches/reducer";
-import districts from "./district/reducer";
-//Ward
-import wards from "./ward/reducer";
-//Localbody
-import localbodies from "./localbody/reducer";
-
 
 const rootReducer = combineReducers({
   // public
@@ -31,9 +25,6 @@ const rootReducer = combineReducers({
   privilages,
   companies,
   branches,
-  districts,
-  wards,
-  localbodies
 });
 
 export default rootReducer;
