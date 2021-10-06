@@ -7,15 +7,14 @@ import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
-  getUsers,
-  addUser,
-  deleteUser,
+  getLocalbodies,
+  addLocalbody,
+  deleteLocalbody,
   apiError,
   getPrivilagesOptions,
   getCompaniesOptions,
   getBranchesOptions,
-  updateUser,
-  //getPrivilagesOptions,
+  updateLocalbody,
 } from "../../../store/actions";
 
 // Redux
@@ -26,19 +25,18 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-// import "./user.scss";
+//import "./district.scss";
 
-const Users = (props) => {
-  //  const [selectedDistrict, setSelectedDistrict] = useState(null);
+const Localbodies = (props) => {
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [userObject, setUserObject] = useState({});
-  const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
-  const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
+  const [localbodyObject, setLocalbodyObject] = useState({});
+  const [localbodyIdTobeUpdated, setLocalbodyIdToBeUpdated] = useState(null);
+  const [localbodyIdToBeDeleted, setLocalbodyIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [localbodysForTable, setLocalbodiesForTable] = useState([]);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -47,77 +45,57 @@ const Users = (props) => {
   });
 
   const {
-    users,
-    addingUser,
-    addUserResponse,
-    deleteUserResponse,
-    updateUserResponse,
+    localbodies,
+    addingLocalbody,
+    addLocalbodyResponse,
+    deleteLocalbodyResponse,
+    updateLocalbodyResponse,
     error,
-  } = useSelector((state) => state.users);
+  } = useSelector((state) => state.localbodies);
 
-  // const districtsOptions = useSelector(
-  //   (state) => state.districts.districtsOptions
-  // );
-
-  const privilagesOptions = useSelector(
-    (state) => state.privilages.privilagesOptions
-  );
-  const companiesOptions = useSelector(
-    (state) => state.companies.companiesOptions
-  );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );
+  
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
+    dispatch(getLocalbodies());
+    
   }, []);
 
-  useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+  
 
   useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
+    if (addLocalbodyResponse.type === "success") {
+      toastr.success(addLocalbodyResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
-      //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
+    } else if (addLocalbodyResponse.type === "failure") {
+      toastr.error(error.data.message, addLocalbodyResponse.message);
     }
-  }, [addUserResponse]);
+  }, [addLocalbodyResponse]);
 
   useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
+    if (deleteLocalbodyResponse.type === "success") {
+      toastr.success(deleteLocalbodyResponse.message);
+      setLocalbodyIdToBeDeleted(null);
+    } else if (deleteLocalbodyResponse.type === "failure") {
+      toastr.error(error.data.message, deleteLocalbodyResponse.message);
     }
-  }, [deleteUserResponse]);
+  }, [deleteLocalbodyResponse]);
 
   useEffect(() => {
-    if (updateUserResponse.type === "success") {
+    if (updateLocalbodyResponse.type === "success") {
       setShowModal(false);
-      setUserIdToBeUpdated(null);
+      setLocalbodyIdToBeUpdated(null);
       setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
+      toastr.success(updateLocalbodyResponse.message);
+    } else if (updateLocalbodyResponse.type === "failure") {
+      toastr.error(error.data.message, updateLocalbodyResponse.message);
     }
-  }, [updateUserResponse]);
+  }, [updateLocalbodyResponse]);
 
-  let preUpdateUser = (item) => {
+  let preUpdateLocalbody = (item) => {
     if (item.privilage) {
       let privilage = {
         label: item.privilage.name,
@@ -140,26 +118,26 @@ const Users = (props) => {
       handleSelectedBranch(branch);
     }
 
-    setUserIdToBeUpdated(item._id);
-    setUserObject({ ...item, password: null });
+    setLocalbodyIdToBeUpdated(item._id);
+    setLocalbodyObject({ ...item, password: null });
   };
 
-  let preUpdateUserPassword = (item) => {
-    setUserIdToBeUpdated(item._id);
+  let preUpdateLocalbodyPassword = (item) => {
+    setLocalbodyIdToBeUpdated(item._id);
     setShowModal(true);
   };
 
   useEffect(() => {
-    let userData = [];
+    let localbodyData = [];
 
-    users.map((item, index) => {
+    localbodies.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
             className="uil-key-skeleton"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              preUpdateUserPassword(item);
+              preUpdateLocalbodyPassword(item);
             }}
           ></i>
           <i
@@ -171,29 +149,24 @@ const Users = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
-              preUpdateUser(item);
+              preUpdateLocalbody(item);
             }}
           ></i>
           <i
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              setUserIdToBeDeleted(item._id);
+              setLocalbodyIdToBeDeleted(item._id);
               setConfirmDeleteAlert(true);
             }}
           ></i>
         </div>
       );
       item.id = index + 1;
-      item.name1 = `${item.firstName} ${item.lastName}`;
-
-      item.privilage1 = item.privilage && item.privilage.name;
-      item.company1 = item.company && item.company.name;
-      item.branch1 = item.branch && item.branch.name;
-      userData.push(item);
+      localbodyData.push(item);
     });
-    setUsersForTable(userData);
-  }, [users]);
+    setLocalbodiesForTable(localbodyData);
+  }, [localbodies]);
 
   const data = {
     columns: [
@@ -204,86 +177,26 @@ const Users = (props) => {
         width: 150,
       },
       {
-        label: "District",
-        field: "district",
+        label: "Localbody Name",
+        field: "localbody_name",
         sort: "asc",
         width: 400,
       },
-      {
-        label: "Local Body Type",
-        field: "localbodytype",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Local Body Name",
-        field: "localbodyname",
-        sort: "asc",
-        width: 200,
-      },
-      
-
       {
         label: "Action",
         field: "action",
         width: 300,
       },
     ],
-    rows: usersForTable,
+    rows: localbodysForTable,
   };
 
-  let privilagesOptionsData =
-    privilagesOptions &&
-    privilagesOptions.data &&
-    privilagesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let companiesOptionsData =
-    companiesOptions &&
-    companiesOptions.data &&
-    companiesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let branchesOptionsData =
-    branchesOptions &&
-    branchesOptions.data &&
-    branchesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
-
-  const privilagesOptionsGroup = [
-    {
-      options: privilagesOptionsData,
-    },
-  ];
-
-  const companiesOptionsGroup = [
-    {
-      options: companiesOptionsData,
-    },
-  ];
-
-  const branchesOptionsGroup = [
-    {
-      options: branchesOptionsData,
-    },
-  ];
-
-  function handleChangeUser(e) {
+  function handleChangeLocalbody(e) {
     let name = e.target.name;
     let value = e.target.value;
-    setUserObject({ ...userObject, [name]: value });
+    setLocalbodyObject({ ...localbodyObject, [name]: value });
   }
 
   function handleSelectedPrivilage(value) {
@@ -292,7 +205,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedPrivilage(value);
-    setUserObject({ ...userObject, privilage: newValue });
+    setLocalbodyObject({ ...localbodyObject, privilage: newValue });
   }
 
   function handleSelectedCompany(value) {
@@ -301,7 +214,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedCompany(value);
-    setUserObject({ ...userObject, company: newValue });
+    setLocalbodyObject({ ...localbodyObject, company: newValue });
   }
   function handleSelectedBranch(value) {
     let newValue = {
@@ -309,7 +222,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedBranch(value);
-    setUserObject({ ...userObject, branch: newValue });
+    setLocalbodyObject({ ...localbodyObject, branch: newValue });
   }
 
   function handleChangePassword(e) {
@@ -319,18 +232,18 @@ const Users = (props) => {
   }
 
   const handleValidSubmit = (event, values) => {
-    userIdTobeUpdated
-      ? dispatch(updateUser(userObject))
-      : dispatch(addUser(userObject));
+    localbodyIdTobeUpdated
+      ? dispatch(updateLocalbody(localbodyObject))
+      : dispatch(addLocalbody(localbodyObject));
   };
 
   const handleValidSubmitPassword = (event, values) => {
     if (passwordObject.password == passwordObject.confirmPassword) {
       let item = {
-        _id: userIdTobeUpdated,
+        _id: localbodyIdTobeUpdated,
         password: passwordObject.password,
       };
-      dispatch(updateUser(item));
+      dispatch(updateLocalbody(item));
     } else {
       toastr.error("Passwords are not matching");
     }
@@ -338,7 +251,7 @@ const Users = (props) => {
 
   let closeModal = () => {
     setShowModal(false);
-    setUserIdToBeUpdated(null);
+    setLocalbodyIdToBeUpdated(null);
   };
 
   return (
@@ -351,7 +264,7 @@ const Users = (props) => {
           confirmBtnBsStyle="success"
           cancelBtnBsStyle="danger"
           onConfirm={() => {
-            dispatch(deleteUser(userIdToBeDeleted));
+            dispatch(deleteLocalbody(localbodyIdToBeDeleted));
             setConfirmDeleteAlert(false);
           }}
           onCancel={() => setConfirmDeleteAlert(false)}
@@ -360,87 +273,10 @@ const Users = (props) => {
         </SweetAlert>
       ) : null}
 
-      <Modal
-        isOpen={showModal}
-        toggle={() => {
-          closeModal();
-        }}
-        centered={true}
-      >
-        <div className="modal-header">
-          <h5 className="modal-title mt-0">Confirmation</h5>
-          <button
-            type="button"
-            onClick={() => {
-              closeModal();
-            }}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <AvForm
-          className="needs-validation"
-          onValidSubmit={(e, v) => {
-            handleValidSubmitPassword(e, v);
-          }}
-        >
-          <div className="modal-body">
-            <Row>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Password</Label>
-                  <AvField
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    errorMessage=" Please provide a valid password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.password}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Confirm Password</Label>
-                  <AvField
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    type="password"
-                    errorMessage=" Please confirm the password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.confirmPassword}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <div className="modal-footer">
-            <button
-              className="btn btn-dark"
-              style={{ marginRight: "1rem" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-            <button className="btn btn-primary" type="submit">
-              Confirm
-            </button>
-          </div>
-        </AvForm>
-      </Modal>
-
+      
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Home" breadcrumbItem="Local body" />
+          <Breadcrumbs title="Home" breadcrumbItem="Manage Localbody" />
           <Row>
             <Col xl="12">
               <Card>
@@ -452,95 +288,47 @@ const Users = (props) => {
                     }}
                   >
                     <Row>
-                      
-                      
-
-                      
-                    
-                      
-                      
-                      <Col md={3}>
-                        <div className="mb-3">
-                          <Label>District</Label>
-                          <Select
-                            name="company"
-                            value={selectedCompany}
-                            onChange={(value) => {
-                              handleSelectedCompany(value);
-                            }}
-                            options={companiesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <div className="mb-3">
-                          <Label>Local Body Type</Label>
-                          <Select
-                            name="branch"
-                            value={selectedBranch}
-                            onChange={(value) => {
-                              handleSelectedBranch(value);
-                            }}
-                            options={branchesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      {userIdTobeUpdated ? null : (
-                        <Col md="3">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom05">Local Body Name</Label>
-                            <AvField
-                              name="password"
-                              placeholder="Password"
-                              type="password"
-                              errorMessage=" Please provide a valid password"
-                              className="form-control"
-                              validate={{ required: { value: true } }}
-                              id="validationCustom05"
-                              value={userObject.password}
-                              onChange={handleChangeUser}
-                            />
-                          </div>
-                        </Col>
-                        
-                      )}
                       <Col md="3">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom05">Short Code</Label>
-                            <AvField
-                              name="password"
-                              placeholder="Password"
-                              type="password"
-                              errorMessage=" Please provide a valid password"
-                              className="form-control"
-                              validate={{ required: { value: true } }}
-                              id="validationCustom05"
-                              value={userObject.password}
-                              onChange={handleChangeUser}
-                            />
-                          </div>
-                        </Col>
-                    </Row>
-
-                    {userIdTobeUpdated ? (
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom01">Localbody Name</Label>
+                          <AvField
+                            name="localbody_name"
+                            placeholder="localbody name"
+                            type="text"
+                            errorMessage="Enter localbody Name"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={localbodyObject.localbody_name}
+                            onChange={handleChangeLocalbody}
+                          />
+                        </div>
+                      </Col>
+                     
+                     <Col>
+                     <div className="mb-3">
+                     {localbodyIdTobeUpdated ? (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingLocalbody ? true : false}
                       >
-                        {addingUser ? "Updating" : "Update"}
+                        {addingLocalbody ? "Updating" : "Update"}
                       </Button>
                     ) : (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingLocalbody ? true : false}
                       >
-                        {addingUser ? "Adding" : "Submit"}
+                        {addingLocalbody ? "Adding" : "Submit"}
                       </Button>
                     )}
+                    </div>
+                     </Col>
+                    </Row>
+
+                   
                   </AvForm>
                 </CardBody>
               </Card>
@@ -570,9 +358,9 @@ const Users = (props) => {
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(Users));
+export default withRouter(connect(mapStateToProps, { apiError })(Localbodies));
 
-Users.propTypes = {
+Localbodies.propTypes = {
   error: PropTypes.any,
-  users: PropTypes.array,
+  localbodys: PropTypes.array,
 };

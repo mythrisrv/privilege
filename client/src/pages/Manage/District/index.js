@@ -7,14 +7,14 @@ import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
-  getUsers,
-  addUser,
-  deleteUser,
+  getDistricts,
+  addDistrict,
+  deleteDistrict,
   apiError,
   getPrivilagesOptions,
   getCompaniesOptions,
   getBranchesOptions,
-  updateUser,
+  updateDistrict,
 } from "../../../store/actions";
 
 // Redux
@@ -25,18 +25,18 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-// import "./user.scss";
+//import "./district.scss";
 
-const Users = (props) => {
+const Districts = (props) => {
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [userObject, setUserObject] = useState({});
-  const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
-  const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
+  const [districtObject, setDistrictObject] = useState({});
+  const [districtIdTobeUpdated, setDistrictIdToBeUpdated] = useState(null);
+  const [districtIdToBeDeleted, setDistrictIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [districtsForTable, setDistrictsForTable] = useState([]);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -45,70 +45,57 @@ const Users = (props) => {
   });
 
   const {
-    users,
-    addingUser,
-    addUserResponse,
-    deleteUserResponse,
-    updateUserResponse,
+    districts,
+    addingDistrict,
+    addDistrictResponse,
+    deleteDistrictResponse,
+    updateDistrictResponse,
     error,
-  } = useSelector((state) => state.users);
+  } = useSelector((state) => state.districts);
 
-  const privilagesOptions = useSelector(
-    (state) => state.privilages.privilagesOptions
-  );
-  const companiesOptions = useSelector(
-    (state) => state.companies.companiesOptions
-  );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );
+  
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
+    dispatch(getDistricts());
+    
   }, []);
 
-  useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+  
 
   useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
+    if (addDistrictResponse.type === "success") {
+      toastr.success(addDistrictResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
+    } else if (addDistrictResponse.type === "failure") {
+      toastr.error(error.data.message, addDistrictResponse.message);
     }
-  }, [addUserResponse]);
+  }, [addDistrictResponse]);
 
   useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
+    if (deleteDistrictResponse.type === "success") {
+      toastr.success(deleteDistrictResponse.message);
+      setDistrictIdToBeDeleted(null);
+    } else if (deleteDistrictResponse.type === "failure") {
+      toastr.error(error.data.message, deleteDistrictResponse.message);
     }
-  }, [deleteUserResponse]);
+  }, [deleteDistrictResponse]);
 
   useEffect(() => {
-    if (updateUserResponse.type === "success") {
+    if (updateDistrictResponse.type === "success") {
       setShowModal(false);
-      setUserIdToBeUpdated(null);
+      setDistrictIdToBeUpdated(null);
       setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
+      toastr.success(updateDistrictResponse.message);
+    } else if (updateDistrictResponse.type === "failure") {
+      toastr.error(error.data.message, updateDistrictResponse.message);
     }
-  }, [updateUserResponse]);
+  }, [updateDistrictResponse]);
 
-  let preUpdateUser = (item) => {
+  let preUpdateDistrict = (item) => {
     if (item.privilage) {
       let privilage = {
         label: item.privilage.name,
@@ -131,26 +118,26 @@ const Users = (props) => {
       handleSelectedBranch(branch);
     }
 
-    setUserIdToBeUpdated(item._id);
-    setUserObject({ ...item, password: null });
+    setDistrictIdToBeUpdated(item._id);
+    setDistrictObject({ ...item, password: null });
   };
 
-  let preUpdateUserPassword = (item) => {
-    setUserIdToBeUpdated(item._id);
+  let preUpdateDistrictPassword = (item) => {
+    setDistrictIdToBeUpdated(item._id);
     setShowModal(true);
   };
 
   useEffect(() => {
-    let userData = [];
+    let districtData = [];
 
-    users.map((item, index) => {
+    districts.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
             className="uil-key-skeleton"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              preUpdateUserPassword(item);
+              preUpdateDistrictPassword(item);
             }}
           ></i>
           <i
@@ -162,121 +149,54 @@ const Users = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
-              preUpdateUser(item);
+              preUpdateDistrict(item);
             }}
           ></i>
           <i
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              setUserIdToBeDeleted(item._id);
+              setDistrictIdToBeDeleted(item._id);
               setConfirmDeleteAlert(true);
             }}
           ></i>
         </div>
       );
       item.id = index + 1;
-      item.name1 = `${item.firstName} ${item.lastName}`;
-
-      item.privilage1 = item.privilage && item.privilage.name;
-      item.company1 = item.company && item.company.name;
-      item.branch1 = item.branch && item.branch.name;
-      userData.push(item);
+      districtData.push(item);
     });
-    setUsersForTable(userData);
-  }, [users]);
+    setDistrictsForTable(districtData);
+  }, [districts]);
 
   const data = {
     columns: [
-        {
-            label: "#",
-            field: "id",
-            sort: "asc",
-            width: 150,
-          },
-          {
-            label: "District",
-            field: "districtname",
-            sort: "asc",
-            width: 400,
-          },
-          {
-            label: "State",
-            field: "statename",
-            sort: "asc",
-            width: 200,
-          },
-          {
-            label: "Country",
-            field: "countryname",
-            sort: "asc",
-            width: 200,
-        },
-          
-       
+      {
+        label: "#",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Name",
+        field: "district_name",
+        sort: "asc",
+        width: 400,
+      },
       {
         label: "Action",
         field: "action",
         width: 300,
       },
     ],
-    // rows: usersForTable,
-
-    rows: ["id"],
+    rows: districtsForTable,
   };
 
-  let privilagesOptionsData =
-    privilagesOptions &&
-    privilagesOptions.data &&
-    privilagesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let companiesOptionsData =
-    companiesOptions &&
-    companiesOptions.data &&
-    companiesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let branchesOptionsData =
-    branchesOptions &&
-    branchesOptions.data &&
-    branchesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
-
-  const privilagesOptionsGroup = [
-    {
-      options: privilagesOptionsData,
-    },
-  ];
-
-  const companiesOptionsGroup = [
-    {
-      options: companiesOptionsData,
-    },
-  ];
-
-  const branchesOptionsGroup = [
-    {
-      options: branchesOptionsData,
-    },
-  ];
-
-  function handleChangeUser(e) {
+  function handleChangeDistrict(e) {
     let name = e.target.name;
     let value = e.target.value;
-    setUserObject({ ...userObject, [name]: value });
+    setDistrictObject({ ...districtObject, [name]: value });
   }
 
   function handleSelectedPrivilage(value) {
@@ -285,7 +205,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedPrivilage(value);
-    setUserObject({ ...userObject, privilage: newValue });
+    setDistrictObject({ ...districtObject, privilage: newValue });
   }
 
   function handleSelectedCompany(value) {
@@ -294,7 +214,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedCompany(value);
-    setUserObject({ ...userObject, company: newValue });
+    setDistrictObject({ ...districtObject, company: newValue });
   }
   function handleSelectedBranch(value) {
     let newValue = {
@@ -302,7 +222,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedBranch(value);
-    setUserObject({ ...userObject, branch: newValue });
+    setDistrictObject({ ...districtObject, branch: newValue });
   }
 
   function handleChangePassword(e) {
@@ -312,18 +232,18 @@ const Users = (props) => {
   }
 
   const handleValidSubmit = (event, values) => {
-    userIdTobeUpdated
-      ? dispatch(updateUser(userObject))
-      : dispatch(addUser(userObject));
+    districtIdTobeUpdated
+      ? dispatch(updateDistrict(districtObject))
+      : dispatch(addDistrict(districtObject));
   };
 
   const handleValidSubmitPassword = (event, values) => {
     if (passwordObject.password == passwordObject.confirmPassword) {
       let item = {
-        _id: userIdTobeUpdated,
+        _id: districtIdTobeUpdated,
         password: passwordObject.password,
       };
-      dispatch(updateUser(item));
+      dispatch(updateDistrict(item));
     } else {
       toastr.error("Passwords are not matching");
     }
@@ -331,7 +251,7 @@ const Users = (props) => {
 
   let closeModal = () => {
     setShowModal(false);
-    setUserIdToBeUpdated(null);
+    setDistrictIdToBeUpdated(null);
   };
 
   return (
@@ -344,7 +264,7 @@ const Users = (props) => {
           confirmBtnBsStyle="success"
           cancelBtnBsStyle="danger"
           onConfirm={() => {
-            dispatch(deleteUser(userIdToBeDeleted));
+            dispatch(deleteDistrict(districtIdToBeDeleted));
             setConfirmDeleteAlert(false);
           }}
           onCancel={() => setConfirmDeleteAlert(false)}
@@ -353,87 +273,10 @@ const Users = (props) => {
         </SweetAlert>
       ) : null}
 
-      <Modal
-        isOpen={showModal}
-        toggle={() => {
-          closeModal();
-        }}
-        centered={true}
-      >
-        <div className="modal-header">
-          <h5 className="modal-title mt-0">Confirmation</h5>
-          <button
-            type="button"
-            onClick={() => {
-              closeModal();
-            }}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <AvForm
-          className="needs-validation"
-          onValidSubmit={(e, v) => {
-            handleValidSubmitPassword(e, v);
-          }}
-        >
-          <div className="modal-body">
-            <Row>
-              {/* <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Password</Label>
-                  <AvField
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    errorMessage=" Please provide a valid password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.password}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col> */}
-              {/* <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Confirm Password</Label>
-                  <AvField
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    type="password"
-                    errorMessage=" Please confirm the password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.confirmPassword}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col> */}
-            </Row>
-          </div>
-          <div className="modal-footer">
-            <button
-              className="btn btn-dark"
-              style={{ marginRight: "1rem" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-            <button className="btn btn-primary" type="submit">
-              Confirm
-            </button>
-          </div>
-        </AvForm>
-      </Modal>
-
+      
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Home" breadcrumbItem="District" />
+          <Breadcrumbs title="Home" breadcrumbItem="Manage District" />
           <Row>
             <Col xl="12">
               <Card>
@@ -445,182 +288,47 @@ const Users = (props) => {
                     }}
                   >
                     <Row>
-                      {/* <Col md="3">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">First name</Label>
+                          <Label htmlFor="validationCustom01">District</Label>
                           <AvField
-                            name="firstName"
+                            name="district_name"
                             placeholder="First name"
                             type="text"
                             errorMessage="Enter First Name"
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom01"
-                            value={userObject.firstName}
-                            onChange={handleChangeUser}
+                            value={districtObject.district_name}
+                            onChange={handleChangeDistrict}
                           />
                         </div>
                       </Col>
-                      <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom02">Last name</Label>
-                          <AvField
-                            name="lastName"
-                            placeholder="Last name"
-                            type="text"
-                            errorMessage="Enter Last name"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom02"
-                            value={userObject.lastName}
-                            onChange={handleChangeUser}
-                          />
-                        </div>
-                      </Col>
-
-                      <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom03">Email</Label>
-                          <AvField
-                            name="email"
-                            placeholder="Email"
-                            type="email"
-                            errorMessage="Enter valid Email"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom03"
-                            value={userObject.email}
-                            onChange={handleChangeUser}
-                          />
-                        </div>
-                      </Col>
-                      <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom03">Username</Label>
-                          <AvField
-                            name="username"
-                            placeholder="Username"
-                            type="text"
-                            errorMessage="Enter valid Username"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom03"
-                            value={userObject.username}
-                            onChange={handleChangeUser}
-                          />
-                        </div>
-                      </Col>
-                      <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom04">Mobile</Label>
-                          <AvField
-                            name="mobile"
-                            placeholder="Mobile"
-                            type="text"
-                            errorMessage="Please provide a valid mobile."
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom04"
-                            value={userObject.mobile}
-                            onChange={handleChangeUser}
-                          />
-                        </div>
-                      </Col>
-                      <Col md={4}>
-                        <div className="mb-3">
-                          <Label>Prililage</Label>
-                          <Select
-                            name="privilage"
-                            value={selectedPrivilage}
-                            onChange={(value) => {
-                              handleSelectedPrivilage(value);
-                            }}
-                            options={privilagesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      <Col md={4}>
-                        <div className="mb-3">
-                          <Label>Company</Label>
-                          <Select
-                            name="company"
-                            value={selectedCompany}
-                            onChange={(value) => {
-                              handleSelectedCompany(value);
-                            }}
-                            options={companiesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      <Col md={4}>
-                        <div className="mb-3">
-                          <Label>Branch</Label>
-                          <Select
-                            name="branch"
-                            value={selectedBranch}
-                            onChange={(value) => {
-                              handleSelectedBranch(value);
-                            }}
-                            options={branchesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col> */}
-                      {/* {userIdTobeUpdated ? null : (
-                        <Col md="3">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom05">Password</Label>
-                            <AvField
-                              name="password"
-                              placeholder="Password"
-                              type="password"
-                              errorMessage=" Please provide a valid password"
-                              className="form-control"
-                              validate={{ required: { value: true } }}
-                              id="validationCustom05"
-                              value={userObject.password}
-                              onChange={handleChangeUser}
-                            />
-                          </div>
-                        </Col>
-                      )} */}
-                      <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom02">District Name</Label>
-                          <AvField
-                            name="districtName"
-                            placeholder="District Name"
-                            type="text"
-                            errorMessage="Enter district name"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom02"
-                            value={userObject.lastName}
-                            onChange={handleChangeUser}
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-
-                    {userIdTobeUpdated ? (
+                     
+                     <Col>
+                     <div className="mb-3">
+                     {districtIdTobeUpdated ? (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingDistrict ? true : false}
                       >
-                        {addingUser ? "Updating" : "Update"}
+                        {addingDistrict ? "Updating" : "Update"}
                       </Button>
                     ) : (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingDistrict ? true : false}
                       >
-                        {addingUser ? "Adding" : "Submit"}
+                        {addingDistrict ? "Adding" : "Submit"}
                       </Button>
                     )}
+                    </div>
+                     </Col>
+                    </Row>
+
+                   
                   </AvForm>
                 </CardBody>
               </Card>
@@ -650,9 +358,9 @@ const Users = (props) => {
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(Users));
+export default withRouter(connect(mapStateToProps, { apiError })(Districts));
 
-Users.propTypes = {
+Districts.propTypes = {
   error: PropTypes.any,
-  users: PropTypes.array,
+  districts: PropTypes.array,
 };

@@ -7,15 +7,14 @@ import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
-  getUsers,
-  addUser,
-  deleteUser,
+  getWards,
+  addWard,
+  deleteWard,
   apiError,
   getPrivilagesOptions,
   getCompaniesOptions,
   getBranchesOptions,
-  updateUser,
-  //getPrivilagesOptions,
+  updateWard,
 } from "../../../store/actions";
 
 // Redux
@@ -26,19 +25,18 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-// import "./user.scss";
+//import "./district.scss";
 
-const Users = (props) => {
-  //  const [selectedDistrict, setSelectedDistrict] = useState(null);
+const Wards = (props) => {
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [userObject, setUserObject] = useState({});
-  const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
-  const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
+  const [wardObject, setWardObject] = useState({});
+  const [wardIdTobeUpdated, setWardIdToBeUpdated] = useState(null);
+  const [wardIdToBeDeleted, setWardIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [wardsForTable, setWardsForTable] = useState([]);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -47,77 +45,57 @@ const Users = (props) => {
   });
 
   const {
-    users,
-    addingUser,
-    addUserResponse,
-    deleteUserResponse,
-    updateUserResponse,
+    wards,
+    addingWard,
+    addWardResponse,
+    deleteWardResponse,
+    updateWardResponse,
     error,
-  } = useSelector((state) => state.users);
+  } = useSelector((state) => state.wards);
 
-  // const districtsOptions = useSelector(
-  //   (state) => state.districts.districtsOptions
-  // );
-
-  const privilagesOptions = useSelector(
-    (state) => state.privilages.privilagesOptions
-  );
-  const companiesOptions = useSelector(
-    (state) => state.companies.companiesOptions
-  );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );
+  
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
+    dispatch(getWards());
+    
   }, []);
 
-  useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+  
 
   useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
+    if (addWardResponse.type === "success") {
+      toastr.success(addWardResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
-      //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
+    } else if (addWardResponse.type === "failure") {
+      toastr.error(error.data.message, addWardResponse.message);
     }
-  }, [addUserResponse]);
+  }, [addWardResponse]);
 
   useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
+    if (deleteWardResponse.type === "success") {
+      toastr.success(deleteWardResponse.message);
+      setWardIdToBeDeleted(null);
+    } else if (deleteWardResponse.type === "failure") {
+      toastr.error(error.data.message, deleteWardResponse.message);
     }
-  }, [deleteUserResponse]);
+  }, [deleteWardResponse]);
 
   useEffect(() => {
-    if (updateUserResponse.type === "success") {
+    if (updateWardResponse.type === "success") {
       setShowModal(false);
-      setUserIdToBeUpdated(null);
+      setWardIdToBeUpdated(null);
       setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
+      toastr.success(updateWardResponse.message);
+    } else if (updateWardResponse.type === "failure") {
+      toastr.error(error.data.message, updateWardResponse.message);
     }
-  }, [updateUserResponse]);
+  }, [updateWardResponse]);
 
-  let preUpdateUser = (item) => {
+  let preUpdateWard = (item) => {
     if (item.privilage) {
       let privilage = {
         label: item.privilage.name,
@@ -140,26 +118,26 @@ const Users = (props) => {
       handleSelectedBranch(branch);
     }
 
-    setUserIdToBeUpdated(item._id);
-    setUserObject({ ...item, password: null });
+    setWardIdToBeUpdated(item._id);
+    setWardObject({ ...item, password: null });
   };
 
-  let preUpdateUserPassword = (item) => {
-    setUserIdToBeUpdated(item._id);
+  let preUpdateWardPassword = (item) => {
+    setWardIdToBeUpdated(item._id);
     setShowModal(true);
   };
 
   useEffect(() => {
-    let userData = [];
+    let wardData = [];
 
-    users.map((item, index) => {
+    wards.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
             className="uil-key-skeleton"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              preUpdateUserPassword(item);
+              preUpdateWardPassword(item);
             }}
           ></i>
           <i
@@ -171,29 +149,24 @@ const Users = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
-              preUpdateUser(item);
+              preUpdateWard(item);
             }}
           ></i>
           <i
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              setUserIdToBeDeleted(item._id);
+              setWardIdToBeDeleted(item._id);
               setConfirmDeleteAlert(true);
             }}
           ></i>
         </div>
       );
       item.id = index + 1;
-      item.name1 = `${item.firstName} ${item.lastName}`;
-
-      item.privilage1 = item.privilage && item.privilage.name;
-      item.company1 = item.company && item.company.name;
-      item.branch1 = item.branch && item.branch.name;
-      userData.push(item);
+      wardData.push(item);
     });
-    setUsersForTable(userData);
-  }, [users]);
+    setWardsForTable(wardData);
+  }, [wards]);
 
   const data = {
     columns: [
@@ -204,92 +177,26 @@ const Users = (props) => {
         width: 150,
       },
       {
-        label: "District",
-        field: "district",
+        label: "ward Name",
+        field: "ward_name",
         sort: "asc",
         width: 400,
       },
-      {
-        label: "Local Body Type",
-        field: "localbodytype",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Local Body Name",
-        field: "localbodyname",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Ward Number",
-        field: "wardnumber",
-        sort: "asc",
-        width: 400,
-      },
-      
-
       {
         label: "Action",
         field: "action",
         width: 300,
       },
     ],
-    rows: usersForTable,
+    rows: wardsForTable,
   };
 
-  let privilagesOptionsData =
-    privilagesOptions &&
-    privilagesOptions.data &&
-    privilagesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let companiesOptionsData =
-    companiesOptions &&
-    companiesOptions.data &&
-    companiesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
 
-  let branchesOptionsData =
-    branchesOptions &&
-    branchesOptions.data &&
-    branchesOptions.data.map((item) => {
-      return {
-        label: item.name,
-        value: item._id,
-      };
-    });
-
-  const privilagesOptionsGroup = [
-    {
-      options: privilagesOptionsData,
-    },
-  ];
-
-  const companiesOptionsGroup = [
-    {
-      options: companiesOptionsData,
-    },
-  ];
-
-  const branchesOptionsGroup = [
-    {
-      options: branchesOptionsData,
-    },
-  ];
-
-  function handleChangeUser(e) {
+  function handleChangeWard(e) {
     let name = e.target.name;
     let value = e.target.value;
-    setUserObject({ ...userObject, [name]: value });
+    setWardObject({ ...wardObject, [name]: value });
   }
 
   function handleSelectedPrivilage(value) {
@@ -298,7 +205,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedPrivilage(value);
-    setUserObject({ ...userObject, privilage: newValue });
+    setWardObject({ ...wardObject, privilage: newValue });
   }
 
   function handleSelectedCompany(value) {
@@ -307,7 +214,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedCompany(value);
-    setUserObject({ ...userObject, company: newValue });
+    setWardObject({ ...wardObject, company: newValue });
   }
   function handleSelectedBranch(value) {
     let newValue = {
@@ -315,7 +222,7 @@ const Users = (props) => {
       _id: value.value,
     };
     setSelectedBranch(value);
-    setUserObject({ ...userObject, branch: newValue });
+    setWardObject({ ...wardObject, branch: newValue });
   }
 
   function handleChangePassword(e) {
@@ -325,18 +232,18 @@ const Users = (props) => {
   }
 
   const handleValidSubmit = (event, values) => {
-    userIdTobeUpdated
-      ? dispatch(updateUser(userObject))
-      : dispatch(addUser(userObject));
+    wardIdTobeUpdated
+      ? dispatch(updateWard(wardObject))
+      : dispatch(addWard(wardObject));
   };
 
   const handleValidSubmitPassword = (event, values) => {
     if (passwordObject.password == passwordObject.confirmPassword) {
       let item = {
-        _id: userIdTobeUpdated,
+        _id: wardIdTobeUpdated,
         password: passwordObject.password,
       };
-      dispatch(updateUser(item));
+      dispatch(updateWard(item));
     } else {
       toastr.error("Passwords are not matching");
     }
@@ -344,7 +251,7 @@ const Users = (props) => {
 
   let closeModal = () => {
     setShowModal(false);
-    setUserIdToBeUpdated(null);
+    setWardIdToBeUpdated(null);
   };
 
   return (
@@ -357,7 +264,7 @@ const Users = (props) => {
           confirmBtnBsStyle="success"
           cancelBtnBsStyle="danger"
           onConfirm={() => {
-            dispatch(deleteUser(userIdToBeDeleted));
+            dispatch(deleteWard(wardIdToBeDeleted));
             setConfirmDeleteAlert(false);
           }}
           onCancel={() => setConfirmDeleteAlert(false)}
@@ -366,87 +273,10 @@ const Users = (props) => {
         </SweetAlert>
       ) : null}
 
-      <Modal
-        isOpen={showModal}
-        toggle={() => {
-          closeModal();
-        }}
-        centered={true}
-      >
-        <div className="modal-header">
-          <h5 className="modal-title mt-0">Confirmation</h5>
-          <button
-            type="button"
-            onClick={() => {
-              closeModal();
-            }}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <AvForm
-          className="needs-validation"
-          onValidSubmit={(e, v) => {
-            handleValidSubmitPassword(e, v);
-          }}
-        >
-          <div className="modal-body">
-            <Row>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Password</Label>
-                  <AvField
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    errorMessage=" Please provide a valid password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.password}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Confirm Password</Label>
-                  <AvField
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    type="password"
-                    errorMessage=" Please confirm the password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.confirmPassword}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <div className="modal-footer">
-            <button
-              className="btn btn-dark"
-              style={{ marginRight: "1rem" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-            <button className="btn btn-primary" type="submit">
-              Confirm
-            </button>
-          </div>
-        </AvForm>
-      </Modal>
-
+      
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Home" breadcrumbItem="Ward" />
+          <Breadcrumbs title="Home" breadcrumbItem="Manage Ward" />
           <Row>
             <Col xl="12">
               <Card>
@@ -458,90 +288,47 @@ const Users = (props) => {
                     }}
                   >
                     <Row>
-                      
-                      
-
-                      
-                    
-                      
-                      
-                      <Col md={3}>
-                        <div className="mb-3">
-                          <Label>District</Label>
-                          <Select
-                            name="district"
-                            value={selectedCompany}
-                            onChange={(value) => {
-                              handleSelectedCompany(value);
-                            }}
-                            options={companiesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <div className="mb-3">
-                          <Label>Local Body</Label>
-                          <Select
-                            name="localbody"
-                            value={selectedBranch}
-                            onChange={(value) => {
-                              handleSelectedBranch(value);
-                            }}
-                            options={branchesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <div className="mb-3">
-                          <Label>Ward Number</Label>
-                          <Select
-                            name="wardnumber"
-                            value={selectedBranch}
-                            onChange={(value) => {
-                              handleSelectedBranch(value);
-                            }}
-                            options={branchesOptionsGroup}
-                            classNamePrefix="select2-selection"
-                          />
-                        </div>
-                      </Col>
                       <Col md="3">
-                          <div className="mb-3">
-                            <Label htmlFor="validationCustom05">Ward Name</Label>
-                            <AvField
-                              name="wardname"
-                              placeholder="wardname"
-                              type="text"
-                            //   errorMessage=" Please provide a valid password"
-                              className="form-control"
-                              validate={{ required: { value: true } }}
-                              id="validationCustom05"
-                              value={userObject.password}
-                              onChange={handleChangeUser}
-                            />
-                          </div>
-                        </Col>
-                    </Row>
-
-                    {userIdTobeUpdated ? (
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom01">Ward Name</Label>
+                          <AvField
+                            name="ward_name"
+                            placeholder="Ward name"
+                            type="text"
+                            errorMessage="Enter ward Name"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={wardObject.ward_name}
+                            onChange={handleChangeWard}
+                          />
+                        </div>
+                      </Col>
+                     
+                     <Col>
+                     <div className="mb-3">
+                     {wardIdTobeUpdated ? (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingWard ? true : false}
                       >
-                        {addingUser ? "Updating" : "Update"}
+                        {addingWard ? "Updating" : "Update"}
                       </Button>
                     ) : (
                       <Button
                         color="primary"
                         type="submit"
-                        disabled={addingUser ? true : false}
+                        disabled={addingWard ? true : false}
                       >
-                        {addingUser ? "Adding" : "Submit"}
+                        {addingWard ? "Adding" : "Submit"}
                       </Button>
                     )}
+                    </div>
+                     </Col>
+                    </Row>
+
+                   
                   </AvForm>
                 </CardBody>
               </Card>
@@ -571,9 +358,9 @@ const Users = (props) => {
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(Users));
+export default withRouter(connect(mapStateToProps, { apiError })(Wards));
 
-Users.propTypes = {
+Wards.propTypes = {
   error: PropTypes.any,
-  users: PropTypes.array,
+  wards: PropTypes.array,
 };

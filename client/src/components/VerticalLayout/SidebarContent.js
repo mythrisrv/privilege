@@ -213,7 +213,7 @@ const SidebarContent = (props) => {
                     {props.t("Local Body")}
                   </Link>
                 </li>
-                <li>-
+                <li>
                   <Link to="/ward">
                     <i className="uil-plus"></i>
                     {props.t("Ward")}
