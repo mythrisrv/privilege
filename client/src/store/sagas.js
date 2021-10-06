@@ -10,6 +10,12 @@ import userSaga from "./users/saga";
 import privilagesSaga from "./privilages/saga";
 import companiesSaga from "./companies/saga";
 import branchesSaga from "./branches/saga";
+import districtSaga from "./district/saga";
+//Ward
+import wardSaga from "./ward/saga";
+//Localbody
+import localbodySaga from "./localbody/saga";
+
 
 export default function* rootSaga() {
   yield all([
@@ -23,5 +29,8 @@ export default function* rootSaga() {
     fork(privilagesSaga),
     fork(companiesSaga),
     fork(branchesSaga),
+    fork(districtSaga),
+    fork(wardSaga),
+    fork(localbodySaga),
   ]);
 }
