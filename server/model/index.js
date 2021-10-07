@@ -6,6 +6,8 @@ const Supplier = require("./Supplier");
 const District= require("./Districts");
 const Localbody = require("./Localbody");
 const Ward =require("./Ward");
+const Otpmessage= require("./Otpmessage");
+const Message= require("./Message");
 
 
 module.exports = {
@@ -17,5 +19,7 @@ module.exports = {
   District,
   Localbody,
   Ward,
+  Otpmessage,
+  Message,
  
 };

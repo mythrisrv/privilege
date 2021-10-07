@@ -22,6 +22,7 @@ const auth = require("./routes/auth");
 const district = require("./routes/district");
 const Localbody =require("./routes/localbody");
 const Ward=require("./routes/ward");
+const apiRouter = require("./routes/apiRouter");
 
 app.use(logger("dev"));
 
@@ -56,6 +57,7 @@ app.use("/user", user);
 app.use("/district", district);
 app.use("/localbody",Localbody);
 app.use("/ward",Ward);
+app.use("/api", apiRouter);
 
 
 app.listen(port, function () {
