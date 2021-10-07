@@ -4,6 +4,7 @@ const Company = require("./Company");
 const Branch = require("./Branch");
 const Supplier = require("./Supplier");
 const District= require("./Districts");
+const Localbody = require("./Localbody");
 
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   Branch,
   Supplier,
   District,
+  Localbody,
  
 };

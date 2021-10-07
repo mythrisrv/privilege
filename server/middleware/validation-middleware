@@ -18,10 +18,28 @@ const createDistrict = (req, res, next) => {
         }
     });
 }
+const createLocalbody = (req, res, next) => {
+    const validationRule = {
+        "localbody_name": "required",
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 
 
 module.exports = { 
     createDistrict,
+    createLocalbody,
 
     
 }
