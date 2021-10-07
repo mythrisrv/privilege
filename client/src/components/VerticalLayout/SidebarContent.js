@@ -179,45 +179,6 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="uil-setting"></i>
-                <span>{props.t("Manage")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/district">
-                    <i className="uil-plus"></i>
-                    {props.t("District")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/localbody">
-                    <i className="uil-plus"></i>
-                    {props.t("Local Body")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/ward">
-                    <i className="uil-plus"></i>
-                    {props.t("Ward")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/group">
-                    <i className="uil-plus"></i>
-                    {props.t("Group")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/group">
-                    <i className="uil-plus"></i>
-                    {props.t("Customer category")}
-                  </Link>
-                </li>
-              </ul>
-            </li>
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-setting"></i>
