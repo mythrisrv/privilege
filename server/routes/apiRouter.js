@@ -1,7 +1,7 @@
 const validationMiddleware = require('../middleware/validation-middleware');
-const {customerLogin} = require('../Controller/API/loginController');
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-// const { jwtauth } = require("../lib/jwtlib");
+const models = require("../model");
+const {customerLogin} = require('../controller/API/loginController');
 router.post('/login/',validationMiddleware.customerLogin,customerLogin);
 module.exports = router;

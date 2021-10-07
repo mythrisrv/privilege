@@ -108,21 +108,6 @@ const SidebarContent = (props) => {
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-user"></i>
-                <span>{props.t("Customer")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/customer">
-                    <i className="uil-plus"></i>
-                    {props.t("Add Customer")}
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="uil-user"></i>
                 <span>{props.t("User")}</span>
               </Link>
               <ul className="sub-menu">
