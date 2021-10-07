@@ -20,7 +20,6 @@ const supplier = require("./routes/supplier");
 const common = require("./routes/common");
 const auth = require("./routes/auth");
 const district = require("./routes/district");
-const apiRouter = require("./routes/apiRouter");
 
 
 app.use(logger("dev"));
@@ -54,7 +53,7 @@ app.use("/common", common);
 
 app.use("/user", user);
 app.use("/district", district);
-app.use("/api", apiRouter);
+
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
