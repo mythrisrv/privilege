@@ -103,6 +103,16 @@ import District from "../pages/Manage/District";
 import Localbody from "../pages/Manage/Localbody";
 // ward
 import Ward from "../pages/Manage/Ward";
+
+//account
+import AccountType from "../pages/Accounts/Account-Type";
+import AccountDetails from "../pages/Accounts/AccountDetails";
+import Chart from "../pages/Accounts/Chart";
+import FundTransfer from "../pages/Accounts/FundTransfer";
+import CreditDebit from "../pages/Accounts/CreditDebit";
+import IncomeExpenses from "../pages/Accounts/IncomeExpenses";
+import TransactionLog from "../pages/Accounts/TransactionLog";
+
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
@@ -186,6 +196,15 @@ const userRoutes = [
    { path: "/Localbody", component: Localbody },
    { path: "/Ward", component: Ward },
 
+   //accounts
+   {path:"/account-type" , component:AccountType},
+   {path:"/account-details" , component:AccountDetails},
+   {path:"/accounts-chart" , component:Chart},
+   {path:"/fund-transfer" , component: FundTransfer},
+   {path:"/credit-debit-fund" , component: CreditDebit},
+   {path:"/income-expense" , component: IncomeExpenses},
+   {path:"/transaction-log" , component: TransactionLog},
+   
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
 ];

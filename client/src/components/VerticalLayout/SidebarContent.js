@@ -233,6 +233,56 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-setting"></i>
+                <span>{props.t("Accounts")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/account-type">
+                    <i className="uil-plus"></i>
+                    {props.t("Account Type")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/account-details">
+                    <i className="uil-plus"></i>
+                    {props.t("Account Details")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/accounts-chart">
+                    <i className="uil-plus"></i>
+                    {props.t("Chart of Accounts")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/fund-transfer">
+                    <i className="uil-plus"></i>
+                    {props.t("Fund Transfer")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/transaction-log">
+                    <i className="uil-plus"></i>
+                    {props.t("Transaction Log")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/credit-debit-fund">
+                    <i className="uil-plus"></i>
+                    {props.t("Credit/Debit Fund")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/income-expense">
+                    <i className="uil-plus"></i>
+                    {props.t("Income/Expense")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
 
             {/* <li className="menu-title">{props.t("Apps")}</li>
 
