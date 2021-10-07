@@ -4,6 +4,8 @@ const Company = require("./Company");
 const Branch = require("./Branch");
 const Supplier = require("./Supplier");
 const District= require("./Districts");
+const Otpmessage= require("./Otpmessage");
+const Message= require("./Message");
 
 
 module.exports = {
@@ -13,5 +15,7 @@ module.exports = {
   Branch,
   Supplier,
   District,
+  Otpmessage,
+  Message,
  
 };
