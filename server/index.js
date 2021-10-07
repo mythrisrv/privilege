@@ -21,6 +21,7 @@ const common = require("./routes/common");
 const auth = require("./routes/auth");
 const district = require("./routes/district");
 const Localbody =require("./routes/localbody");
+const Ward=require("./routes/ward");
 
 app.use(logger("dev"));
 
@@ -54,6 +55,7 @@ app.use("/common", common);
 app.use("/user", user);
 app.use("/district", district);
 app.use("/localbody",Localbody);
+app.use("/ward",Ward);
 
 
 app.listen(port, function () {

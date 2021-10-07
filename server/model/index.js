@@ -5,6 +5,7 @@ const Branch = require("./Branch");
 const Supplier = require("./Supplier");
 const District= require("./Districts");
 const Localbody = require("./Localbody");
+const Ward =require("./Ward");
 
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
   Supplier,
   District,
   Localbody,
+  Ward,
  
 };
