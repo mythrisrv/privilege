@@ -3,41 +3,7 @@
 const createDistrict = (req, res, next) => {
     const validationRule = {
         "district_name": "required",
-        "addedby": "required",
-    }
-    validator(req.body, validationRule, {}, (err, status) => {
-        if (!status) {
-            res.status(412)
-                .send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: err
-                });
-        } else {
-            next();
-        }
-    });
-}
-const createLocalbody = (req, res, next) => {
-    const validationRule = {
-        "localbody_name": "required",
-    }
-    validator(req.body, validationRule, {}, (err, status) => {
-        if (!status) {
-            res.status(412)
-                .send({
-                    success: false,
-                    message: 'Validation failed',
-                    data: err
-                });
-        } else {
-            next();
-        }
-    });
-}
-const createWardvalidator = (req, res, next) => {
-    const validationRule = {
-        "ward_name": "required",
+        //"addedby": "required",
     }
     validator(req.body, validationRule, {}, (err, status) => {
         if (!status) {
@@ -71,13 +37,47 @@ const customerLogin = (req, res, next) => {
     });
 }
 
+const createWardvalidator = (req, res, next) => {
+    const validationRule = {
+        "ward_name": "required",
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
+const createLocalbody = (req, res, next) => {
+    const validationRule = {
+        "localbody_name": "required",
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 
 
 module.exports = { 
     createDistrict,
-    createLocalbody,
-    createWardvalidator,
     customerLogin,
+    createWardvalidator,
+    createLocalbody
 
     
 }

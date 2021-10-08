@@ -6,6 +6,7 @@ import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import jwt_decode from 'jwt-decode';
 import {
   getUsers,
   addUser,
@@ -37,6 +38,7 @@ const Users = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [usersForTable, setUsersForTable] = useState([]);
+  const [userId, setUserId] = useState(1);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -70,6 +72,17 @@ const Users = (props) => {
     dispatch(getPrivilagesOptions());
     dispatch(getCompaniesOptions());
   }, []);
+
+  useEffect(() => {
+    setUserObject({ ['addedby']: 1 });
+    if (localStorage.getItem('authUser')) {
+      const obj = jwt_decode(localStorage.getItem('authUser'));
+      console.log(obj);
+
+      setUserId(obj.user);
+      setUserObject({ ['addedby']: userId });
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (selectedCompany !== null) {

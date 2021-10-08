@@ -71,7 +71,7 @@ let userSchema = new Schema(
       default: true,
     },
   },
-  { timestamps: true ,collection:'users' }
+  { timestamps: true }
 );
 
 userSchema.methods.generatePasswordHash = (password) => {

@@ -4,12 +4,10 @@ const Company = require("./Company");
 const Branch = require("./Branch");
 const Supplier = require("./Supplier");
 const District= require("./Districts");
-const Localbody = require("./Localbody");
-const Ward =require("./Ward");
-const Customer = require("./Customer");
-const group = require("./group");
 const Otpmessage= require("./Otpmessage");
 const Message= require("./Message");
+const Ward =require("./Ward");
+const Localbody = require("./Localbody");
 
 
 module.exports = {
@@ -19,11 +17,9 @@ module.exports = {
   Branch,
   Supplier,
   District,
-  Customer,
-  group,
-  Ward,
-  Localbody,
   Otpmessage,
   Message,
+  Ward,
+  Localbody,
  
 };

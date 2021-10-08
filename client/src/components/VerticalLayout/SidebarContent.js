@@ -108,6 +108,21 @@ const SidebarContent = (props) => {
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-user"></i>
+                <span>{props.t("Customer")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/customer">
+                    <i className="uil-plus"></i>
+                    {props.t("Add Customer")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
                 <span>{props.t("User")}</span>
               </Link>
               <ul className="sub-menu">
@@ -179,52 +194,41 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
+
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-setting"></i>
-                <span>{props.t("Accounts")}</span>
+                <span>{props.t("Manage")}</span>
               </Link>
               <ul className="sub-menu">
                 <li>
-                  <Link to="/account-type">
+                  <Link to="/district">
                     <i className="uil-plus"></i>
-                    {props.t("Account Type")}
+                    {props.t("District")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/account-details">
+                  <Link to="/localbody">
                     <i className="uil-plus"></i>
-                    {props.t("Account Details")}
+                    {props.t("Local Body")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/accounts-chart">
+                  <Link to="/ward">
                     <i className="uil-plus"></i>
-                    {props.t("Chart of Accounts")}
+                    {props.t("Ward")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/fund-transfer">
+                  <Link to="/group">
                     <i className="uil-plus"></i>
-                    {props.t("Fund Transfer")}
+                    {props.t("Group")}
                   </Link>
                 </li>
                 <li>
-                  <Link to="/transaction-log">
+                  <Link to="/group">
                     <i className="uil-plus"></i>
-                    {props.t("Transaction Log")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/credit-debit-fund">
-                    <i className="uil-plus"></i>
-                    {props.t("Credit/Debit Fund")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/income-expense">
-                    <i className="uil-plus"></i>
-                    {props.t("Income/Expense")}
+                    {props.t("Customer category")}
                   </Link>
                 </li>
               </ul>

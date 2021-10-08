@@ -20,11 +20,9 @@ const supplier = require("./routes/supplier");
 const common = require("./routes/common");
 const auth = require("./routes/auth");
 const district = require("./routes/district");
-const Localbody =require("./routes/localbody");
 const Ward=require("./routes/ward");
+const Localbody =require("./routes/localbody");
 const apiRouter = require("./routes/apiRouter");
-const getUserData = require("./routes/qrcodeSearch");
-const listApi = require("./routes/ListingApi");
 
 
 app.use(logger("dev"));
@@ -58,11 +56,10 @@ app.use("/common", common);
 
 app.use("/user", user);
 app.use("/district", district);
-app.use("/localbody",Localbody);
 app.use("/ward",Ward);
+app.use("/localbody",Localbody);
 app.use("/api", apiRouter);
-app.use("/ListData",listApi)
-app.use("/searchCustomerData",getUserData)
+
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
