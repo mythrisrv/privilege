@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom";
 import Dashboard from "../pages/Dashboard/index";
 import User from "../pages/User/index";
 import Customer from "../pages/Customers/index";
+import viewTariff from "../pages/Customers/viewTariff";
+import QrCode from "../pages/Customers/QrCode";
 
 
 import Company from "../pages/MasterSettings/Company";
@@ -112,14 +114,33 @@ import FundTransfer from "../pages/Accounts/FundTransfer";
 import CreditDebit from "../pages/Accounts/CreditDebit";
 import IncomeExpenses from "../pages/Accounts/IncomeExpenses";
 import TransactionLog from "../pages/Accounts/TransactionLog";
+
+//package
+import AddTariff from "../pages/Package/AddTariff";
+import AddWaste from "../pages/Package/AddWaste";
+
+//Invoice
+import ViewInvoice from "../pages/Invoice/ViewInvoice";
+import AutoInvoice from "../pages/Invoice/AutoInvoice";
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   { path: "/user", component: User },
   { path: "/customer", component: Customer },
+  { path: "/view-tariff", component:viewTariff },
+  { path: "/qr-code" , component:QrCode },
 
   { path: "/company", component: Company },
   { path: "/privilage", component: Privilage },
+
+  //package
+  {path:"/add-tariff" , component:AddTariff},
+  {path:"/add-waste",component:AddWaste},
+
+  //Invoice
+  {path:"/view-invoice", component:ViewInvoice},
+  {path:"/auto-invoice", component:AutoInvoice},
+
 
   //Utility
   { path: "/pages-starter", component: PagesStarter },

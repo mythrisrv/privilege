@@ -134,13 +134,6 @@ const Wards = (props) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateWardPassword(item);
-            }}
-          ></i>
-          <i
             className="uil-edit-alt"
             style={{
               fontSize: "1.3em",

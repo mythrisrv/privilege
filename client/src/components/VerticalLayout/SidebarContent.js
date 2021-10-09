@@ -117,6 +117,112 @@ const SidebarContent = (props) => {
                     {props.t("Add Customer")}
                   </Link>
                 </li>
+                <li>
+                  <Link to="/view-tariff">
+                    <i className="uil-plus"></i>
+                    {props.t("View Tariff")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/qr-code">
+                    <i className="uil-plus"></i>
+                    {props.t("Qr Code")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
+                <span>{props.t("Package")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/add-tariff">
+                    <i className="uil-plus"></i>
+                    {props.t("Add Tariff")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/add-waste">
+                    <i className="uil-plus"></i>
+                    {props.t("Add Waste")}
+                  </Link>
+                </li>
+                
+              </ul>
+            </li>
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
+                <span>{props.t("Invoice")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/view-invoice">
+                    <i className="uil-plus"></i>
+                    {props.t("View Invoice")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/auto-invoice">
+                    <i className="uil-plus"></i>
+                    {props.t("Monthly Automatic Invoice Generator")}
+                  </Link>
+                </li>
+                
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
+                <span>{props.t("Accounts")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/account-type">
+                    <i className="uil-plus"></i>
+                    {props.t("Account Type")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/account-details">
+                    <i className="uil-plus"></i>
+                    {props.t("Account Details")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/accounts-chart">
+                    <i className="uil-plus"></i>
+                    {props.t("Chart of Accounts")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/fund-transfer">
+                    <i className="uil-plus"></i>
+                    {props.t("Fund Transfer")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/transaction-log">
+                    <i className="uil-plus"></i>
+                    {props.t("Transaction Log")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/credit-debit-fund">
+                    <i className="uil-plus"></i>
+                    {props.t("Credit/Debit Fund")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/income-expense">
+                    <i className="uil-plus"></i>
+                    {props.t("Income/Expense")}
+                  </Link>
+                </li>
               </ul>
             </li>
 
@@ -134,6 +240,46 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
+                <span>{props.t("Manage")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/district">
+                    <i className="uil-plus"></i>
+                    {props.t("District")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/localbody">
+                    <i className="uil-plus"></i>
+                    {props.t("Local Body")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/ward">
+                    <i className="uil-plus"></i>
+                    {props.t("Ward")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/group">
+                    <i className="uil-plus"></i>
+                    {props.t("Group")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/group">
+                    <i className="uil-plus"></i>
+                    {props.t("Customer category")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
 
             <li>
               <Link to="/#" className="has-arrow waves-effect">
@@ -196,95 +342,8 @@ const SidebarContent = (props) => {
             </li>
 
 
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="uil-setting"></i>
-                <span>{props.t("Manage")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/district">
-                    <i className="uil-plus"></i>
-                    {props.t("District")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/localbody">
-                    <i className="uil-plus"></i>
-                    {props.t("Local Body")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/ward">
-                    <i className="uil-plus"></i>
-                    {props.t("Ward")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/group">
-                    <i className="uil-plus"></i>
-                    {props.t("Group")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/group">
-                    <i className="uil-plus"></i>
-                    {props.t("Customer category")}
-                  </Link>
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <Link to="/#" className="has-arrow waves-effect">
-                <i className="uil-setting"></i>
-                <span>{props.t("Accounts")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/account-type">
-                    <i className="uil-plus"></i>
-                    {props.t("Account Type")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/account-details">
-                    <i className="uil-plus"></i>
-                    {props.t("Account Details")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/accounts-chart">
-                    <i className="uil-plus"></i>
-                    {props.t("Chart of Accounts")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/fund-transfer">
-                    <i className="uil-plus"></i>
-                    {props.t("Fund Transfer")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/transaction-log">
-                    <i className="uil-plus"></i>
-                    {props.t("Transaction Log")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/credit-debit-fund">
-                    <i className="uil-plus"></i>
-                    {props.t("Credit/Debit Fund")}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/income-expense">
-                    <i className="uil-plus"></i>
-                    {props.t("Income/Expense")}
-                  </Link>
-                </li>
-              </ul>
-            </li>
+            
+         
 
 
             

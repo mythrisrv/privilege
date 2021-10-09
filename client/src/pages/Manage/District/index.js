@@ -134,13 +134,6 @@ const Districts = (props) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateDistrictPassword(item);
-            }}
-          ></i>
-          <i
             className="uil-edit-alt"
             style={{
               fontSize: "1.3em",
@@ -293,9 +286,9 @@ const Districts = (props) => {
                           <Label htmlFor="validationCustom01">District</Label>
                           <AvField
                             name="district_name"
-                            placeholder="First name"
+                            placeholder="District name"
                             type="text"
-                            errorMessage="Enter First Name"
+                            errorMessage="Enter District Name"
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom01"

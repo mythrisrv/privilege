@@ -133,13 +133,7 @@ const Localbodies = (props) => {
     localbodies.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateLocalbodyPassword(item);
-            }}
-          ></i>
+         
           <i
             className="uil-edit-alt"
             style={{
