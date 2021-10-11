@@ -23,6 +23,9 @@ const district = require("./routes/district");
 const Ward=require("./routes/ward");
 const Localbody =require("./routes/localbody");
 const apiRouter = require("./routes/apiRouter");
+const getUserData = require("./routes/qrcodeSearch");
+const listApi = require("./routes/ListingApi");
+const customer = require("./routes/customer");
 
 
 app.use(logger("dev"));
@@ -59,6 +62,10 @@ app.use("/district", district);
 app.use("/ward",Ward);
 app.use("/localbody",Localbody);
 app.use("/api", apiRouter);
+
+app.use("/ListData",listApi)
+app.use("/searchCustomerData",getUserData);
+app.use("/customer",customer);
 
 
 app.listen(port, function () {

@@ -8,6 +8,11 @@ const Otpmessage= require("./Otpmessage");
 const Message= require("./Message");
 const Ward =require("./Ward");
 const Localbody = require("./Localbody");
+const Thariff = require("./Thariff");
+const LocalbodyName = require("./Localbodyname");
+const Customer = require("./Customer");
+const Customer_type = require("./Customer_type");
+const group = require("./group");
 
 
 module.exports = {
@@ -21,5 +26,9 @@ module.exports = {
   Message,
   Ward,
   Localbody,
- 
+  Customer,
+  Thariff,
+  LocalbodyName,
+  Customer_type,
+  group,
 };
