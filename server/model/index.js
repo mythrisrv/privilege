@@ -13,6 +13,9 @@ const LocalbodyName = require("./Localbodyname");
 const Customer = require("./Customer");
 const Customer_type = require("./Customer_type");
 const group = require("./group");
+const TariffAssign = require("./ThariffAssign");
+const Invoice = require("./Invoice");
+const InvoiceItem = require("./InvoiceItem");
 
 
 module.exports = {
@@ -31,4 +34,7 @@ module.exports = {
   LocalbodyName,
   Customer_type,
   group,
+  TariffAssign,
+  Invoice,
+  InvoiceItem
 };

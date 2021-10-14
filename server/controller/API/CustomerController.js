@@ -1,73 +1,222 @@
 let models = require("../../model");
 let moment = require("moment");
-
-createCustomer = (req) => {
-    var ip = req.ip;
-    const format2 = "YYYY-MM-DD"
-    var date2 = new Date();
-   date = moment(date2).format(format2);
-   time = moment(date2).format("hh:mm A");
-     return new Promise(async (resolve, reject) => {
-       try {
-      
-        let Customer = new models.Customer( 
-          { cust_status:0,
-            cust_ip:ip,
-            cust_status:0,
-            cust_addedby:req.body.cust_addedby,
-            cust_updatedby:req.body.cust_updatedby,
-            cust_date:date,
-            cust_time:time,
-            cust_name:req.body.cust_name,
-            cust_address:req.body.cust_address,
-            cust_address1:req.body.cust_address1,
-            district:req.body.district,
-            localbody_type:req.body.localbody_type,
-            localbody_name:req.body.localbody_name,
-            cust_type:req.body.cust_type,
-            cust_package_id:req.body.cust_package_id,
-            cust_group_id:req.body.cust_group_id,
-            ward:req.body.ward,
-            cust_phone:req.body.cust_phone,
-            cust_landline_no:req.body.cust_landline_no,
-            cust_whatspp_no:req.body.cust_whatspp_no,
-            cust_email:req.body.cust_email,
-            cust_no_members:req.body.cust_no_members,
-            cust_qr_code:req.body.cust_qr_code,
-            cust_serial_no:req.body.cust_serial_no,
-            cust_designation:req.body.cust_designation,
-            cust_latitude:req.body.cust_latitude,
-            cust_longitude:req.body.cust_longitude,
-            cust_company:req.body.cust_company,
-          },
-          );
-        let numberOfcustomers = await models.Customer.countDocuments();
-        let localbodyname = await models.LocalbodyName.find({
-            _id:req.body.localbody_name,
-          });
-          let companyname = await models.Company.find({
-            _id:req.body.cust_company,
-             });
-             console.log(req.body.cust_company);
-          console.log('companyname',companyname);
-          localbodyname.forEach(data => {
-            var localbodyName = data["short_code"];
-            console.log("localbodyName",localbodyName);
-            Customer.customer_id = numberOfcustomers + 1;
-            Customer =  Customer.save();
-            console.log(Customer)
-            resolve(Customer);
-      })
-         } catch (err) {
-        console.log(err);
+const multer = require('multer');
+createCustomer = async (req, res) => {
+  var ip = req.ip;
+  const format2 = "YYYY-MM-DD"
+  var date2 = new Date();
+  date = moment(date2).format(format2);
+  time = moment(date2).format("hh:mm A");
+  return new Promise(async (resolve, reject) => {
+    try {
+      let customer_data;
+      let packages_id;
+      let package_name;
+      let package_reg_fee;
+      let Customer = new models.Customer(
+        {
+          cust_status: 0,
+          cust_ip: ip,
+          cust_status: 0,
+          cust_addedby: req.body.cust_addedby,
+          cust_updatedby: req.body.cust_updatedby,
+          cust_date: date,
+          cust_time: time,
+          cust_name: req.body.cust_name,
+          cust_address: req.body.cust_address,
+          cust_address1: req.body.cust_address1,
+          district: req.body.district,
+          localbody_type: req.body.localbody_type,
+          localbody_name: req.body.localbody_name,
+          cust_type: req.body.cust_type,
+          cust_package_id: req.body.cust_package_id,
+          cust_group_id: req.body.cust_group_id,
+          ward: req.body.ward,
+          cust_phone: req.body.cust_phone,
+          cust_landline_no: req.body.cust_landline_no,
+          cust_whatspp_no: req.body.cust_whatspp_no,
+          cust_email: req.body.cust_email,
+          cust_no_members: req.body.cust_no_members,
+          cust_qr_code: req.body.cust_qr_code,
+          cust_serial_no: req.body.cust_serial_no,
+          cust_designation: req.body.cust_designation,
+          cust_latitude: req.body.cust_latitude,
+          cust_longitude: req.body.cust_longitude,
+          cust_company: req.body.cust_company,
+        },
+      );
+      let companyname = await models.Company.find({
+        _id: req.body.cust_company,
+      });
+      let numberOfcustomers = await models.Customer.countDocuments();
+      var customer_id = numberOfcustomers + 1;
+      let localbodyname = await models.LocalbodyName.find({
+        _id: req.body.localbody_name,
+      });
+     if(localbodyname){
+      localbodyname.forEach(data => {
+        var localbodyName = data["short_code"];
+        if(companyname){
+        companyname.forEach(data => {
+          var company_shortcode = data["company_shortcode"];
+          var cust_reg_number = company_shortcode + localbodyName + customer_id.toString().padStart(6, '0');
+          Customer.cust_id = customer_id;
+          Customer.cust_reg_no = cust_reg_number;
+           Customer.save().then(async (result) => {
+            customer_data = result;
+            var package_id = customer_data.cust_package_id;
+            var customer_id = customer_data._id;
+            let packageDetails = await models.Thariff.find({
+              _id: package_id,
+            })
+            if(packageDetails){
+            packageDetails.forEach(async data => {
+              var packages_id =  data["_id"];
+              var package_name = data["package_name"]
+              var package_reg_fee = data["package_reg_fee"];
+              var gst=0;
+              var gst_amount=package_reg_fee*(gst/100);
+              var invoice_total=package_reg_fee+gst_amount;
+              let invoice = new models.Invoice(
+                {
+                  invoice_ip :ip,
+                  invoice_status:0,
+                  invoice_addedby:req.body.cust_addedby,
+                  invoice_date:date,
+                  invoice_time:time,
+                  invoice_customer_name:req.body.cust_name,
+                  invoice_cust_phone:req.body.cust_phone,
+                  invoice_package_name:package_name,
+                  invoice_customer_id:customer_id,
+                  invoice_company:req.body.cust_company,
+                  invoice_group_id:req.body.cust_group_id,
+                  invoice_district:req.body.district,
+                  invoice_package_id:package_id,
+                  invoice_bill_dur_from:date,
+                  invoice_bill_dur_to:date,
+                  invoice_gst:gst,
+                  invoice_gst_amt:gst_amount,
+                  invoice_total_amt:invoice_total,
+                  },);
+                  let numberofInvoice = await models.Invoice.countDocuments();
+                  var invoice_no = numberofInvoice+1;
+                  console.log(numberofInvoice)
+                  invoice.invoice_no=invoice_no;
+                  invoice.save().then(async (result) => {
+                    let invoiceItem = new models.InvoiceItem(
+                      {
+                        invoice_item_ip:ip,
+                        invoice_item_status:0,
+                        invoice_item_addedby:req.body.cust_addedby,
+                        invoice_no:result.invoice_no,
+                        inovice_item_name:"Registration Fee",
+                        invoice_item_price:0,
+                        invoice_id:result._id,
+                        invoice_item_quanty:1,
+                        invoice_item_price:result.invoice_total,
+                        invoice_item_price:result.invoice_total,
+                     },);
+                     let numberOfInvoiceItem = await models.InvoiceItem.countDocuments();
+              var InvoiceItem = numberOfInvoiceItem+1;
+              invoiceItem.invoice_item_id = InvoiceItem;
+              invoiceItem.save();
+                    })
+                 
+             })
+            }else{
+              reject({
+                message: err.message,
+              }); 
+            }
+             let thariff = new models.TariffAssign(
+              {
+                tariff_assign_ip: req.ip,
+                tariff_assign_status: 0,
+                tariff_assign_addedby:req.body.cust_addedby,
+                tariff_assign_updatedby:req.body.cust_updatedby,
+                tariff_assign_date:date,
+                tariff_assign_time:time,
+                tariff_assign_company:req.body.cust_company,
+                tariff_assign_customer_id:customer_id,
+                tariff_assign_pack_id:package_id,
+                tariff_assign_active_status:0,
+                },);
+              let numberOfThariff = await models.TariffAssign.countDocuments();
+              var thariff_id = numberOfThariff+1;
+              thariff.tariff_assign_id = thariff_id;
+              var tariff_regnumber = "TF"+thariff_id.toString().padStart(5,'0');
+              thariff.tariff_reg_number = tariff_regnumber;
+              thariff.save();
+            resolve(result);
+           })
+        })
+      }else{
         reject({
           message: err.message,
         });
-       }
-     });
-  };
+      }
+      })
+    }else{
+      reject({
+        message: err.message,
+      });
+    }
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
+// const customerImageStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//       cb(null, './public/uploads/customer-images');
+//   },
+//   filename: function (req, file, cb) {
+//       cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname)
+//   }
+// });
+// const fileFilter = (req, file, cb) => {
+//   // reject file
+//   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png' || file.mimetype === 'image/svg') {
+//       cb(null, true)
+//   } else {
+//       cb(null, false)
+//       // return cb(new Error('Only images are allowed'))
+//   }
+// }
+// const uploadCustomerImage = multer({
+//   storage: customerImageStorage,
+//   limits: {
+//       fileSize: 1024 * 1024 * 5
+//   },
+//   fileFilter: fileFilter
+// });
+// const uploadCustomerSingleImage = (req, res, next) => {
+//   try {       
+//       if (req.file) {
+//         console.log(req.file)
+//           const file = req.file;
+//           return res.json({
+//               message: "File Uploaded Successfully",
+//               status: "success",
+//               file: req.file
+//           }).status(201)
+//       } else {
+//           return res.json({
+//               message: "File Uploaded Failed",
+//               status: "failed",
+//               file: req.file
+//           }).status(400)
+//       }
+//   } catch (error) {      
+//       res.status(400).send(error.message);
+//   }
 
+// }
 module.exports = {
-    createCustomer
-  };
-  
+  createCustomer,
+  //uploadCustomerImage,
+  //uploadCustomerSingleImage
+};

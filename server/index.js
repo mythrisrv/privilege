@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const fs = require("express-fileupload");
+const multer = require("multer");
 
 const port = process.env.PORT || 3099;
 const env = process.env.NODE_ENV || "development";

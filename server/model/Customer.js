@@ -64,15 +64,16 @@ let customerSchema = new Schema(
         ref: "tbl_customer_type",
       },
       cust_package_id: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: "tbl_tariff",
       },
       cust_group_id: {
-        type:Number,
+        type: Schema.Types.ObjectId,
         ref: "tbl_group",
       },
       ward: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref: "tbl_ward",
       },
       cust_house_no: {
         type: String,

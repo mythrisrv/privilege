@@ -4,9 +4,6 @@ const bcrypt = require("bcryptjs");
 const { isInteger } = require("lodash");
 let Thariff_Schema = new Schema(
     {
-        _id:{
-            type:Number,
-        },
         tariff_id: {
         type: Number,
         required: true,

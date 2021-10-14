@@ -8,65 +8,69 @@ let companySchema = new Schema(
       required: true,
       unique: true,
     },
-    name: {
+    company_name: {
       type: String,
       required: true,
     },
-    shortCode: {
+    company_shortcode: {
       type: String,
       required: true,
     },
-    contactPerson: {
+    company_person: {
       type: String,
       required: true,
     },
-    designation: {
+    company_design: {
       type: String,
     },
-    state: {
-      type: String,
-      required: true,
+    cust_image: {
+    data:Buffer,
+    contentType:String
     },
-    city: {
-      type: String,
-      required: true,
-    },
-    address: {
+    company_state: {
       type: String,
       required: true,
     },
-    landLineNumber: {
-      type: String,
-    },
-    mobile: {
+    company_district: {
       type: String,
       required: true,
     },
-    pincode: {
+    company_address: {
       type: String,
       required: true,
     },
-    email: {
+    company_land: {
+      type: String,
+    },
+    company_mob: {
       type: String,
       required: true,
     },
-    website: {
-      type: String,
-    },
-    companyLogo: {
+    company_pin: {
       type: String,
       required: true,
     },
-    gstin: {
+    company_email: {
+      type: String,
+      required: true,
+    },
+    company_web: {
       type: String,
     },
-    panNumber: {
+    company_logo: {
+      type: String,
+      required: true,
+    },
+    company_gstin: {
       type: String,
     },
-    cinNumber: {
+    company_pan: {
       type: String,
     },
-    tdsNumber: {
+    company_cin: {
+      type: String,
+    },
+    company_tds: {
       type: String,
     },
     latitude: {
@@ -80,9 +84,9 @@ let companySchema = new Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true ,collection: 'tbl_company'}
 );
 
-let company = mongoose.model("company", companySchema);
+let company = mongoose.model("tbl_company", companySchema);
 
 module.exports = company;
