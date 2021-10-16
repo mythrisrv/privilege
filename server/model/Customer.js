@@ -40,6 +40,9 @@ let customerSchema = new Schema(
       cust_name: {
         type: String,
       },
+      cust_image: {
+        type: Buffer,
+      },
       cust_address: {
         type: String,
         required: true,

@@ -169,6 +169,27 @@ createCustomer = async (req, res) => {
     }
   });
 };
+// imageUpload = async (id,body) => {
+//   console.log('imsageeeeeeeee');
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//   dp = await models.Customer.updateOne({_id:id},{
+//    $set:{
+//      cust_image:'customer'+'/'+''+id+'.jpeg'
+//    }
+//  })
+//  resolve(dp);
+// } catch (err) {
+//   console.log(err);
+//   reject({
+//     message: err.message,
+//   });
+// }
+// });
+// };
+
+
+
 // const customerImageStorage = multer.diskStorage({
 //   destination: function (req, file, cb) {
 //       cb(null, './public/uploads/customer-images');
@@ -215,8 +236,56 @@ createCustomer = async (req, res) => {
 //   }
 
 // }
+
+
+/********************
+ * profile view
+ * ******************/
+customerProfile = (req) => {
+  let customer_id= req.params.id;
+  return new Promise(async (resolve, reject) => {
+  
+    try {
+      let customerProfile = await models.Customer.find({
+        cust_status: 0,_id:customer_id
+      });
+      resolve(customerProfile);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
+/********************
+ * profile update
+ * ******************/
+ updateCustomer = (req) => {
+  
+  return new Promise(async (resolve, reject) => {
+    try {
+      let customer = await models.Customer.findByIdAndUpdate(
+        req.params.cust_id,
+        req.body,
+        {
+          new: true,
+        }
+      );
+      resolve(customer);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
 module.exports = {
   createCustomer,
+ // imageUpload,
+  customerProfile,
+  updateCustomer
   //uploadCustomerImage,
   //uploadCustomerSingleImage
 };
