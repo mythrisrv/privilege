@@ -4,18 +4,19 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
-    createCustomer,uploadCustomerImage,uploadCustomerSingleImage
+    createCustomer,customerProfile,updateCustomer
 } = require('../controller/API/CustomerController');
+let item;
 router.post('/create', async (req, res) => {
     try {
-      let item = await createCustomer(req);
+       item = await createCustomer(req);
       
        res.status(200).json({
         status: 200,
         data: item,
         message: "customer created successfully",
-      });
-      //uploadCustomerImage.single('cust_image'),
+ });
+    //uploadCustomerImage.single('cust_image'),
       //uploadCustomerSingleImage  
       console.log()
     } catch (err) {
@@ -24,7 +25,78 @@ router.post('/create', async (req, res) => {
         message: err.message,
       });
     }
+  //   let data = item._id;
+  //   if(data){
+  //     console.log('1');
+  //     if(req.files&&req.files.image!=null){
+  //      console.log('2');
+  //     const image = re.files.image;
+  //     var publicFolder = 'public';
+  //     var customer='customer';
+  //     if(dirExists(publicFolder)){
+  //      console.log('3');
+  //       console.log('public exists');
+  //       if(dirExists(publicFolder+'/'+customer)){
+  //        console.log('4');
+  //         let path= image.mv(publicFolder+'/'+customer+'/'+'_cust'+data+'.jpeg',async(err)=>{
+  //           if(!err){
+  //            console.log('5');
+  //            let image = await imageUpload(data,req.body);
+  //          }else{
+  //              res.status(200).json({
+  //                isCreated:false,
+  //                message:'internal server error',
+  //              });
+  //            }
+  //           });
+  //         }
+  //       }
+  //     }else{
+  //      res.status(200).json({
+  //        isCreated:false,
+  //        message:'customer image not found',
+  //      })
+  //     }
+  //   }else{
+  //    res.status(200).json({
+  //      isCreated:false,
+  //      message:'internal server error',
+  //    });
+  //   }
   });
- 
+  /********************
+ * profile
+ * ******************/
+  router.get("/profile/:id", [jwtauth], async (req, res) => {
+    try {
+      let item = await customerProfile(req);
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
+  /********************
+ * profile Edit
+ * ******************/
+  router.put("/update/:cust_id", [jwtauth], async (req, res) => {
+    try {
+      let item = await updateCustomer(req);
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
 
 module.exports = router;
