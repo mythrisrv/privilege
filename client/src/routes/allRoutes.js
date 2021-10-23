@@ -105,6 +105,7 @@ import District from "../pages/Manage/District";
 import Localbody from "../pages/Manage/Localbody";
 // ward
 import Ward from "../pages/Manage/Ward";
+import Group from "../pages/Manage/Group";
 
 //account
 import AccountType from "../pages/Accounts/Account-Type";
@@ -122,6 +123,17 @@ import AddWaste from "../pages/Package/AddWaste";
 //Invoice
 import ViewInvoice from "../pages/Invoice/ViewInvoice";
 import AutoInvoice from "../pages/Invoice/AutoInvoice";
+
+//Receipt
+import Receipt from "../pages/Receipt";
+
+//Waste Collection
+import HelperCollection from "../pages/WasteCollection/HelperCollection";
+import HelperDrop from "../pages/WasteCollection/HelperDrop";
+import DriverCollection from "../pages/WasteCollection/DriverCollection";
+import DriverDrop from "../pages/WasteCollection/DriverDrop";
+import WastePlot from "../pages/WasteCollection/WastePlot";
+import GroupWasteSpot from "../pages/WasteCollection/GroupWasteSpot";
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
@@ -141,6 +153,16 @@ const userRoutes = [
   {path:"/view-invoice", component:ViewInvoice},
   {path:"/auto-invoice", component:AutoInvoice},
 
+//Receipt
+{ path: "/view-receipt", component: Receipt },
+
+//Waste Collection
+{ path: "/waste-collect", component: HelperCollection },
+{ path: "/waste-collect/helper", component: HelperDrop },
+{ path: "/waste-collect/driver-collect", component: DriverCollection },
+{ path: "/waste-collect/driver-drop", component: DriverDrop },
+{ path: "/waste-collect/waste-plots", component: WastePlot },
+{path: "/waste-collect/waste-spots",component:GroupWasteSpot},
 
   //Utility
   { path: "/pages-starter", component: PagesStarter },
@@ -215,6 +237,7 @@ const userRoutes = [
    { path: "/District", component: District },
    { path: "/Localbody", component: Localbody },
    { path: "/Ward", component: Ward },
+   {path:"/group", component:Group},
 
    //accounts
    {path:"/account-type" , component:AccountType},

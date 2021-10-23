@@ -178,6 +178,65 @@ const SidebarContent = (props) => {
             <li>
               <Link to="/#" className="has-arrow waves-effect">
                 <i className="uil-user"></i>
+                <span>{props.t("Receipt")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/view-receipt">
+                    <i className="uil-plus"></i>
+                    {props.t("View Receipt")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
+                <span>{props.t("Waste Collection")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/waste-collect">
+                    <i className="uil-plus"></i>
+                    {props.t("Helper Collection")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/waste-collect/helper">
+                    <i className="uil-plus"></i>
+                    {props.t("Helper Drop")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/waste-collect/driver-collect">
+                    <i className="uil-plus"></i>
+                    {props.t("Driver Collection")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/waste-collect/driver-drop">
+                    <i className="uil-plus"></i>
+                    {props.t("Driver Drop")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/waste-collect/waste-plots">
+                    <i className="uil-plus"></i>
+                    {props.t("Waste Plots")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/waste-collect/waste-spots">
+                    <i className="uil-plus"></i>
+                    {props.t("Group Waste Spot")}
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/#" className="has-arrow waves-effect">
+                <i className="uil-user"></i>
                 <span>{props.t("Accounts")}</span>
               </Link>
               <ul className="sub-menu">
