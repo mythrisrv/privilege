@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
@@ -13,8 +13,12 @@ import {
   apiError,
   getPrivilagesOptions,
   getCompaniesOptions,
+  getCompaniesOptionsSuccess,
+  getDistrictsSuccess,
   getBranchesOptions,
+  getDistricts,
   updateLocalbody,
+  formreset
 } from "../../../store/actions";
 
 // Redux
@@ -37,7 +41,13 @@ const Localbodies = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [localbodysForTable, setLocalbodiesForTable] = useState([]);
-
+const[companyOptions,setcompanyOptions]=useState([])
+const[companyname,setCompanyname]=useState("");
+const[districtname,setDistrictname]=useState("");
+const[localbodytype,setlocalbodytype]=useState("");
+const[localbodyname,setlocalbodyname]=useState("");
+const[shortcode,setshortcode]=useState("");
+const [districtOptions,setdistrictOptions]=useState([])
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -53,8 +63,8 @@ const Localbodies = (props) => {
     error,
   } = useSelector((state) => state.localbodies);
 
-  
-
+  const companies=useSelector((state)=>state.companies);
+const district=useSelector((state)=>state.districts);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -62,6 +72,14 @@ const Localbodies = (props) => {
     
   }, []);
 
+  
+    useEffect(()=>{
+    
+        dispatch(getCompaniesOptions());
+        
+        dispatch(getDistricts());
+      
+    },[])
   
 
   useEffect(() => {
@@ -96,27 +114,14 @@ const Localbodies = (props) => {
   }, [updateLocalbodyResponse]);
 
   let preUpdateLocalbody = (item) => {
-    if (item.privilage) {
-      let privilage = {
-        label: item.privilage.name,
-        value: item.privilage._id,
-      };
-      handleSelectedPrivilage(privilage);
-    }
-    if (item.company) {
-      let company = {
-        label: item.company.name,
-        value: item.company._id,
-      };
-      handleSelectedCompany(company);
-    }
-    if (item.branch) {
-      let branch = {
-        label: item.branch.name,
-        value: item.branch._id,
-      };
-      handleSelectedBranch(branch);
-    }
+    console.log(item._id)
+     setCompanyname(item.company_name)
+      //handleSelectedPrivilage(privilage);
+    setDistrictname(item.district_name);
+    setlocalbodytype(item.localbody_type);
+    setlocalbodyname(item.localbody_name)
+    setshortcode(item.short_code)
+   
 
     setLocalbodyIdToBeUpdated(item._id);
     setLocalbodyObject({ ...item, password: null });
@@ -146,6 +151,8 @@ const Localbodies = (props) => {
               preUpdateLocalbody(item);
             }}
           ></i>
+          
+
           <i
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
@@ -171,8 +178,32 @@ const Localbodies = (props) => {
         width: 150,
       },
       {
+        label: "Company Name",
+        field: "company_name",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "District",
+        field: "district_name",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Localbody Type",
+        field: "localbody_type",
+        sort: "asc",
+        width: 400,
+      },
+      {
         label: "Localbody Name",
         field: "localbody_name",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Short code",
+        field: "short_code",
         sort: "asc",
         width: 400,
       },
@@ -187,12 +218,38 @@ const Localbodies = (props) => {
 
 
 
-  function handleChangeLocalbody(e) {
+  function handleChangeLocalbodyname(e) {
     let name = e.target.name;
     let value = e.target.value;
-    setLocalbodyObject({ ...localbodyObject, [name]: value });
+   setlocalbodyname(value)
+   setLocalbodyObject({ ...localbodyObject, [name]: value });
   }
 
+  function handleChangeCompany(e){
+    let name = e.target.name;
+    let value = e.target.value;
+   setCompanyname(value)
+   setLocalbodyObject({ ...localbodyObject, [name]: value });
+  }
+  function handleChangeDistrictName(e){
+    let name = e.target.name;
+    let value = e.target.value;
+   setDistrictname(value)
+   setLocalbodyObject({ ...localbodyObject, [name]: value });
+  }
+
+  function handleChangeLocalbodyType(e){
+    let name = e.target.name;
+    let value = e.target.value;
+   setlocalbodytype(value)
+   setLocalbodyObject({ ...localbodyObject, [name]: value });
+  }
+  function handleChangeShortcode(e){
+    let name = e.target.name;
+    let value = e.target.value;
+   setshortcode(value)
+   setLocalbodyObject({ ...localbodyObject, [name]: value });
+  }
   function handleSelectedPrivilage(value) {
     let newValue = {
       name: value.label,
@@ -226,9 +283,15 @@ const Localbodies = (props) => {
   }
 
   const handleValidSubmit = (event, values) => {
+    console.log(localbodyIdTobeUpdated)
     localbodyIdTobeUpdated
       ? dispatch(updateLocalbody(localbodyObject))
       : dispatch(addLocalbody(localbodyObject));
+    setCompanyname("");
+    setDistrictname("");
+    setlocalbodyname("");
+    setlocalbodytype("");
+    setshortcode("")
   };
 
   const handleValidSubmitPassword = (event, values) => {
@@ -284,17 +347,96 @@ const Localbodies = (props) => {
                     <Row>
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">Localbody Name</Label>
+                         
+                        <FormGroup>
+        
+        <Input type="select" name="company_name" id="exampleSelect" style={{appearance:"auto"}}  value={companyname}
+                            onChange={handleChangeCompany} onClick={()=>{
+                              console.log(companies);
+                              setcompanyOptions(companies.companiesOptions.data)
+                            }}>
+       <option>CompanyName</option>
+      {
+        companyOptions.map(options=>(
+           <option>{options.company_name}</option>
+         )
+
+         )
+       }
+     
+        </Input>
+      </FormGroup>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                         
+                        <FormGroup>
+        
+        <Input type="select" name="district_name" id="exampleSelect" style={{appearance:"auto"}}  value={districtname}
+                            onChange={handleChangeDistrictName} onClick={()=>{
+                              setdistrictOptions(district.districts)
+                            }}>
+        <option>District</option>
+        
+        {
+        districtOptions.map(options=>(
+           <option>{options.district_name}</option>
+         )
+
+         )
+       }
+        </Input>
+      </FormGroup>
+                        </div>
+                      </Col>
+                     
+
+                      <Col md="3">
+                        <div className="mb-3">
+                         
+                        <FormGroup>
+        
+        <Input type="select" name="localbody_type" id="exampleSelect" style={{appearance:"auto"}}  value={localbodytype}
+                            onChange={handleChangeLocalbodyType}>
+        <option>Local Body Type</option>
+        <option>Municipality</option>
+        <option>Gramapanchayath</option>
+        <option>corporation</option>
+         
+        </Input>
+      </FormGroup>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                         
                           <AvField
                             name="localbody_name"
-                            placeholder="localbody name"
+                            placeholder="Localbody Name"
                             type="text"
                             errorMessage="Enter localbody Name"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                            //validate={{ required: { value: true } }}
                             id="validationCustom01"
-                            value={localbodyObject.localbody_name}
-                            onChange={handleChangeLocalbody}
+                            value={localbodyname}
+                            onChange={handleChangeLocalbodyname}
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                         
+                          <AvField
+                            name="short_code"
+                            placeholder="ShortCode"
+                            type="text"
+                            errorMessage="Enter shortcode"
+                            className="form-control"
+                           // validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={shortcode}
+                            onChange={handleChangeShortcode}
                           />
                         </div>
                       </Col>

@@ -88,6 +88,7 @@ router.get("/:ward_Id", [jwtauth], async (req, res) => {
 router.put("/:ward_Id", [jwtauth], async (req, res) => {
   try {
     let item = await updateWard(req);
+    //console.log(item)
     res.status(200).json({
       status: 200,
       data: item,

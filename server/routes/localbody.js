@@ -17,6 +17,7 @@ const {
 //create localbody
 router.post('/',[validationMiddleware.createLocalbody,jwtauth], async (req, res) => {
   try {
+    console.log(req.body);
     let item = await createLocalbody(req);
      res.status(200).json({
       status: 200,
@@ -70,6 +71,7 @@ router.get("/list/options", [jwtauth], async (req, res) => {
 // Get localbody data
 router.get("/:localbody_Id", [jwtauth], async (req, res) => {
   try {
+    console.log(req.params)
     let item = await getLocalbodyData(req);
     res.status(200).json({
       status: 200,

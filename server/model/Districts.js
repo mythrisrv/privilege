@@ -6,6 +6,7 @@ let districtSchema = new Schema(
     
     district_name: {
       type: String,
+      
     },
     district_ip: {
       type: String,

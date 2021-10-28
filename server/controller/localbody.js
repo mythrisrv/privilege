@@ -7,14 +7,18 @@ createLocalbody = (req) => {
     var date2 = new Date();
     date = moment(date2).format(format2);
     time = moment(date2).format("hh:mm A");
-// console.log(req.body.district_name);
+ console.log(req.body);
   return new Promise(async (resolve, reject) => {
     try {
       //let  = new models.Customer(req.body);
       let localbody = new models.Localbody( 
         { 
           localbody_status:0,
-          localbody_name:req.body.localbody_name
+          company_name:req.body.company_name,
+          district_name:req.body.district_name,
+          localbody_type:req.body.localbody_type,
+           localbody_name:req.body.localbody_name,
+           short_code:req.body.short_code
          }
        );
       let numberOflocalbodies = await models.Localbody.countDocuments();
@@ -61,6 +65,7 @@ getLocalbodiesListOptions = (req) => {
       let localbodies = await models.Localbody.find({
         localbody_status:0,
       }).select("localbody_name");
+      console.log(localbodies);
       resolve(localbodies);
     } catch (err) {
       console.log(err);
@@ -73,9 +78,10 @@ getLocalbodiesListOptions = (req) => {
 
 getLocalbodyData = (req) => {
   return new Promise(async (resolve, reject) => {
+    console.log(req.params)
     try {
       let localbody= await models.Localbody.findOne({
-        _id: req.params.localbody_id,
+        localbody_name:req.params.localbodyname
       });
       resolve(localbody);
     } catch (err) {
@@ -90,6 +96,7 @@ getLocalbodyData = (req) => {
 updateLocalbody = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(req.params)
       let localbody = await models.Localbody.findByIdAndUpdate(
         req.params.localbody_Id,
         req.body,

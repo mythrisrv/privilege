@@ -37,8 +37,9 @@ getCompaniesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       let companies = await models.Company.find({
-        isListed: true,
-      }).select("_id name");
+        company_status:"0"
+      }).select("company_name");
+      
       resolve(companies);
     } catch (err) {
       console.log(err);

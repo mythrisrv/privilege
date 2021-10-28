@@ -111,13 +111,15 @@ getDistrictData = (req) => {
 updateDistrict = (req) => {
    return new Promise(async (resolve, reject) => {
     try {
+      //console.log(req.params.districtId)
       let district = await models.District.findByIdAndUpdate(
         req.params.districtId,
-        { district_name:"kannur1" },
+        req.body,
         { new: true }
       );
-     
+     console.log(district)
       resolve(district);
+      //console.log(district)
     } catch (err) {
       console.log(err);
       reject({

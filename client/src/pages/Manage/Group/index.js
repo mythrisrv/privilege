@@ -28,7 +28,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import "./user.scss";
 
-const QrCode = (props) => {
+const Group = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -363,7 +363,7 @@ const QrCode = (props) => {
                         <div className="mb-3">
                           <Label>Localbody</Label>
                           <Select
-                            name="customer_community_id"
+                            name="localbody_name"
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
@@ -449,7 +449,7 @@ const QrCode = (props) => {
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(QrCode));
+export default withRouter(connect(mapStateToProps, { apiError })(Group));
 
 // Users.propTypes = {
 //   error: PropTypes.any,

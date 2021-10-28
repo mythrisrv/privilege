@@ -63,7 +63,7 @@ export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
 
 // add localbodies
 export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
-export const getLocalbody = (localbodyId) => get(url.GET_LOCALBODY, localbodyId);
+export const getLocalbody = (localbodyname) => get(url.GET_LOCALBODY, localbodyname);
 export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
 export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
 

@@ -20,7 +20,8 @@ createWard = (req) => {
           ward_date:date,
           ward_time:time,
           ward_name:req.body.ward_name,
-          ward_no:req.body.wrd_no,
+          ward_no:req.body.ward_no,
+          localbody_name:req.body.localbody_name,
           state_id:19,
           dist_id:101,
           //localbody_type_id:req.body.localbody_id,
@@ -108,6 +109,7 @@ updateWard = (req) => {
           new: true,
         }
       );
+     console.log(ward)
       resolve(ward);
     } catch (err) {
       console.log(err);

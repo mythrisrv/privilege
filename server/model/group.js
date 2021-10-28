@@ -9,6 +9,9 @@ let groupSchema = new Schema(
         required: true,
         unique: true,
       },
+      group_localbody_name:{
+        type:String
+      },
       group_ip: {
         type: String,
         required: true,

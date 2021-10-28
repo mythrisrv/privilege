@@ -11,6 +11,9 @@ import {
   UPDATE_LOCALBODY,
   UPDATE_LOCALBODY_SUCCESS,
   UPDATE_LOCALBODY_FAIL,
+  GET_LOCALBODY,
+  GET_LOCALBODY_SUCCESS,
+  GET_LOCALBODY_FAIL
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -40,6 +43,23 @@ const Localbody = (state = INIT_STATE, action) => {
       };
 
     case GET_LOCALBODIES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+     
+      
+      case GET_LOCALBODY:
+        return {
+          ...state,
+          params: action.payload,
+        };
+        case GET_LOCALBODY_SUCCESS:
+          return {
+            ...state,
+            localbody: action.payload.data,
+          };
+          case GET_LOCALBODY_FAIL:
       return {
         ...state,
         error: action.payload,
