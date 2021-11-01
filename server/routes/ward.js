@@ -16,6 +16,7 @@ const {
 
 
 router.post('/',[validationMiddleware.createWardvalidator,jwtauth], async (req, res) => {
+  console.log(req.body);
   try {
     let item = await createWard(req);
      res.status(200).json({

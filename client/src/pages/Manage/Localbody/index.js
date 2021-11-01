@@ -250,14 +250,14 @@ const district=useSelector((state)=>state.districts);
    setshortcode(value)
    setLocalbodyObject({ ...localbodyObject, [name]: value });
   }
-  function handleSelectedPrivilage(value) {
+ /* function handleSelectedPrivilage(value) {
     let newValue = {
       name: value.label,
       _id: value.value,
     };
     setSelectedPrivilage(value);
     setLocalbodyObject({ ...localbodyObject, privilage: newValue });
-  }
+  
 
   function handleSelectedCompany(value) {
     let newValue = {
@@ -274,8 +274,7 @@ const district=useSelector((state)=>state.districts);
     };
     setSelectedBranch(value);
     setLocalbodyObject({ ...localbodyObject, branch: newValue });
-  }
-
+  }*/
   function handleChangePassword(e) {
     let name = e.target.name;
     let value = e.target.value;

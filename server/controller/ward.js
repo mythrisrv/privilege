@@ -7,8 +7,9 @@ createWard = (req) => {
     var date2 = new Date();
     date = moment(date2).format(format2);
     time = moment(date2).format("hh:mm A");
-// console.log(req.body.district_name);
+ console.log(req.body);
   return new Promise(async (resolve, reject) => {
+    
     try {
       //let  = new models.Customer(req.body);
       let ward = new models.Ward( 
@@ -47,7 +48,7 @@ getWardsList = (req) => {
     try {
       let ward = await models.Ward.find({
         ward_status: 0,
-      });
+      }).sort({createdAt:-1})
       resolve(ward);
     } catch (err) {
       console.log(err);

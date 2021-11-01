@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { MDBDataTable } from "mdbreact";
+import { MDBDataTable, } from "mdbreact";
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -155,13 +155,13 @@ const[districtValue,setdistrictValue]=useState("")
       {
         label: "#",
         field: "id",
-        sort: "asc",
+        //sort: "desc",
         width: 150,
       },
       {
         label: "Name",
         field: "district_name",
-        sort: "asc",
+        sort: "desc",
         width: 400,
       },
       {
@@ -292,16 +292,17 @@ const[districtValue,setdistrictValue]=useState("")
                             onChange={handleChangeDistrict}
                             
                           />
-                        </div>
+                       </div>
                       </Col>
-                     
+                    
                      <Col>
-                     <div className="mb-3">
+                     <div className="mb-3" style={{paddingTop:"30px"}}>
                      {districtIdTobeUpdated ? (
                       <Button
                         color="primary"
                         type="submit"
                         disabled={addingDistrict ? true : false}
+                       
                       >
                         {addingDistrict ? "Updating" : "Update"}
                       </Button>
@@ -310,7 +311,7 @@ const[districtValue,setdistrictValue]=useState("")
                         color="primary"
                         type="submit"
                         disabled={addingDistrict ? true : false}
-                      >
+                       >
                         {addingDistrict ? "Adding" : "Submit"}
                         
                       </Button>
@@ -319,10 +320,11 @@ const[districtValue,setdistrictValue]=useState("")
                     }
                     </div>
                      </Col>
-                    </Row>
-
                    
+
+                   </Row>
                   </AvForm>
+                  
                 </CardBody>
               </Card>
             </Col>
@@ -338,6 +340,7 @@ const[districtValue,setdistrictValue]=useState("")
                     searching={true}
                     paging={true}
                     info={false}
+                   
                   />
                 </CardBody>
               </Card>

@@ -19,6 +19,7 @@ router.post('/',[validationMiddleware.createLocalbody,jwtauth], async (req, res)
   try {
     //console.log(req.body);
     let item = await createLocalbody(req);
+   
      res.status(200).json({
       status: 200,
       data: item,

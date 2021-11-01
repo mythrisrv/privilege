@@ -384,7 +384,7 @@ setWardname(item.ward_name)
                         <div className="mb-3">
                          
                           <AvField
-                            name="wardname"
+                            name="ward_name"
                             placeholder=" Enter Ward name"
                             type="text"
                             errorMessage="Enter ward Name"

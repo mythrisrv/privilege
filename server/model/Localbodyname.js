@@ -24,6 +24,9 @@ let localbodynameSchema = new Schema(
         type: String,
         required: true,
       },
+      localbody_type:{
+        type:String,
+      },
       localbody_addedby: {
         type: String,
         //required: true,
