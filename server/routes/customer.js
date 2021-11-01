@@ -4,7 +4,7 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
-    createCustomer,customerProfile,updateCustomer
+    createCustomer,customerProfile,updateCustomer,getCustomersList
 } = require('../controller/API/CustomerController');
 let item;
 router.post('/create', async (req, res) => {
@@ -64,7 +64,25 @@ router.post('/create', async (req, res) => {
   //    });
   //   }
   });
-  /********************
+ 
+/* customers */
+   router.get("/list",[jwtauth] , async (req, res) => {
+    try {
+     
+      let item = await getCustomersList(req)
+      console.log(item);
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
+   /********************
  * profile
  * ******************/
   router.get("/profile/:id", [jwtauth], async (req, res) => {

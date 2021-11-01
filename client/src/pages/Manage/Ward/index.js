@@ -453,7 +453,7 @@ setWardname(item.ward_name)
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>

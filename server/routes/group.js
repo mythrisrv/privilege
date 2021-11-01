@@ -4,7 +4,8 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
-   createGroup
+   createGroup,
+   getGroupsList
 } = require('../controller/groupController');
 
 
@@ -26,11 +27,11 @@ router.post('/',[validationMiddleware.createGroup,jwtauth], async (req, res) => 
   }
 });
 
-//Get localbody list
-router.get("/list", [jwtauth], async (req, res) => {
+//Get groups list
+router.get("/list",[jwtauth] , async (req, res) => {
   try {
-    // let item = await getDistrictsList(req);
-    let item = await getLocalbodiesList(req)
+    let item = await getGroupsList(req)
+    console.log(item)
     res.status(200).json({
       status: 200,
       data: item,
@@ -44,78 +45,4 @@ router.get("/list", [jwtauth], async (req, res) => {
 });
 
 
-// router.get('/list/',validationMiddleware.getDistrictList,getDistrictList);
-// // Get list options
-router.get("/list/options", [jwtauth], async (req, res) => {
-  try {
-    let item = await getLocalbodiesListOptions(req);
-    res.status(200).json({
-      status: 200,
-      data: item,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: err.message,
-    });
-  }
-});
-
-
-
-// Get localbody data
-router.get("/:localbody_Id", [jwtauth], async (req, res) => {
-  try {
-    console.log(req.params)
-    let item = await getLocalbodyData(req);
-    res.status(200).json({
-      status: 200,
-      data: item,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: err.message,
-    });
-  }
-});
-
-
-// Updata localbody data
-router.put("/:localbody_Id", [jwtauth], async (req, res) => {
-  try {
-    let item = await updateLocalbody(req);
-    res.status(200).json({
-      status: 200,
-      data: item,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: err.message,
-    });
-  }
-});
-
-
-
-//Delete localbody by id
-router.delete("/:localbody_Id", [jwtauth], async (req, res) => {
-  try {
-    let item = await deleteLocalbody(req);
-    res.status(200).json({
-      status: 200,
-      message: "Item deleted successfully",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      message: err.message,
-    });
-  }
-});
-
-
-
-
-module.exports = router;
+module.exports=router;

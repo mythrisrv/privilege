@@ -106,6 +106,12 @@ import Ward from "../pages/Manage/Ward";
 //Group
 import Group from "../pages/Manage/Group";
 
+// Add Customer
+import Customer from "../pages/Customers/AddCustomer";
+import AddCustomer from "../pages/Customers/AddCustomer";
+
+
+
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
@@ -188,6 +194,9 @@ const userRoutes = [
    { path: "/Localbody", component: Localbody },
    { path: "/Ward", component: Ward },
    {path:"/Group",component:Group},
+
+   //Customers
+   {path:"/Customer",component:AddCustomer},
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

@@ -4,11 +4,7 @@ const bcrypt = require("bcryptjs");
 const { isInteger } = require("lodash");
 let groupSchema = new Schema(
     {
-        group_id: {
-        type: String,
-        required: true,
-        unique: true,
-      },
+        
       group_localbody_name:{
         type:String
       },

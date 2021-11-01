@@ -29,6 +29,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+
 //import "./district.scss";
 
 const Localbodies = (props) => {
@@ -67,14 +68,11 @@ const [districtOptions,setdistrictOptions]=useState([])
 const district=useSelector((state)=>state.districts);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getLocalbodies());
-    
-  }, []);
+ 
 
   
     useEffect(()=>{
-    
+    dispatch(getLocalbodies())
         dispatch(getCompaniesOptions());
         
         dispatch(getDistricts());
@@ -164,6 +162,8 @@ const district=useSelector((state)=>state.districts);
         </div>
       );
       item.id = index + 1;
+      item.company_name=item.localbody_company.company_name;
+      item.district_name=item.dist_id.district_name;
       localbodyData.push(item);
     });
     setLocalbodiesForTable(localbodyData);
@@ -479,7 +479,7 @@ const district=useSelector((state)=>state.districts);
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>

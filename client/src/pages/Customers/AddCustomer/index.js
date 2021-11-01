@@ -23,7 +23,8 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
-} from "../../store/actions";
+  getCustomers,
+} from "../../../store/actions";
 
 // Redux
 import { connect } from "react-redux";
@@ -32,7 +33,7 @@ import { withRouter } from "react-router-dom";
 import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 //import "./user.scss";
 
 const Customers = (props) => {
@@ -71,7 +72,9 @@ const Customers = (props) => {
     error,
   } = useSelector((state) => state.users);
   
-
+const {
+  customers
+}=useSelector((state)=>state.customers);
   //edited
   
   // const customertypeOptions = useSelector(
@@ -117,9 +120,10 @@ const Customers = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
+    dispatch(getCustomers())
+    //dispatch(getUsers());
+    //dispatch(getPrivilagesOptions());
+   // dispatch(getCompaniesOptions());
     //edited
    //dispatch(getCustomerTypesOptions());
     //dispatch(getDesignationOptions());
@@ -271,9 +275,9 @@ const Customers = (props) => {
   };
 
   useEffect(() => {
-    let userData = [];
+    let customerData = [];
 
-    users.map((item, index) => {
+    customers.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
@@ -310,10 +314,14 @@ const Customers = (props) => {
       item.privilage1 = item.privilage && item.privilage.name;
       item.company1 = item.company && item.company.name;
       item.branch1 = item.branch && item.branch.name;
-      userData.push(item);
+    // item.type=item.cust_type.customer_type_name;
+    //item.district=item.district.district_name
+      item.localbody="localbody name";
+      item.ward="ward name"
+      customerData.push(item);
     });
-    setUsersForTable(userData);
-  }, [users]);
+    setUsersForTable(customerData);
+  }, [customers]);
 
   const data = {
     columns: [
@@ -325,7 +333,7 @@ const Customers = (props) => {
               },
               {
                 label: "Reg No",
-                field: "regno",
+                field: "cust_reg_no",
                 sort: "asc",
                 width: 400,
               },
@@ -337,16 +345,17 @@ const Customers = (props) => {
               },
               {
                 label: "Name",
-                field: "name",
+                field: "cust_name",
                 sort: "asc",
                 width: 200,
               },
               {
                 label: "Phone",
-                field: "phone",
+                field: "cust_phone",
                 sort: "asc",
-                width: 100,
+                width: 200,
               },
+             
               {
                 label: "District",
                 field: "district",

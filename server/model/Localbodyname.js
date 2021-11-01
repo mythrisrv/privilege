@@ -4,13 +4,13 @@ let Schema = mongoose.Schema;
 let localbodynameSchema = new Schema(
   {
     local_id: {
-      type: String,
-      required: false,
-      unique: true,
+     type: String,
+     // required: false,
+      //unique: true,
     },
     localbody_id: {
       type: String,
-      required: true,
+     // required: true,
     },
     localbody_time: {
       type: String,
@@ -26,7 +26,7 @@ let localbodynameSchema = new Schema(
       },
       localbody_addedby: {
         type: String,
-        required: true,
+        //required: true,
       },
       localbody_name: {
         type: String,
@@ -38,15 +38,20 @@ let localbodynameSchema = new Schema(
       },
       state_id: {
         type: String,
-        required: true,
+       
       },
       dist_id: {
-        type: String,
-        required: true,
+        type: Schema.Types.ObjectId,
+        ref:"districts",
       },
       local_body_id: {
         type: String,
-        required: true,
+       // required: true,
+      },
+      localbody_company:{
+        type:Schema.Types.ObjectId,
+        ref:"tbl_company"
+
       },
     isListed: {
       type: Boolean,

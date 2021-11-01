@@ -83,3 +83,10 @@ export const getBranchesOptions = (companyId) =>
   get(`${url.GET_BRANCHES_OPTIONS}/${companyId}`, { companyId: companyId });
 
 export { getLoggedInUser, isUserAuthenticated, login };
+
+
+// get Groups
+export const getGroups  = () => get(url.GET_GROUPS);
+
+//get customers
+export const getCustomers = () =>get(url.GET_CUSTOMERS);

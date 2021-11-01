@@ -15,3 +15,5 @@ export * from "./companies/actions";
 export * from "./district/actions";
 export * from "./ward/actions";
 export * from "./localbody/actions";
+export * from "./group/actions";
+export * from "./customer/actions";

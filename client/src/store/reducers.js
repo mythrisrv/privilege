@@ -19,6 +19,12 @@ import wards from "./ward/reducer";
 //Localbody
 import localbodies from "./localbody/reducer";
 
+//group
+import groups from "./group/reducer";
+ 
+//customers
+
+import customers  from "./customer/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -33,7 +39,9 @@ const rootReducer = combineReducers({
   branches,
   districts,
   wards,
-  localbodies
+  localbodies,
+  groups,
+  customers,
 });
 
 export default rootReducer;
