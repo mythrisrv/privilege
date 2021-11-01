@@ -6,20 +6,19 @@ exports.customerLogin = async (req, res) => {
   try {
     var mob = req.body.mobile;
     const user = await models.User.findOne({ mobile: mob }).then(info=>{
-      if(info)
-      {
-        console.log(info);
+     // if(info)
+      //{
         if (!info) {
           res.send({"success":false,"message":"User not exist"});       
         } 
-        else{
+        else{ 
           if(mob.length==10)
           {
               mob = '+91'+mob;
           }
           var otp = Math.floor(1000 + Math.random() * 9000);
           console.log(otp);
-          var message = 'Hi, '+otp+' is your myKit OTP. Do not share this code with anyone else. Regards, myKit Ecommerce';
+          var message = 'Hi, '+otp+' is your Hazel OTP. Do not share this code with anyone else. Regards,  HazelGreen';
           var axios = require('axios');
       
           var config = {
@@ -63,11 +62,11 @@ var datetime= m.getFullYear() +"-"+ (m.getMonth()+1) +"-"+ m.getDate() + " " + m
               message_log = await message_log.save();
 
           
-          res.send({response:true,message:'Otp send Successfully',otp:otp});
+          res.send({response:true,message:'Otp Send Successfully'});
         };
         proceed();
         }
-      }
+      //}
     });
     // console.log(user);
     
