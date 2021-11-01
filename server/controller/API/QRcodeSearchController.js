@@ -33,9 +33,8 @@ getUserData = (req) => {
              {cust_reg_no: { $regex:keyword }},
              {cust_phone: { $regex:keyword }},
              {cust_house_no: { $regex:keyword }},
-             //{ward:{ $regex:keyword }},
-            
- ]
+             
+            ]
        }
         
         //  [ {$match:
