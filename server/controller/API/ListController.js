@@ -43,8 +43,8 @@ DistrictList = (req) => {
       try {
         let group = await models.group.find({
           group_status: 0,
-        }).select("_id group_id group_name group_ward");
-        resolve(group);
+        }).select("_id group_name");
+        resolve(group)
       } catch (err) {
         console.log(err);
         reject({

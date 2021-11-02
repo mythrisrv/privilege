@@ -3,9 +3,8 @@ let Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const { isInteger } = require("lodash");
 let groupSchema = new Schema(
-    {
-        
-      group_localbody_name:{
+    {  
+      group_name:{
         type:String
       },
       group_ip: {
@@ -22,9 +21,6 @@ let groupSchema = new Schema(
         type:Date,
       },
       group_addedby: {
-        type: String,
-      },
-      group_name: {
         type: String,
       },
       group_state_id: {
