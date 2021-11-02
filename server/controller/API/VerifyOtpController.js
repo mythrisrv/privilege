@@ -1,5 +1,7 @@
 let models = require("../../model");
 const jwt = require('jsonwebtoken');
+const env = process.env.NODE_ENV || "development";
+const config = require("../../config")[env];
 
 exports.verifyOtp = async(req,res)=>{
     try{
@@ -9,9 +11,20 @@ exports.verifyOtp = async(req,res)=>{
         const result = await models.Otpmessage.findOne({ mobile:contact}).sort({createdAt:-1}).limit(1) 
         if(result){
             if(result.otp==otp){
-                 const user = await models.User.findOne({mobile:mob})
+                 let user = await models.User.findOne({mobile:mob})
                 if(user){
-                    res.send({"success":true,"message":"Otp verified Successfully",data:user});
+                  user = user
+                    user.token = jwt.sign(
+                        {
+                          _id: user._id,
+                        },
+                        config.secret,
+                        {
+                          expiresIn: "30m",
+                        }
+                      )
+                    res.send({"success":true,"message":"Otp verified Successfully",data:user,token:user.token
+                });
                 }else{
                     res.send({"success":true,"message":"Otp verified Successfully"}); 
                 }
