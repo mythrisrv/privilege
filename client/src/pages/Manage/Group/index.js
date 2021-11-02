@@ -15,6 +15,7 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getGroups,
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -28,7 +29,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import "./user.scss";
 
-const QrCode = (props) => {
+const Group = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -55,7 +56,10 @@ const QrCode = (props) => {
     updateUserResponse,
     error,
   } = useSelector((state) => state.users);
-
+  const{
+    groups
+  } =useSelector((state)=>state.groups)
+ 
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
   // );
@@ -72,50 +76,20 @@ const QrCode = (props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
-  }, []);
+  
 
   useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+  // dispatch(getUsers())
+     dispatch(getGroups());
+    }, []);
 
-  useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
-      setSelectedPrivilage({});
-      setSelectedCompany(null);
-      setSelectedBranch(null);
-      //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
-    }
-  }, [addUserResponse]);
+  
 
-  useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
-    }
-  }, [deleteUserResponse]);
+ 
 
-  useEffect(() => {
-    if (updateUserResponse.type === "success") {
-      setShowModal(false);
-      setUserIdToBeUpdated(null);
-      setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
-    }
-  }, [updateUserResponse]);
+  
+
+  
 
   //   let preUpdateUser = (item) => {
   //     if (item.privilage) {
@@ -151,7 +125,7 @@ const QrCode = (props) => {
 
   useEffect(() => {
     let userData = [];
-
+let groupsData=[];
     users.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -363,7 +337,7 @@ const QrCode = (props) => {
                         <div className="mb-3">
                           <Label>Localbody</Label>
                           <Select
-                            name="customer_community_id"
+                            name="localbody_name"
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
@@ -449,9 +423,9 @@ const QrCode = (props) => {
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(QrCode));
+export default withRouter(connect(mapStateToProps, { apiError })(Group));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ Group.propTypes = {
+  error: PropTypes.any,
+   groups: PropTypes.array,
+ };

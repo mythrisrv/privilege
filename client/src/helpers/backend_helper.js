@@ -63,7 +63,7 @@ export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
 
 // add localbodies
 export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
-export const getLocalbody = (localbodyId) => get(url.GET_LOCALBODY, localbodyId);
+export const getLocalbody = (localbodyname) => get(url.GET_LOCALBODY, localbodyname);
 export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
 export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
 
@@ -83,3 +83,10 @@ export const getBranchesOptions = (companyId) =>
   get(`${url.GET_BRANCHES_OPTIONS}/${companyId}`, { companyId: companyId });
 
 export { getLoggedInUser, isUserAuthenticated, login };
+
+
+// get Groups
+export const getGroups  = () => get(url.GET_GROUPS);
+
+//get customers
+export const getCustomers = () =>get(url.GET_CUSTOMERS);

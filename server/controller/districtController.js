@@ -25,8 +25,8 @@ time = moment(date2).format("hh:mm A");
         );
       let numberOfDistricts = await models.District.countDocuments();
       district.Id = numberOfDistricts + 1;
-      district = await district.save();
-      console.log(district)
+      district = await district.save()
+     
       resolve(district);
      
        } catch (err) {
@@ -48,7 +48,7 @@ getDistrictList = (req) => {
         .lean()
         .populate("states", "name")
         .populate("countries", "name")
-      
+      .sort({createdAt:-1})
       resolve(district);
     } catch (err) {
       console.log(err);
@@ -111,13 +111,15 @@ getDistrictData = (req) => {
 updateDistrict = (req) => {
    return new Promise(async (resolve, reject) => {
     try {
+      //console.log(req.params.districtId)
       let district = await models.District.findByIdAndUpdate(
         req.params.districtId,
-        { district_name:"kannur1" },
+        req.body,
         { new: true }
-      );
-     
+      ).sort({createdAt:-1})
+     console.log(district)
       resolve(district);
+      //console.log(district)
     } catch (err) {
       console.log(err);
       reject({

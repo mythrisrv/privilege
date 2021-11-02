@@ -97,8 +97,10 @@ router.get("/:districtId", [jwtauth], async (req, res) => {
 
 // Updata customer data
 router.put("/:districtId", [jwtauth], async (req, res) => {
+  console.log(req.body)
   try {
     let item = await updateDistrict(req);
+   
     res.status(200).json({
       status: 200,
       data: item,

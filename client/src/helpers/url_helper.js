@@ -46,3 +46,9 @@ export const GET_COMPANIES_OPTIONS = "/company/list/options";
 export const GET_BRANCHES_OPTIONS = "/branch/list/options";
 
 export const GET_USER_PROFILE = "/user";
+
+//Groups
+export const GET_GROUPS= "/group/list";
+
+//get customers
+export const GET_CUSTOMERS = "/customer/list";

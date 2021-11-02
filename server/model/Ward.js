@@ -31,7 +31,7 @@ let wardSchema = new Schema(
         type: String,
      },
      ward_no:{
-        type: String,
+        type: Number,
      },
      state_id:{
         //type: Schema.Types.ObjectId,
@@ -48,6 +48,10 @@ let wardSchema = new Schema(
      localbody_name_id:{
         type: Schema.Types.ObjectId,
         // ref: "tbl_local_body_name",
+      },
+      localbody_name:{
+         type:String,
+
       },
     ward_company:{
         type: String,

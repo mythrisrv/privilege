@@ -11,6 +11,7 @@ import {
   UPDATE_DISTRICT,
   UPDATE_DISTRICT_SUCCESS,
   UPDATE_DISTRICT_FAIL,
+  
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -59,9 +60,12 @@ const District = (state = INIT_STATE, action) => {
         addDistrictResponse: {
           type: "success",
           message: "District added successfully",
+         
         },
+      
         districts: newUers,
         error: {},
+        
       };
 
     case ADD_DISTRICT_FAIL:
@@ -142,7 +146,7 @@ const District = (state = INIT_STATE, action) => {
         },
         error: action.payload,
       };
-
+     
     default:
       return state;
   }

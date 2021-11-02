@@ -15,6 +15,11 @@ import districtSaga from "./district/saga";
 import wardSaga from "./ward/saga";
 //Localbody
 import localbodySaga from "./localbody/saga";
+//Group
+import groupSaga from "./localbody/saga"
+
+//customer
+import customerSaga from "./customer/saga"
 
 
 export default function* rootSaga() {
@@ -32,5 +37,7 @@ export default function* rootSaga() {
     fork(districtSaga),
     fork(wardSaga),
     fork(localbodySaga),
+    fork(groupSaga),
+    fork(customerSaga),
   ]);
 }

@@ -3,16 +3,16 @@ const Privilage = require("./Privilage");
 const Company = require("./Company");
 const Branch = require("./Branch");
 const Supplier = require("./Supplier");
-const District= require("./Districts");
+const District= require("./District");
 const Otpmessage= require("./Otpmessage");
 const Message= require("./Message");
 const Ward =require("./Ward");
 const Localbody = require("./Localbody");
 const Thariff = require("./Thariff");
-const LocalbodyName = require("./Localbodyname");
+const LocalbodyName = require("./LocalbodyName");
 const Customer = require("./Customer");
 const Customer_type = require("./Customer_type");
-const group = require("./group");
+const Group = require("./Group");
 const TariffAssign = require("./ThariffAssign");
 const Invoice = require("./Invoice");
 const InvoiceItem = require("./InvoiceItem");
@@ -33,7 +33,7 @@ module.exports = {
   Thariff,
   LocalbodyName,
   Customer_type,
-  group,
+  Group,
   TariffAssign,
   Invoice,
   InvoiceItem

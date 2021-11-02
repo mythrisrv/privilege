@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { MDBDataTable } from "mdbreact";
+import { MDBDataTable, } from "mdbreact";
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -37,7 +37,7 @@ const Districts = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [districtsForTable, setDistrictsForTable] = useState([]);
-
+const[districtValue,setdistrictValue]=useState("")
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -64,23 +64,28 @@ const Districts = (props) => {
 
   
 
-  useEffect(() => {
+ useEffect(()=>{
     if (addDistrictResponse.type === "success") {
       toastr.success(addDistrictResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
+    
+ 
+     
     } else if (addDistrictResponse.type === "failure") {
       toastr.error(error.data.message, addDistrictResponse.message);
     }
-  }, [addDistrictResponse]);
+  },[addDistrictResponse])
+  
 
   useEffect(() => {
     if (deleteDistrictResponse.type === "success") {
+      
       toastr.success(deleteDistrictResponse.message);
       setDistrictIdToBeDeleted(null);
     } else if (deleteDistrictResponse.type === "failure") {
-      toastr.error(error.data.message, deleteDistrictResponse.message);
+      toastr.error(error.data.message, deleteDistrictResponse.message,{timeOut:2000,preventDuplicates:true});
     }
   }, [deleteDistrictResponse]);
 
@@ -96,28 +101,11 @@ const Districts = (props) => {
   }, [updateDistrictResponse]);
 
   let preUpdateDistrict = (item) => {
-    if (item.privilage) {
-      let privilage = {
-        label: item.privilage.name,
-        value: item.privilage._id,
-      };
-      handleSelectedPrivilage(privilage);
+    console.log(item)
+    if (item.district_name) {
+     setdistrictValue(item.district_name)
+     console.log(districtValue)
     }
-    if (item.company) {
-      let company = {
-        label: item.company.name,
-        value: item.company._id,
-      };
-      handleSelectedCompany(company);
-    }
-    if (item.branch) {
-      let branch = {
-        label: item.branch.name,
-        value: item.branch._id,
-      };
-      handleSelectedBranch(branch);
-    }
-
     setDistrictIdToBeUpdated(item._id);
     setDistrictObject({ ...item, password: null });
   };
@@ -159,6 +147,7 @@ const Districts = (props) => {
       districtData.push(item);
     });
     setDistrictsForTable(districtData);
+    console.log(districtsForTable)
   }, [districts]);
 
   const data = {
@@ -166,13 +155,13 @@ const Districts = (props) => {
       {
         label: "#",
         field: "id",
-        sort: "asc",
+        //sort: "desc",
         width: 150,
       },
       {
         label: "Name",
         field: "district_name",
-        sort: "asc",
+        sort: "desc",
         width: 400,
       },
       {
@@ -189,7 +178,9 @@ const Districts = (props) => {
   function handleChangeDistrict(e) {
     let name = e.target.name;
     let value = e.target.value;
+    setdistrictValue(value)
     setDistrictObject({ ...districtObject, [name]: value });
+    
   }
 
   function handleSelectedPrivilage(value) {
@@ -216,6 +207,7 @@ const Districts = (props) => {
     };
     setSelectedBranch(value);
     setDistrictObject({ ...districtObject, branch: newValue });
+    
   }
 
   function handleChangePassword(e) {
@@ -228,6 +220,8 @@ const Districts = (props) => {
     districtIdTobeUpdated
       ? dispatch(updateDistrict(districtObject))
       : dispatch(addDistrict(districtObject));
+      setdistrictValue("")
+     
   };
 
   const handleValidSubmitPassword = (event, values) => {
@@ -277,7 +271,9 @@ const Districts = (props) => {
                   <AvForm
                     className="needs-validation"
                     onValidSubmit={(e, v) => {
-                      handleValidSubmit(e, v);
+                     
+                      handleValidSubmit(e, v)
+                   
                     }}
                   >
                     <Row>
@@ -290,21 +286,23 @@ const Districts = (props) => {
                             type="text"
                             errorMessage="Enter District Name"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                           
                             id="validationCustom01"
-                            value={districtObject.district_name}
+                            value={districtValue}
                             onChange={handleChangeDistrict}
+                            
                           />
-                        </div>
+                       </div>
                       </Col>
-                     
+                    
                      <Col>
-                     <div className="mb-3">
+                     <div className="mb-3" style={{paddingTop:"30px"}}>
                      {districtIdTobeUpdated ? (
                       <Button
                         color="primary"
                         type="submit"
                         disabled={addingDistrict ? true : false}
+                       
                       >
                         {addingDistrict ? "Updating" : "Update"}
                       </Button>
@@ -313,16 +311,20 @@ const Districts = (props) => {
                         color="primary"
                         type="submit"
                         disabled={addingDistrict ? true : false}
-                      >
+                       >
                         {addingDistrict ? "Adding" : "Submit"}
+                        
                       </Button>
-                    )}
+                      
+                    )
+                    }
                     </div>
                      </Col>
-                    </Row>
-
                    
+
+                   </Row>
                   </AvForm>
+                  
                 </CardBody>
               </Card>
             </Col>
@@ -336,8 +338,9 @@ const Districts = (props) => {
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
+                   
                   />
                 </CardBody>
               </Card>

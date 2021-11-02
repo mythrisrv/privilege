@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
-import toastr from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
+import toastr, { options } from "toastr";
+import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
@@ -14,7 +14,11 @@ import {
   getPrivilagesOptions,
   getCompaniesOptions,
   getBranchesOptions,
+  getLocalbodies,
+  getLocalbodiesSuccess,
   updateWard,
+  getLocalbody,
+  getLocalbodySuccess
 } from "../../../store/actions";
 
 // Redux
@@ -37,7 +41,11 @@ const Wards = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [wardsForTable, setWardsForTable] = useState([]);
-
+  const [localbodyOptions,setlocalbodyOptions]=useState([])
+  const [wardname,setWardname]=useState("")
+  const[localbodyname,setLocalbodyname]=useState("")
+  const[wardshortcode,setwardShortcode]=useState("")
+  const[wardno,setwardno]=useState("")
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -53,12 +61,14 @@ const Wards = (props) => {
     error,
   } = useSelector((state) => state.wards);
 
+  const localbody=useSelector((state)=>state.localbodies)
   
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getWards());
+    dispatch(getLocalbodies())
     
   }, []);
 
@@ -96,28 +106,13 @@ const Wards = (props) => {
   }, [updateWardResponse]);
 
   let preUpdateWard = (item) => {
-    if (item.privilage) {
-      let privilage = {
-        label: item.privilage.name,
-        value: item.privilage._id,
-      };
-      handleSelectedPrivilage(privilage);
-    }
-    if (item.company) {
-      let company = {
-        label: item.company.name,
-        value: item.company._id,
-      };
-      handleSelectedCompany(company);
-    }
-    if (item.branch) {
-      let branch = {
-        label: item.branch.name,
-        value: item.branch._id,
-      };
-      handleSelectedBranch(branch);
-    }
-
+   
+     console.log(item)
+        setLocalbodyname(item.localbody_name);
+setwardno(item.ward_no);
+setWardname(item.ward_name)
+    
+     // handleSelectedlocalbodyname(localbodyname);
     setWardIdToBeUpdated(item._id);
     setWardObject({ ...item, password: null });
   };
@@ -142,6 +137,7 @@ const Wards = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
+             console.log(item)
               preUpdateWard(item);
             }}
           ></i>
@@ -170,6 +166,18 @@ const Wards = (props) => {
         width: 150,
       },
       {
+        label: "Localbody ",
+        field: "localbody_name",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "ward Number",
+        field: "ward_no",
+        sort: "asc",
+        width: 400,
+      },
+      {
         label: "ward Name",
         field: "ward_name",
         sort: "asc",
@@ -189,15 +197,46 @@ const Wards = (props) => {
   function handleChangeWard(e) {
     let name = e.target.name;
     let value = e.target.value;
+    setWardname(value)
+ 
+   
     setWardObject({ ...wardObject, [name]: value });
+    
   }
+  function handleChangeWardno(e) {
+    let name = e.target.name;
+    let value = e.target.value;
+    setwardno(value)
+ 
+   
+    setWardObject({ ...wardObject, [name]: value });
+    
+  }
+  function handelChangeLocalbody(e){
+    
+    let name=e.target.name;
+    let value=e.target.value;
+    setLocalbodyname(value)
 
-  function handleSelectedPrivilage(value) {
+    const shortcode=localbodyOptions.find( ({ localbody_name }) => localbody_name === localbodyname)
+    if(shortcode){
+      let wardcode=shortcode.short_code;
+      setwardShortcode(wardcode);
+    }
+  
+    setWardObject({ ...wardObject, [name]: value });
+    
+    
+  }
+    
+  
+
+  function handleSelectedlocalbodyname(value) {
     let newValue = {
       name: value.label,
       _id: value.value,
     };
-    setSelectedPrivilage(value);
+    setLocalbodyname(value);
     setWardObject({ ...wardObject, privilage: newValue });
   }
 
@@ -211,11 +250,11 @@ const Wards = (props) => {
   }
   function handleSelectedBranch(value) {
     let newValue = {
-      name: value.label,
-      _id: value.value,
+      name: value.value,
+     
     };
     setSelectedBranch(value);
-    setWardObject({ ...wardObject, branch: newValue });
+    setWardObject({ ...wardObject, localbody_name: newValue });
   }
 
   function handleChangePassword(e) {
@@ -228,6 +267,9 @@ const Wards = (props) => {
     wardIdTobeUpdated
       ? dispatch(updateWard(wardObject))
       : dispatch(addWard(wardObject));
+      setLocalbodyname("");
+      setwardno("");
+      setWardname("")
   };
 
   const handleValidSubmitPassword = (event, values) => {
@@ -281,22 +323,97 @@ const Wards = (props) => {
                     }}
                   >
                     <Row>
+                     
+
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">Ward Name</Label>
+                         
+                        <FormGroup>
+        
+        <Input type="select" name="localbody_name" id="exampleSelect" style={{appearance:"auto"}}  value={localbodyname}
+                            onChange={handelChangeLocalbody}
+                            
+                            onClick={()=>{
+                             
+                              setlocalbodyOptions(localbody.localbodies)
+                              console.log(localbodyOptions)
+                            }}>
+                           
+                              
+                             
+                            
+        <option value="">Localbody </option>
+        
+        {
+        localbodyOptions.map(options=>(
+          
+           <option key={options._id}>{options.localbody_name}</option>
+         )
+
+         )
+       }
+        </Input>
+       
+      </FormGroup>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                         
+                        <FormGroup>
+        
+        <Input type="select" name="ward_no" id="exampleSelect" style={{appearance:"auto"}}  value={wardno}
+                            onChange={handleChangeWardno}>
+        <option>Ward Number </option>
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option>6</option>
+    <option>7</option>
+    <option>8</option>
+    <option>9</option>
+    <option>10</option>
+    <option>11</option>
+        </Input>
+      </FormGroup>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                         
                           <AvField
                             name="ward_name"
-                            placeholder="Ward name"
+                            placeholder=" Enter Ward name"
                             type="text"
                             errorMessage="Enter ward Name"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                           // validate={{ required: { value: true } }}
                             id="validationCustom01"
-                            value={wardObject.ward_name}
+                            value={wardshortcode}
                             onChange={handleChangeWard}
                           />
                         </div>
                       </Col>
+
+                      <Col md="3">
+                        <div className="mb-3">
+                         
+                          <AvField
+                            name="ward_name"
+                            placeholder=" Ward name"
+                            type="text"
+                            errorMessage="Enter ward Name"
+                            className="form-control"
+                            //validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={wardname}
+                            onChange={handleChangeWard}
+                          />
+                        </div>
+                      </Col>
+                     
                      
                      <Col>
                      <div className="mb-3">
@@ -336,7 +453,7 @@ const Wards = (props) => {
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>
@@ -347,7 +464,7 @@ const Wards = (props) => {
       </div>
     </React.Fragment>
   );
-};
+                    };
 
 const mapStateToProps = (state) => {};
 

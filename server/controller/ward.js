@@ -7,8 +7,9 @@ createWard = (req) => {
     var date2 = new Date();
     date = moment(date2).format(format2);
     time = moment(date2).format("hh:mm A");
-// console.log(req.body.district_name);
+ console.log(req.body);
   return new Promise(async (resolve, reject) => {
+    
     try {
       //let  = new models.Customer(req.body);
       let ward = new models.Ward( 
@@ -20,7 +21,8 @@ createWard = (req) => {
           ward_date:date,
           ward_time:time,
           ward_name:req.body.ward_name,
-          ward_no:req.body.wrd_no,
+          ward_no:req.body.ward_no,
+          localbody_name:req.body.localbody_name,
           state_id:19,
           dist_id:101,
           //localbody_type_id:req.body.localbody_id,
@@ -46,7 +48,7 @@ getWardsList = (req) => {
     try {
       let ward = await models.Ward.find({
         ward_status: 0,
-      });
+      }).sort({createdAt:-1})
       resolve(ward);
     } catch (err) {
       console.log(err);
@@ -108,6 +110,7 @@ updateWard = (req) => {
           new: true,
         }
       );
+     console.log(ward)
       resolve(ward);
     } catch (err) {
       console.log(err);

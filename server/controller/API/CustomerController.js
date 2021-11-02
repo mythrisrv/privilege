@@ -258,6 +258,27 @@ customerProfile = (req) => {
     }
   });
 };
+
+getCustomersList=(req)=>{
+  return new Promise(async(resolve,reject)=>{
+    try{
+      let customer=await models.Customer.find({
+        cust_status:0,
+      })
+      .populate("localbody_name","localbody_name -_id")
+      .populate("ward","ward_name -_id")
+      .populate("cust_type","customer_type_name -_id")
+      .populate("district","district_name -_id")
+      resolve(customer);
+    }catch(err){
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+
+    }
+  })
+}
 /********************
  * profile update
  * ******************/
@@ -285,7 +306,8 @@ module.exports = {
   createCustomer,
  // imageUpload,
   customerProfile,
-  updateCustomer
+  updateCustomer,
+  getCustomersList,
   //uploadCustomerImage,
   //uploadCustomerSingleImage
 };
