@@ -12,7 +12,7 @@ console.log(req.body)
   return new Promise(async (resolve, reject) => {
     try {
       
-      let localbody = new models.LocalbodyName( 
+      let localbody = new models.Localbodyname( 
         { 
           localbody_ip:ip,
           localbody_status:0,
@@ -32,7 +32,7 @@ console.log(req.body)
           { "district_name":req.body.district_name});
           localbody.dist_id=district._id;
       
-          let numberOflocalbodies = await models.LocalbodyName.countDocuments();
+          let numberOflocalbodies = await models.Localbodyname.countDocuments();
         localbody.localbody_id = numberOflocalbodies + 1;
        
           localbody.populate("localbody_company","company_name -_id")
@@ -53,7 +53,7 @@ console.log(req.body)
 getLocalbodiesList = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbody = await models.LocalbodyName.find({
+      let localbody = await models.Localbodyname.find({
         localbody_status: 0,
       }).populate("localbody_company","company_name -_id")
       .populate("dist_id","district_name -_id")
@@ -80,7 +80,7 @@ getLocalbodiesList = (req) => {
 getLocalbodiesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbodies = await models.LocalbodyName.find({
+      let localbodies = await models.Localbodyname.find({
         localbody_status:0,
       }).select("localbody_name");
       console.log(localbodies);
@@ -98,7 +98,7 @@ getLocalbodyData = (req) => {
   return new Promise(async (resolve, reject) => {
     console.log(req.params)
     try {
-      let localbody= await models.LocalbodyName.findOne({
+      let localbody= await models.Localbodyname.findOne({
         localbody_name:req.params.localbodyname
       });
       resolve(localbody);
@@ -129,7 +129,7 @@ updateLocalbody = (req) => {
      req.body.dist_id=district._id;
     // console.log(req.body);
 
-      let localbody = await models.LocalbodyName.findByIdAndUpdate(
+      let localbody = await models.Localbodyname.findByIdAndUpdate(
          req.params.localbody_Id,
         req.body,
         {
@@ -150,7 +150,7 @@ updateLocalbody = (req) => {
 deleteLocalbody = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbody = await models.LocalbodyName.findByIdAndUpdate(
+      let localbody = await models.Localbodyname.findByIdAndUpdate(
         req.params.localbody_Id,
         { localbody_status:1 },
         { new: true }
