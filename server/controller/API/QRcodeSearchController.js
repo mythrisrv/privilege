@@ -28,15 +28,14 @@ getUserData = (req) => {
         // console.log('group',group);
         let user = await models.Customer.find(
           {"$or":[
-             {cust_name: { $regex: keyword }},
-            {cust_qr_code: { $regex: keyword }},
-            {cust_reg_no: { $regex: keyword }},
-            {cust_phone: { $regex: keyword }},
-            {cust_house_no: { $regex: keyword }},
-            {ward: { $regex: keyword }},
-            
- ]
-          }
+             {cust_name: { $regex:keyword }},
+             {cust_qr_code: { $regex:keyword }},
+             {cust_reg_no: { $regex:keyword }},
+             {cust_phone: { $regex:keyword }},
+             {cust_house_no: { $regex:keyword }},
+             
+            ]
+       }
         
         //  [ {$match:
         //   {
