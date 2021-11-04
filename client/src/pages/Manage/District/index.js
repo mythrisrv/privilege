@@ -66,6 +66,7 @@ const[districtValue,setdistrictValue]=useState("")
 
  useEffect(()=>{
     if (addDistrictResponse.type === "success") {
+      dispatch(getDistricts())
       toastr.success(addDistrictResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
@@ -81,7 +82,7 @@ const[districtValue,setdistrictValue]=useState("")
 
   useEffect(() => {
     if (deleteDistrictResponse.type === "success") {
-      
+      dispatch(getDistricts())
       toastr.success(deleteDistrictResponse.message);
       setDistrictIdToBeDeleted(null);
     } else if (deleteDistrictResponse.type === "failure") {
@@ -91,6 +92,7 @@ const[districtValue,setdistrictValue]=useState("")
 
   useEffect(() => {
     if (updateDistrictResponse.type === "success") {
+      dispatch(getDistricts())
       setShowModal(false);
       setDistrictIdToBeUpdated(null);
       setPasswordObject({});

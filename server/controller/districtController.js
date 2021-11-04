@@ -50,8 +50,7 @@ getDistrictList = (req) => {
       .sort({createdAt:-1})
         
 
-      
-      resolve(district);
+       resolve(district);
     } catch (err) {
       console.log(err);
       reject({
@@ -126,7 +125,7 @@ updateDistrict = (req) => {
         data,
         //req.body,
         { new: true }
-      )
+      ).populate("dist_id","district_name")
       
      console.log(district)
       resolve(district);
