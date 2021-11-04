@@ -7,7 +7,7 @@ const {
     createCustomer,customerProfile,updateCustomer
 } = require('../controller/API/CustomerController');
 let item;
-router.post('/create', async (req, res) => {
+router.post('/create',[validationMiddleware.createCustomervalidator,jwtauth], async (req, res) => {
     try {
        item = await createCustomer(req);
       console.log(item);
@@ -130,5 +130,21 @@ router.post('/create', async (req, res) => {
       });
     }
   });
-
+/********************
+ * customer verification
+ * ******************/
+ router.put("/custVerify/:cust_id",[jwtauth],async (req, res) => {
+  try {
+    let item = await verifyCustomer(req);
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
 module.exports = router;

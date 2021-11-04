@@ -34,6 +34,10 @@ let customerSchema = new Schema(
         type:String,
         required: true,
       },
+      cust_date: {
+        type:String,
+        required: true,
+      },
       cust_reg_no: {
         type: String,
       },
@@ -78,12 +82,16 @@ let customerSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "tbl_ward",
       },
-      cust_house_no: {
+      cust_house_num: {
         type: String,
+        required: true,
       },
       cust_phone: {
         type: String,
         required: true,
+      },
+      cust_image: {
+        type:String,
       },
       cust_landline_no: {
         type: String,
@@ -118,10 +126,18 @@ let customerSchema = new Schema(
         type: String,
         required: true,
       },
+      cust_verification_status:{
+        type: Number,
+        required: true
+      },
+      cust_verification_at: {
+        type: Date,
+       },
       cust_company: {
         type: Schema.Types.ObjectId,
         ref: "tbl_company",
       },
+     
     },
    
     { timestamps: { currentTime: ()=> Date.now()} ,collection:'tbl_customer'}

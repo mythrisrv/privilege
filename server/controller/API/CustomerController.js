@@ -7,6 +7,7 @@ createCustomer = async (req, res) => {
   var date2 = new Date();
   date = moment(date2).format(format2);
   time = moment(date2).format("hh:mm A");
+  type= req.body.type;
   return new Promise(async (resolve, reject) => {
     try {
       let customer_data;
@@ -18,8 +19,8 @@ createCustomer = async (req, res) => {
           cust_status: 0,
           cust_ip: ip,
           cust_status: 0,
-          cust_addedby: req.body.cust_addedby,
-          cust_updatedby: req.body.cust_updatedby,
+          cust_addedby: req.body.user_id,
+          cust_updatedby: req.body.user_id,
           cust_date: date,
           cust_time: time,
           cust_name: req.body.cust_name,
@@ -45,6 +46,9 @@ createCustomer = async (req, res) => {
           cust_latitude: req.body.cust_latitude,
           cust_longitude: req.body.cust_longitude,
           cust_company: req.body.cust_company,
+          cust_verification_status:0,
+          cust_verification_at:date2
+          
         },
       );
       //resolve(Customer);
@@ -313,6 +317,32 @@ customerProfile = (req) => {
             ])
 
         resolve(customers);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
+  /*****************************/
+  /*customer verifivation
+  /*****************************/
+  verifyCustomer = (req) => {
+  
+    return new Promise(async (resolve, reject) => {
+      try {
+        var date = new Date();
+        console.log(date);
+        let customer = await models.Customer.findByIdAndUpdate(
+          req.params.cust_id,
+          {
+            cust_verification_status:1,
+            cust_verification_at: date,
+          }
+        );
+        console.log(customer);
+        resolve(customer);
       } catch (err) {
         console.log(err);
         reject({
