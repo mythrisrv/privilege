@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr, { options } from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input, FormText, } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
@@ -46,6 +46,7 @@ const Wards = (props) => {
   const[localbodyname,setLocalbodyname]=useState("")
   const[wardshortcode,setwardShortcode]=useState("")
   const[wardno,setwardno]=useState("")
+  const [values, setValues] = useState({})
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -76,6 +77,7 @@ const Wards = (props) => {
 
   useEffect(() => {
     if (addWardResponse.type === "success") {
+      dispatch(getWards())
       toastr.success(addWardResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
@@ -87,6 +89,7 @@ const Wards = (props) => {
 
   useEffect(() => {
     if (deleteWardResponse.type === "success") {
+      dispatch(getWards())
       toastr.success(deleteWardResponse.message);
       setWardIdToBeDeleted(null);
     } else if (deleteWardResponse.type === "failure") {
@@ -96,6 +99,7 @@ const Wards = (props) => {
 
   useEffect(() => {
     if (updateWardResponse.type === "success") {
+      dispatch(getWards())
       setShowModal(false);
       setWardIdToBeUpdated(null);
       setPasswordObject({});
@@ -152,6 +156,8 @@ setWardname(item.ward_name)
         </div>
       );
       item.id = index + 1;
+      item.localbody_name=item.localbody_name_id.localbody_name;
+      item.ward_addedby=item.ward_addedby.username;
       wardData.push(item);
     });
     setWardsForTable(wardData);
@@ -162,6 +168,18 @@ setWardname(item.ward_name)
       {
         label: "#",
         field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Date",
+        field: "ward_date",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Time",
+        field: "ward_time",
         sort: "asc",
         width: 150,
       },
@@ -184,6 +202,12 @@ setWardname(item.ward_name)
         width: 400,
       },
       {
+        label: "Staff",
+        field: "ward_addedby",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Action",
         field: "action",
         width: 300,
@@ -201,6 +225,7 @@ setWardname(item.ward_name)
  
    
     setWardObject({ ...wardObject, [name]: value });
+   
     
   }
   function handleChangeWardno(e) {
@@ -210,7 +235,8 @@ setWardname(item.ward_name)
  
    
     setWardObject({ ...wardObject, [name]: value });
-    
+    setValues({ ...values, [name]: value })
+    console.log(values)
   }
   function handelChangeLocalbody(e){
     
@@ -225,6 +251,7 @@ setWardname(item.ward_name)
     }
   
     setWardObject({ ...wardObject, [name]: value });
+    
     
     
   }
@@ -394,6 +421,7 @@ setWardname(item.ward_name)
                             value={wardshortcode}
                             onChange={handleChangeWard}
                           />
+                        
                         </div>
                       </Col>
 
@@ -411,7 +439,8 @@ setWardname(item.ward_name)
                             value={wardname}
                             onChange={handleChangeWard}
                           />
-                        </div>
+                              </div>
+
                       </Col>
                      
                      

@@ -13,12 +13,12 @@ let wardSchema = new Schema(
     },
     ward_addedby:{
         type: Schema.Types.ObjectId,
-        // ref: "users",
+         ref: "user",
   
      },
     ward_updatedby:{
         type: Schema.Types.ObjectId,
-        // ref: "users",
+        ref: "user",
     
        },
      ward_date:{
@@ -47,7 +47,7 @@ let wardSchema = new Schema(
        },
      localbody_name_id:{
         type: Schema.Types.ObjectId,
-        // ref: "tbl_local_body_name",
+         ref: "tbl_local_body_name",
       },
     ward_company:{
         type: String,

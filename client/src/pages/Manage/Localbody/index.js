@@ -82,6 +82,7 @@ const district=useSelector((state)=>state.districts);
 
   useEffect(() => {
     if (addLocalbodyResponse.type === "success") {
+      dispatch(getLocalbodies())
       toastr.success(addLocalbodyResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
@@ -93,6 +94,7 @@ const district=useSelector((state)=>state.districts);
 
   useEffect(() => {
     if (deleteLocalbodyResponse.type === "success") {
+      dispatch(getLocalbodies())
       toastr.success(deleteLocalbodyResponse.message);
       setLocalbodyIdToBeDeleted(null);
     } else if (deleteLocalbodyResponse.type === "failure") {
@@ -102,6 +104,7 @@ const district=useSelector((state)=>state.districts);
 
   useEffect(() => {
     if (updateLocalbodyResponse.type === "success") {
+      dispatch(getLocalbodies())
       setShowModal(false);
       setLocalbodyIdToBeUpdated(null);
       setPasswordObject({});
