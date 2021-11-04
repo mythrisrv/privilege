@@ -112,7 +112,7 @@ const district=useSelector((state)=>state.districts);
   }, [updateLocalbodyResponse]);
 
   let preUpdateLocalbody = (item) => {
-    console.log(item._id)
+    console.log(item)
      setCompanyname(item.company_name)
       //handleSelectedPrivilage(privilage);
     setDistrictname(item.district_name);
@@ -162,8 +162,20 @@ const district=useSelector((state)=>state.districts);
         </div>
       );
       item.id = index + 1;
-      item.company_name=item.localbody_company.company_name;
-      item.district_name=item.dist_id.district_name;
+      if(item.localbody_addedby!=null)
+      {
+        item.localbody_addedby=item.localbody_addedby.username;
+      }
+      if(item.localbody_company!=null)
+      {
+        item.company_name=item.localbody_company.company_name;
+      }
+      if(item.dist_id)
+      {
+        item.district_name=item.dist_id.district_name;
+      }
+      
+      
       localbodyData.push(item);
     });
     setLocalbodiesForTable(localbodyData);
@@ -178,25 +190,38 @@ const district=useSelector((state)=>state.districts);
         width: 150,
       },
       {
-        label: "Company Name",
+        label: "Date ",
+        field: "localbody_date",
+        sort: "asc",
+        width: 400,
+      }, {
+        label: "Time ",
+        field: "localbody_time",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Company ",
         field: "company_name",
         sort: "asc",
         width: 400,
       },
       {
-        label: "District",
+        label: "District ",
         field: "district_name",
         sort: "asc",
         width: 400,
       },
+
+     
       {
-        label: "Localbody Type",
+        label: " Type",
         field: "localbody_type",
         sort: "asc",
         width: 400,
       },
       {
-        label: "Localbody Name",
+        label: " Name",
         field: "localbody_name",
         sort: "asc",
         width: 400,
@@ -204,6 +229,12 @@ const district=useSelector((state)=>state.districts);
       {
         label: "Short code",
         field: "short_code",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Staff",
+        field: "localbody_addedby",
         sort: "asc",
         width: 400,
       },
@@ -282,7 +313,7 @@ const district=useSelector((state)=>state.districts);
   }
 
   const handleValidSubmit = (event, values) => {
-    console.log(localbodyIdTobeUpdated)
+   
     localbodyIdTobeUpdated
       ? dispatch(updateLocalbody(localbodyObject))
       : dispatch(addLocalbody(localbodyObject));

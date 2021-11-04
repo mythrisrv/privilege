@@ -33,6 +33,21 @@ getCompaniesList = (req) => {
   });
 };
 
+// getCompaniesListOptions = (req) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let companies = await models.Company.find({
+//         isListed: true,
+//       }).select("_id name");
+//       resolve(companies);
+//     } catch (err) {
+//       console.log(err);
+//       reject({
+//         message: err.message,
+//       });
+//     }
+//   });
+// };
 getCompaniesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -49,7 +64,6 @@ getCompaniesListOptions = (req) => {
     }
   });
 };
-
 getCompanyData = (req) => {
   return new Promise(async (resolve, reject) => {
     try {

@@ -1,25 +1,27 @@
 let models = require("../model");
 let moment = require("moment");
-const { isValidObjectId } = require("mongoose");
-var ObjectId=require("mongoose").ObjectId;
+const { populate } = require("../model/User");
+
 createLocalbody = (req) => {
     var ip = req.ip;
     const format2 = "YYYY-MM-DD"
     var date2 = new Date();
     date = moment(date2).format(format2);
     time = moment(date2).format("hh:mm A");
-console.log(req.body)
+
   return new Promise(async (resolve, reject) => {
     try {
       
-      let localbody = new models.Localbodyname( 
+      let localbody = new models.LocalbodyName( 
         { 
           localbody_ip:ip,
           localbody_status:0,
           localbody_time:time,
         localbody_type:req.body.localbody_type,
            localbody_name:req.body.localbody_name,
-           short_code:req.body.short_code
+           short_code:req.body.short_code,
+           localbody_date:date,
+           localbody_addedby:req.user._id,
          }
         
        );
@@ -32,14 +34,15 @@ console.log(req.body)
           { "district_name":req.body.district_name});
           localbody.dist_id=district._id;
       
-          let numberOflocalbodies = await models.Localbodyname.countDocuments();
+          let numberOflocalbodies = await models.LocalbodyName.countDocuments();
         localbody.localbody_id = numberOflocalbodies + 1;
        
-          localbody.populate("localbody_company","company_name -_id")
-          .populate("dist_id","district_name -_id").execPopulate();
+       localbody.populate("localbody_addedby","username -_id")
+       .populate("localbody_company","company_name -_id")
+       .populate("dist_id","district_name -_id")
+  .execPopulate();
 
-      localbody = await localbody.save()
-      
+      localbody = await localbody.save();
       resolve(localbody);
     } catch (err) {
       console.log(err);
@@ -53,10 +56,11 @@ console.log(req.body)
 getLocalbodiesList = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbody = await models.Localbodyname.find({
+      let localbody = await models.LocalbodyName.find({
         localbody_status: 0,
       }).populate("localbody_company","company_name -_id")
-      .populate("dist_id","district_name -_id")
+     .populate("localbody_addedby","username -_id")
+     .populate("dist_id","district_name -_id")
       .sort({createdAt:-1})
       resolve(localbody);
     } catch (err) {
@@ -80,7 +84,7 @@ getLocalbodiesList = (req) => {
 getLocalbodiesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbodies = await models.Localbodyname.find({
+      let localbodies = await models.LocalbodyName.find({
         localbody_status:0,
       }).select("localbody_name");
       console.log(localbodies);
@@ -98,7 +102,7 @@ getLocalbodyData = (req) => {
   return new Promise(async (resolve, reject) => {
     console.log(req.params)
     try {
-      let localbody= await models.Localbodyname.findOne({
+      let localbody= await models.LocalbodyName.findOne({
         localbody_name:req.params.localbodyname
       });
       resolve(localbody);
@@ -121,17 +125,26 @@ updateLocalbody = (req) => {
         company_name:req.body.company_name
       })
       console.log(company)
-     req.body.localbody_company=company._id;
-     let district=await models.District.findOne({
-        district_name:req.body.district_name
-      });
-      console.log(district)
-     req.body.dist_id=district._id;
+    // req.body.localbody_company=company._id;
+    let district=await models.District.findOne({
+      district_name:req.body.district_name
+    })
+    console.log(district)
+    
+    let data={
+      localbody_company:company._id,
+      dist_id:district._id,
+      localbody_type:req.body.localbody_type,
+      localbody_name:req.body.localbody_name,
+      short_code:req.body.short_code,
+      localbody_updatedby:req.user._id
+
+    }
     // console.log(req.body);
 
-      let localbody = await models.Localbodyname.findByIdAndUpdate(
+      let localbody = await models.LocalbodyName.findByIdAndUpdate(
          req.params.localbody_Id,
-        req.body,
+        data,
         {
           new: true,
          
@@ -150,7 +163,7 @@ updateLocalbody = (req) => {
 deleteLocalbody = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let localbody = await models.Localbodyname.findByIdAndUpdate(
+      let localbody = await models.LocalbodyName.findByIdAndUpdate(
         req.params.localbody_Id,
         { localbody_status:1 },
         { new: true }

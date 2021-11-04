@@ -7,7 +7,7 @@ createDistrict = (req) => {
    var date2 = new Date();
 date = moment(date2).format(format2);
 time = moment(date2).format("hh:mm A");
-// console.log(req.body.district_name);
+;
   return new Promise(async (resolve, reject) => {
     try {
     
@@ -19,14 +19,16 @@ time = moment(date2).format("hh:mm A");
           country_id: 101,
           district_date: date,
           district_time: time,
-          district_addedby: req.body.addedby,
+         district_addedby:req.user._id,
 
         },
         );
+       
       let numberOfDistricts = await models.District.countDocuments();
       district.Id = numberOfDistricts + 1;
+      
       district = await district.save()
-     
+      district.populate("district_addedby","username -_id").execPopulate();
       resolve(district);
      
        } catch (err) {
@@ -44,11 +46,11 @@ getDistrictList = (req) => {
     try {
       let district = await models.District.find({
         district_status: 0,
-      })
-        .lean()
-        .populate("states", "name")
-        .populate("countries", "name")
+      }).populate("district_addedby","username -_id")
       .sort({createdAt:-1})
+        
+
+      
       resolve(district);
     } catch (err) {
       console.log(err);
@@ -109,14 +111,23 @@ getDistrictData = (req) => {
 };
 
 updateDistrict = (req) => {
+  console.log(req.body)
    return new Promise(async (resolve, reject) => {
     try {
-      //console.log(req.params.districtId)
+     let data={
+       district_name:req.body.district_name,
+       district_updatedby:req.user._id,
+       
+
+     }
+
       let district = await models.District.findByIdAndUpdate(
         req.params.districtId,
-        req.body,
+        data,
+        //req.body,
         { new: true }
-      ).sort({createdAt:-1})
+      )
+      
      console.log(district)
       resolve(district);
       //console.log(district)

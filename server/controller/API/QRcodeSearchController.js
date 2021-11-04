@@ -1,7 +1,8 @@
 let models = require("../../model");
 
 getUserData = (req) => {
-  var  keyword= req.body.keyword
+  var  keyword= req.query.keyword
+  console.log(keyword);
   //console.log(cust_qr_code);
     return new Promise(async (resolve, reject) => {
       try {
@@ -28,11 +29,11 @@ getUserData = (req) => {
         // console.log('group',group);
         let user = await models.Customer.find(
           {"$or":[
-             {cust_name: { $regex:keyword }},
+             {cust_name: { $regex:new RegExp(keyword,"i")}},
              {cust_qr_code: { $regex:keyword }},
-             {cust_reg_no: { $regex:keyword }},
+             {cust_reg_no: { $regex:new RegExp(keyword,"i")}},
              {cust_phone: { $regex:keyword }},
-             {cust_house_no: { $regex:keyword }},
+             {cust_house_num:  { $regex:new RegExp(keyword,"i")}},
              
             ]
        }

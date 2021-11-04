@@ -144,12 +144,15 @@ const[districtValue,setdistrictValue]=useState("")
         </div>
       );
       item.id = index + 1;
+      item.state_name="Kerala";
+      item.district_addedby=item.district_addedby.username;
       districtData.push(item);
     });
     setDistrictsForTable(districtData);
     console.log(districtsForTable)
   }, [districts]);
 
+ 
   const data = {
     columns: [
       {
@@ -159,8 +162,32 @@ const[districtValue,setdistrictValue]=useState("")
         width: 150,
       },
       {
+        label: "Date",
+        field: "district_date",
+        //sort: "desc",
+        width: 150,
+      },
+      {
+        label: "Time",
+        field: "district_time",
+        //sort: "desc",
+        width: 150,
+      },
+      {
+        label: "State",
+        field: "state_name",
+        //sort: "desc",
+        width: 150,
+      },
+      {
         label: "Name",
         field: "district_name",
+        sort: "desc",
+        width: 400,
+      },
+      {
+        label: "Staff",
+        field: "district_addedby",
         sort: "desc",
         width: 400,
       },
@@ -172,7 +199,7 @@ const[districtValue,setdistrictValue]=useState("")
     ],
     rows: districtsForTable,
   };
-
+ 
 
 
   function handleChangeDistrict(e) {

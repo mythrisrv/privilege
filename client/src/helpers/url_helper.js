@@ -51,4 +51,4 @@ export const GET_USER_PROFILE = "/user";
 export const GET_GROUPS= "/group/list";
 
 //get customers
-export const GET_CUSTOMERS = "/customer/list";
+export const GET_CUSTOMERS = "/customer/list_crm";

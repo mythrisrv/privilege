@@ -43,8 +43,8 @@ DistrictList = (req) => {
       try {
         let group = await models.group.find({
           group_status: 0,
-        }).select("_id group_name");
-        resolve(group)
+        }).select("_id group_id group_name group_ward");
+        resolve(group);
       } catch (err) {
         console.log(err);
         reject({
@@ -79,7 +79,7 @@ DistrictList = (req) => {
       try {
         let PackageList = await models.Thariff.find({
           tariff_status: 0,
-        }).select(" _id tariff_id package_name");
+        }).select("_id tariff_id package_name");
         resolve(PackageList);
       } catch (err) {
         console.log(err);

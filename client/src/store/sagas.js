@@ -16,7 +16,7 @@ import wardSaga from "./ward/saga";
 //Localbody
 import localbodySaga from "./localbody/saga";
 //Group
-import groupSaga from "./localbody/saga"
+import groupSaga from "./group/saga"
 
 //customer
 import customerSaga from "./customer/saga"

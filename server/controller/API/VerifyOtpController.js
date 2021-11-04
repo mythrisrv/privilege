@@ -20,7 +20,7 @@ exports.verifyOtp = async(req,res)=>{
                         },
                         config.secret,
                         {
-                          expiresIn: "1d",
+                          expiresIn: "30m",
                         }
                       )
                     res.send({"success":true,"message":"Otp verified Successfully",data:user,token:user.token

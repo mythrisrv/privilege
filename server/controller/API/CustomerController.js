@@ -25,6 +25,7 @@ createCustomer = async (req, res) => {
           cust_name: req.body.cust_name,
           cust_address: req.body.cust_address,
           cust_address1: req.body.cust_address1,
+          cust_house_num:req.body.cust_house_num,
           district: req.body.district,
           localbody_type: req.body.localbody_type,
           localbody_name: req.body.localbody_name,
@@ -33,6 +34,7 @@ createCustomer = async (req, res) => {
           cust_group_id: req.body.cust_group_id,
           ward: req.body.ward,
           cust_phone: req.body.cust_phone,
+          cust_image:req.body.cust_image,
           cust_landline_no: req.body.cust_landline_no,
           cust_whatspp_no: req.body.cust_whatspp_no,
           cust_email: req.body.cust_email,
@@ -45,6 +47,7 @@ createCustomer = async (req, res) => {
           cust_company: req.body.cust_company,
         },
       );
+      //resolve(Customer);
       let companyname = await models.Company.find({
         _id: req.body.cust_company,
       });
@@ -53,10 +56,10 @@ createCustomer = async (req, res) => {
       let localbodyname = await models.LocalbodyName.find({
         _id: req.body.localbody_name,
       });
-     if(localbodyname){
+     if(localbodyname.length>0){
       localbodyname.forEach(data => {
         var localbodyName = data["short_code"];
-        if(companyname){
+        if(companyname.length>0){
         companyname.forEach(data => {
           var company_shortcode = data["company_shortcode"];
           var cust_reg_number = company_shortcode + localbodyName + customer_id.toString().padStart(6, '0');
@@ -100,7 +103,6 @@ createCustomer = async (req, res) => {
                   },);
                   let numberofInvoice = await models.Invoice.countDocuments();
                   var invoice_no = numberofInvoice+1;
-                  console.log(numberofInvoice)
                   invoice.invoice_no=invoice_no;
                   invoice.save().then(async (result) => {
                     let invoiceItem = new models.InvoiceItem(
@@ -125,8 +127,8 @@ createCustomer = async (req, res) => {
              })
             }else{
               reject({
-                message: err.message,
-              }); 
+                message: "unable to find package",
+              });
             }
              let thariff = new models.TariffAssign(
               {
@@ -152,17 +154,16 @@ createCustomer = async (req, res) => {
         })
       }else{
         reject({
-          message: err.message,
+          message: "unable to find company",
         });
       }
       })
     }else{
       reject({
-        message: err.message,
+        message: "unable to find localbody",
       });
     }
     } catch (err) {
-      console.log(err);
       reject({
         message: err.message,
       });
@@ -258,27 +259,6 @@ customerProfile = (req) => {
     }
   });
 };
-
-getCustomersList=(req)=>{
-  return new Promise(async(resolve,reject)=>{
-    try{
-      let customer=await models.Customer.find({
-        cust_status:0,
-      })
-      .populate("localbody_name","localbody_name -_id")
-      .populate("ward","ward_name -_id")
-      .populate("cust_type","customer_type_name -_id")
-      .populate("district","district_name -_id")
-      resolve(customer);
-    }catch(err){
-      console.log(err);
-      reject({
-        message: err.message,
-      });
-
-    }
-  })
-}
 /********************
  * profile update
  * ******************/
@@ -302,12 +282,72 @@ getCustomersList=(req)=>{
     }
   });
 };
+/*****************************/
+  /*customer type List
+  /*****************************/
+  CustomerList = (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let customers = await models.Customer.aggregate([
+            {
+              $lookup:
+              {
+                from: "tbl_ward",
+                localField: "ward",
+                foreignField: "_id",
+                as: "ward_details" 
+              }
+            },
+            {
+              $project: {
+                customer_id:'$_id',
+                cust_name: "$cust_name",
+                cust_phone:"$cust_phone",
+                cust_house_num:"$cust_house_num",
+                cust_image:"$cust_image",
+                ward_name: { $arrayElemAt: ['$ward_details.ward_name', 0] },
+               //ward_name: "$ward_details"
+                
+              }
+            }
+            ])
+
+        resolve(customers);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
+  getCustomersList=(req)=>{
+    return new Promise(async(resolve,reject)=>{
+      try{
+        let customer=await models.Customer.find({
+          cust_status:0,
+        })
+        .populate("localbody_name","localbody_name -_id")
+        .populate("ward","ward_name -_id")
+        .populate("cust_type","customer_type_name -_id")
+        .populate("district","district_name -_id")
+        resolve(customer);
+      }catch(err){
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+  
+      }
+    })
+  }
 module.exports = {
   createCustomer,
  // imageUpload,
   customerProfile,
   updateCustomer,
-  getCustomersList,
+  CustomerList,
+  getCustomersList
   //uploadCustomerImage,
   //uploadCustomerSingleImage
 };

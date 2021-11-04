@@ -18,7 +18,7 @@ exports.customerLogin = async (req, res) => {
           }
           var otp = Math.floor(1000 + Math.random() * 9000);
           console.log(otp);
-          var message = 'Hi, '+otp+' is your Hazel OTP. Do not share this code with anyone else. Regards,  HazelGreen';
+          var message = 'Hi,'+otp+ ' is your myKit OTP. Do not share this code with anyone else. Regards, myKit Ecommerce';
           var axios = require('axios');
       
           var config = {
@@ -29,7 +29,9 @@ exports.customerLogin = async (req, res) => {
             }
           }; 
           axios(config)
-          .then();
+          .then(response=>{
+           // console.log(response);
+          });
           const proceed = async () => {
             
             let Otpmessage = new models.Otpmessage( 

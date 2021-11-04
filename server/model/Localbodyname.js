@@ -12,6 +12,10 @@ let localbodynameSchema = new Schema(
       type: String,
      // required: true,
     },
+    localbody_date: {
+      type: String,
+      required: false,
+    },
     localbody_time: {
       type: String,
       required: false,
@@ -28,8 +32,12 @@ let localbodynameSchema = new Schema(
         type:String,
       },
       localbody_addedby: {
-        type: String,
-        //required: true,
+        type: Schema.Types.ObjectId,
+        ref:"user",
+      },
+      localbody_updateddby: {
+        type: Schema.Types.ObjectId,
+        ref:"user",
       },
       localbody_name: {
         type: String,

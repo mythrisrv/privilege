@@ -4,21 +4,18 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
-    createCustomer,customerProfile,updateCustomer,getCustomersList
+    createCustomer,customerProfile,updateCustomer
 } = require('../controller/API/CustomerController');
 let item;
 router.post('/create', async (req, res) => {
     try {
        item = await createCustomer(req);
-      
+      console.log(item);
        res.status(200).json({
         status: 200,
         data: item,
         message: "customer created successfully",
  });
-    //uploadCustomerImage.single('cust_image'),
-      //uploadCustomerSingleImage  
-      console.log()
     } catch (err) {
       console.log(err);
       res.status(400).json({
@@ -64,9 +61,25 @@ router.post('/create', async (req, res) => {
   //    });
   //   }
   });
- 
-/* customers */
-   router.get("/list",[jwtauth] , async (req, res) => {
+  /********************
+ * list all customers
+ * ******************/
+   router.get("/list", [jwtauth], async (req, res) => {
+    try {
+      let item = await CustomerList(req);
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
+  /* customers */
+  router.get("/list_crm",[jwtauth] , async (req, res) => {
     try {
      
       let item = await getCustomersList(req)
@@ -82,9 +95,10 @@ router.post('/create', async (req, res) => {
       });
     }
   });
-   /********************
+  /********************
  * profile
  * ******************/
+
   router.get("/profile/:id", [jwtauth], async (req, res) => {
     try {
       let item = await customerProfile(req);

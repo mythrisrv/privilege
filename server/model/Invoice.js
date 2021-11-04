@@ -4,11 +4,7 @@ const bcrypt = require("bcryptjs");
 const { isInteger } = require("lodash");
 let invoiceSchema = new Schema(
     {
-        invoice_id: {
-        type: Number,
-        unique: true,
-      },
-      invoice_ip: {
+     invoice_ip: {
         type: String,
         required: true,
       },

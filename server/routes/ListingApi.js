@@ -34,7 +34,7 @@ router.get("/Districtlist",[jwtauth], async (req, res) => {
       });
     }
   });
-  router.get("/Grouplist",[jwtauth],async(req, res) => {
+  router.get("/Grouplist",[jwtauth], async (req, res) => {
     try {
       let item = await GroupList(req);
       res.status(200).json({
