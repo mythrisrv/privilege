@@ -6,6 +6,8 @@ import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+
+
 import {
   getUsers,
   addUser,
@@ -16,6 +18,7 @@ import {
   getBranchesOptions,
   updateUser,
   getGroups,
+
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -30,6 +33,7 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import "./user.scss";
 
 const Group = (props) => {
+  
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -39,7 +43,7 @@ const Group = (props) => {
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [groupDataForTable, setgroupDataForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
 
   const [passwordObject, setPasswordObject] = useState({
@@ -124,9 +128,9 @@ const Group = (props) => {
   //   };
 
   useEffect(() => {
-    let userData = [];
+   
 let groupsData=[];
-    users.map((item, index) => {
+    groups.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -158,16 +162,16 @@ let groupsData=[];
           ></i>
         </div>
       );
-      //   item.id = index + 1;
+         item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
       //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+         groupsData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+    setgroupDataForTable(groupsData);
+  }, [groups]);
 
   const data = {
     columns: [
@@ -179,24 +183,34 @@ let groupsData=[];
       },
       {
         label: "Date",
-        field: "district",
+        field: "group_date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Time	",
-        field: "localbodytype",
+        field: "group_time",
         sort: "asc",
         width: 200,
       },
       {
         label: "Local Body",
-        field: "action",
+        field: "group_localbody_type_id",
         width: 300,
       },
       {
-        label: "Added By",
-        field: "action",
+        label: "Ward",
+        field: "ward",
+        width: 300,
+      },
+      {
+        label: "Incentive",
+        field: "",
+        width: 300,
+      },
+      {
+        label: "staff",
+        field: "",
         width: 300,
       },
       {
@@ -205,7 +219,7 @@ let groupsData=[];
         width: 300,
       },
     ],
-    rows: usersForTable,
+    rows: groupDataForTable,
   };
 
   //   let privilagesOptionsData =
@@ -333,6 +347,20 @@ let groupsData=[];
                     // }}
                   >
                     <Row>
+                    <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">Group Name</Label>
+                          <AvField
+                            name="Start"
+                            placeholder="Start"
+                            type="text"
+                            errorMessage="Enter Start"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                          />
+                        </div>
+                      </Col>
                       <Col md="3">
                         <div className="mb-3">
                           <Label>Localbody</Label>
@@ -347,37 +375,33 @@ let groupsData=[];
                           />
                         </div>
                       </Col>
+                    
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom05">Start</Label>
-                          <AvField
-                            name="Start"
-                            placeholder="Start"
-                            type="text"
-                            errorMessage="Enter Start"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom05"
-                          />
+                          <Label>select ward</Label>
+                        <Select  
+                        isMulti  />
+                          
+                          
                         </div>
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom05">End</Label>
-                          <AvField
-                            name="End"
-                            placeholder="End"
-                            type="text"
-                            errorMessage="Enter End"
-                            className="form-control"
-                            validate={{ required: { value: true } }}
-                            id="validationCustom05"
+                          <Label>select incentive</Label>
+                          <Select
+                            name="localbody_name"
+                            //   value={selectCommunity}
+                            //   onChange={(value) => {
+                            //     handleSelectedCommunities(value);
+                            //   }}
+                            //   options={communitiesOptionsGroup}
+                            classNamePrefix="select2-selection"
                           />
                         </div>
                       </Col>
                       <Col md="2">
                         <div className="mt-4">
-                          <Button color="primary" type="submit">
+                          <Button style={{ fontSize:12}} color="primary" type="submit">
                             Generate Qr Code
                           </Button>
                         </div>
@@ -385,6 +409,7 @@ let groupsData=[];
                       <Col md="1">
                         <div className="mt-4">
                           <Button
+                          style={{ fontSize:12}}
                             color="danger"
                             type="reset"
                             onClick={() => setAccountType("")}

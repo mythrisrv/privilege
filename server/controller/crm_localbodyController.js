@@ -7,7 +7,7 @@ createLocalbody = (req) => {
     const format2 = "YYYY-MM-DD"
     var date2 = new Date();
     date = moment(date2).format(format2);
-    time = moment(date2).format("hh:mm A");
+    time = moment(date2).format("HH:mm A");
 
   return new Promise(async (resolve, reject) => {
     try {

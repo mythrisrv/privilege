@@ -27,7 +27,8 @@ const Localbody =require("./routes/crm_localbody");
 const apiRouter = require("./routes/apiRouter");
 const getUserData = require("./routes/qrcodeSearch");
 const listApi = require("./routes/ListingApi");
-const customer = require("./routes/customer");
+const customer = require("./routes/crm_customer");
+const group=require("./routes/crm_group")
 const wasteItem = require("./routes/wasteItemApi");
 const userapi = require("./routes/UserApi");
 
@@ -66,6 +67,7 @@ app.use("/district", district);
 app.use("/ward",Ward);
 app.use("/localbody",Localbody);
 app.use("/api", apiRouter);
+app.use("/group", group);
 
 app.use("/ListData",listApi)
 app.use("/searchCustomerData",getUserData);

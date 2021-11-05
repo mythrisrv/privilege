@@ -315,9 +315,9 @@ const {
       item.company1 = item.company && item.company.name;
       item.branch1 = item.branch && item.branch.name;
     // item.type=item.cust_type.customer_type_name;
-    //item.district=item.district.district_name
-      item.localbody="localbody name";
-      item.ward="ward name"
+   // item.district=item.district.district_name
+      item.localbody=item.localbody_name.localbody_name;
+    //  item.ward=item.ward.ward_name
       customerData.push(item);
     });
     setUsersForTable(customerData);
@@ -382,7 +382,7 @@ const {
               },
               {
                 label: "Verification Status",
-                field: "verification status",
+                field: "cust_verification_status",
                 sort: "asc",
                 width: 100,
               },
