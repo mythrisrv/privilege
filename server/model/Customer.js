@@ -25,10 +25,12 @@ let customerSchema = new Schema(
         
       },
       cust_added_by: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: "users",
       },
       cust_updated_by: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: "users",
       },
       cust_time: {
         type:String,

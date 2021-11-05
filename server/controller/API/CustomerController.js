@@ -16,11 +16,8 @@ createCustomer = async (req, res) => {
       let package_reg_fee;
       let Customer = new models.Customer(
         {
-          cust_status: 0,
           cust_ip: ip,
           cust_status: 0,
-          cust_addedby: req.body.user_id,
-          cust_updatedby: req.body.user_id,
           cust_date: date,
           cust_time: time,
           cust_name: req.body.cust_name,
@@ -34,6 +31,7 @@ createCustomer = async (req, res) => {
           cust_package_id: req.body.cust_package_id,
           cust_group_id: req.body.cust_group_id,
           ward: req.body.ward,
+          cust_company: req.body.cust_company,
           cust_phone: req.body.cust_phone,
           cust_image:req.body.cust_image,
           cust_landline_no: req.body.cust_landline_no,
@@ -45,9 +43,10 @@ createCustomer = async (req, res) => {
           cust_designation: req.body.cust_designation,
           cust_latitude: req.body.cust_latitude,
           cust_longitude: req.body.cust_longitude,
-          cust_company: req.body.cust_company,
           cust_verification_status:0,
-          cust_verification_at:date2
+          cust_verification_at:date2,
+          cust_added_by: req.body.user_id,
+          cust_updated_by: req.body.user_id,
           
         },
       );
@@ -66,7 +65,7 @@ createCustomer = async (req, res) => {
         if(companyname.length>0){
         companyname.forEach(data => {
           var company_shortcode = data["company_shortcode"];
-          var cust_reg_number = company_shortcode + localbodyName + customer_id.toString().padStart(6, '0');
+          var cust_reg_number = company_shortcode + localbodyName + customer_id.toString().padStart(5, '0');
           Customer.cust_id = customer_id;
           Customer.cust_reg_no = cust_reg_number;
            Customer.save().then(async (result) => {
@@ -256,7 +255,6 @@ customerProfile = (req) => {
       });
       resolve(customerProfile);
     } catch (err) {
-      console.log(err);
       reject({
         message: err.message,
       });
@@ -268,26 +266,94 @@ customerProfile = (req) => {
  * ******************/
  updateCustomer = (req) => {
   
+  // return new Promise(async (resolve, reject) => {
+  //   try {
+  //     let customer = await models.Customer.findByIdAndUpdate(
+  //       req.params.cust_id,
+  //       req.body,
+  //       {
+  //         new: true,
+  //       }
+  //     );
+  //     resolve(customer);
+  //   } catch (err) {
+  //     console.log(err);
+  //     reject({
+  //       message: err.message,
+  //     });
+  //   }
+  // });
   return new Promise(async (resolve, reject) => {
     try {
-      let customer = await models.Customer.findByIdAndUpdate(
-        req.params.cust_id,
-        req.body,
-        {
-          new: true,
-        }
-      );
-      resolve(customer);
-    } catch (err) {
-      console.log(err);
+    let id = req.params.id; 
+    let customer_id = req.body.cust_id;
+    let companyname = await models.Company.find({
+      _id: req.body.cust_company,
+    });
+    let localbodyname = await models.LocalbodyName.find({
+      _id: req.body.localbody_name,
+    });
+    if(localbodyname.length>0){
+      localbodyname.forEach(data => {
+        var localbodyName = data["short_code"];
+        if(companyname.length>0){
+        companyname.forEach(async(data) => {
+          var company_shortcode = data["company_shortcode"];
+          var cust_reg_number = company_shortcode + localbodyName + customer_id.toString().padStart(5, '0');
+          cust_id = customer_id;
+          //cust_reg_no = cust_reg_number;
+          //console.log(cust_reg_no);
+          Customer = await models.Customer.updateOne({_id:id},{
+            $set:{
+          cust_updatedby: req.body.user_id,
+          cust_name: req.body.cust_name,
+          cust_address: req.body.cust_address,
+          cust_address1: req.body.cust_address1,
+          cust_house_num:req.body.cust_house_num,
+          district: req.body.district,
+          localbody_type: req.body.localbody_type,
+          localbody_name: req.body.localbody_name,
+          cust_type: req.body.cust_type,
+          cust_package_id: req.body.cust_package_id,
+          cust_group_id: req.body.cust_group_id,
+          ward: req.body.ward,
+          cust_phone: req.body.cust_phone,
+          cust_image:req.body.cust_image,
+          cust_landline_no: req.body.cust_landline_no,
+          cust_whatspp_no: req.body.cust_whatspp_no,
+          cust_email: req.body.cust_email,
+          cust_no_members: req.body.cust_no_members,
+          cust_qr_code: req.body.cust_qr_code,
+          cust_serial_no: req.body.cust_serial_no,
+          cust_designation: req.body.cust_designation,
+          cust_latitude: req.body.cust_latitude,
+          cust_longitude: req.body.cust_longitude,
+          cust_company: req.body.cust_company,
+          cust_reg_no:cust_reg_number,
+            }
+          })
+          resolve(Customer);
+        })
+      }else{
+        reject({
+          message: "unable to find company",
+        });
+      }
+      })
+    }else{
       reject({
-        message: err.message,
+        message: "unable to find localbody",
       });
     }
-  });
+  } catch (err) {
+        reject({
+          message: err.message,
+        });
+      }
+  })
 };
 /*****************************/
-  /*customer type List
+  /*customer List all
   /*****************************/
   CustomerList = (req) => {
     return new Promise(async (resolve, reject) => {
@@ -318,7 +384,6 @@ customerProfile = (req) => {
 
         resolve(customers);
       } catch (err) {
-        console.log(err);
         reject({
           message: err.message,
         });
@@ -333,7 +398,6 @@ customerProfile = (req) => {
     return new Promise(async (resolve, reject) => {
       try {
         var date = new Date();
-        console.log(date);
         let customer = await models.Customer.findByIdAndUpdate(
           req.params.cust_id,
           {
@@ -341,10 +405,8 @@ customerProfile = (req) => {
             cust_verification_at: date,
           }
         );
-        console.log(customer);
         resolve(customer);
       } catch (err) {
-        console.log(err);
         reject({
           message: err.message,
         });
@@ -363,7 +425,6 @@ customerProfile = (req) => {
         .populate("district","district_name -_id")
         resolve(customer);
       }catch(err){
-        console.log(err);
         reject({
           message: err.message,
         });

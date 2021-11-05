@@ -85,6 +85,38 @@ const createCustomervalidator = (req, res, next) => {
         }
     });
 }
+const updateCustomervalidator = (req, res, next) => {
+    const validationRule = {
+        "user_id": "required",
+        "type":"required",
+        "cust_name":"required",
+        "localbody_type":"required",
+        "district": "required",
+        "localbody_name":"required",
+        "cust_type":"required",
+        "cust_group_id":"required",
+        "ward": "required",
+        "cust_phone":"required",
+        "cust_designation":"required",
+        "cust_latitude":"required",
+        "cust_longitude": "required",
+        "cust_company":"required",
+        "cust_package_id":"required",
+        "cust_id":"required"
+}
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 const createLocalbody = (req, res, next) => {
     const validationRule = {
         "localbody_name": "required",
@@ -102,12 +134,32 @@ const createLocalbody = (req, res, next) => {
         }
     });
 }
-
+const getWasteitems = (req, res, next) => {
+    const validationRule = {
+        "type": "required",
+        "customer_id":"required",
+        "user-id":"required"
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 
 module.exports = { 
     createDistrict,
     customerLogin,
     createWardvalidator,
     createLocalbody,
-    createCustomervalidator
+    createCustomervalidator,
+    updateCustomervalidator,
+    getWasteitems
 }

@@ -28,6 +28,8 @@ const apiRouter = require("./routes/apiRouter");
 const getUserData = require("./routes/qrcodeSearch");
 const listApi = require("./routes/ListingApi");
 const customer = require("./routes/customer");
+const wasteItem = require("./routes/wasteItemApi");
+const userapi = require("./routes/UserApi");
 
 
 app.use(logger("dev"));
@@ -68,6 +70,8 @@ app.use("/api", apiRouter);
 app.use("/ListData",listApi)
 app.use("/searchCustomerData",getUserData);
 app.use("/customer",customer);
+app.use("/wasteIteam",wasteItem);
+app.use("/staff",userapi);
 
 
 app.listen(port, function () {

@@ -116,12 +116,13 @@ router.post('/create',[validationMiddleware.createCustomervalidator,jwtauth], as
   /********************
  * profile Edit
  * ******************/
-  router.put("/update/:cust_id", [jwtauth], async (req, res) => {
+  router.put("/update/:id",[validationMiddleware.updateCustomervalidator,jwtauth], async (req, res) => {
     try {
       let item = await updateCustomer(req);
       res.status(200).json({
         status: 200,
-        data: item,
+        //data: item,
+        message: "customer updated successfully",
       });
     } catch (err) {
       console.log(err);
@@ -138,7 +139,8 @@ router.post('/create',[validationMiddleware.createCustomervalidator,jwtauth], as
     let item = await verifyCustomer(req);
     res.status(200).json({
       status: 200,
-      data: item,
+     // data: item,
+      message: "customer verified successfully",
     });
   } catch (err) {
     console.log(err);

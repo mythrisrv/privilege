@@ -16,6 +16,7 @@ const group = require("./group");
 const TariffAssign = require("./ThariffAssign");
 const Invoice = require("./Invoice");
 const InvoiceItem = require("./InvoiceItem");
+const WasteItem = require("./WasteItems");
 
 
 module.exports = {
@@ -36,5 +37,6 @@ module.exports = {
   group,
   TariffAssign,
   Invoice,
-  InvoiceItem
+  InvoiceItem,
+  WasteItem
 };

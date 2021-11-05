@@ -16,6 +16,9 @@ let userSchema = new Schema(
     lastName: {
       type: String,
     },
+    status: {
+      type: Number,
+    },
     email: {
       type: String,
       required: true,
@@ -43,7 +46,7 @@ let userSchema = new Schema(
     },
     company: {
       type: Schema.Types.ObjectId,
-      ref: "company",
+      ref: "tbl_company",
     },
     branch: {
       type: Schema.Types.ObjectId,
