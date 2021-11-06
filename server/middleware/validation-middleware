@@ -153,27 +153,6 @@ const getWasteitems = (req, res, next) => {
         }
     });
 }
-
-<<<<<<< .mine
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
 const createGroup = (req, res, next) => {
     const validationRule = {
         "group_name": "required",
@@ -191,20 +170,13 @@ const createGroup = (req, res, next) => {
         }
     });
 }
-
->>>>>>> .theirs
 module.exports = { 
     createDistrict,
     customerLogin,
     createWardvalidator,
     createLocalbody,
-<<<<<<< .mine
     createCustomervalidator,
     updateCustomervalidator,
-    getWasteitems
-=======
-    createCustomervalidator,
+    getWasteitems,
     createGroup,
-
->>>>>>> .theirs
 }
