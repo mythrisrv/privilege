@@ -1,4 +1,17 @@
 import React from "react";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
+import Save from "@mui/icons-material/Save";
+import Upload from "@mui/icons-material/Upload";
+
 import { MDBDataTable } from "mdbreact";
 import {
   Row,
@@ -18,501 +31,273 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import "./company.scss";
 
 const DatatableTables = () => {
+  const [state, setState] = React.useState("");
+  const [city, setCity] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
+
+  const handleChange = (event) => {
+    setState(event.target.value);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleChange1 = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+
   const data = {
     columns: [
       {
-        label: "Name",
-        field: "name",
+        label: "Company ID",
+        field: "cid",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Position",
-        field: "position",
+        label: "Company Name",
+        field: "cname",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Office",
-        field: "office",
+        label: "Code",
+        field: "code",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Age",
-        field: "age",
+        label: "Person Name",
+        field: "pname",
         sort: "asc",
         width: 100,
       },
       {
-        label: "Start date",
-        field: "date",
+        label: "Mobile",
+        field: "mobile",
         sort: "asc",
-        width: 150,
+        width: 10,
       },
       {
-        label: "Salary",
-        field: "salary",
+        label: "City",
+        field: "city",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        label: "Added By",
+        field: "addedby",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        label: "Action",
+        field: "action",
         sort: "asc",
         width: 100,
       },
     ],
     rows: [
       {
-        name: "Tiger Nixon",
-        position: "System Architect",
-        office: "Edinburgh",
-        age: "61",
-        date: "2011/04/25",
-        salary: "$320",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Garrett Winters",
-        position: "Accountant",
-        office: "Tokyo",
-        age: "63",
-        date: "2011/07/25",
-        salary: "$170",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Ashton Cox",
-        position: "Junior Technical Author",
-        office: "San Francisco",
-        age: "66",
-        date: "2009/01/12",
-        salary: "$86",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Cedric Kelly",
-        position: "Senior Javascript Developer",
-        office: "Edinburgh",
-        age: "22",
-        date: "2012/03/29",
-        salary: "$433",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Airi Satou",
-        position: "Accountant",
-        office: "Tokyo",
-        age: "33",
-        date: "2008/11/28",
-        salary: "$162",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Brielle Williamson",
-        position: "Integration Specialist",
-        office: "New York",
-        age: "61",
-        date: "2012/12/02",
-        salary: "$372",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Herrod Chandler",
-        position: "Sales Assistant",
-        office: "San Francisco",
-        age: "59",
-        date: "2012/08/06",
-        salary: "$137",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Rhona Davidson",
-        position: "Integration Specialist",
-        office: "Tokyo",
-        age: "55",
-        date: "2010/10/14",
-        salary: "$327",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Colleen Hurst",
-        position: "Javascript Developer",
-        office: "San Francisco",
-        age: "39",
-        date: "2009/09/15",
-        salary: "$205",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Sonya Frost",
-        position: "Software Engineer",
-        office: "Edinburgh",
-        age: "23",
-        date: "2008/12/13",
-        salary: "$103",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
       {
-        name: "Jena Gaines",
-        position: "Office Manager",
-        office: "London",
-        age: "30",
-        date: "2008/12/19",
-        salary: "$90",
-      },
-      {
-        name: "Quinn Flynn",
-        position: "Support Lead",
-        office: "Edinburgh",
-        age: "22",
-        date: "2013/03/03",
-        salary: "$342",
-      },
-      {
-        name: "Charde Marshall",
-        position: "Regional Director",
-        office: "San Francisco",
-        age: "36",
-        date: "2008/10/16",
-        salary: "$470",
-      },
-      {
-        name: "Haley Kennedy",
-        position: "Senior Marketing Designer",
-        office: "London",
-        age: "43",
-        date: "2012/12/18",
-        salary: "$313",
-      },
-      {
-        name: "Tatyana Fitzpatrick",
-        position: "Regional Director",
-        office: "London",
-        age: "19",
-        date: "2010/03/17",
-        salary: "$385",
-      },
-      {
-        name: "Michael Silva",
-        position: "Marketing Designer",
-        office: "London",
-        age: "66",
-        date: "2012/11/27",
-        salary: "$198",
-      },
-      {
-        name: "Paul Byrd",
-        position: "Chief Financial Officer (CFO)",
-        office: "New York",
-        age: "64",
-        date: "2010/06/09",
-        salary: "$725",
-      },
-      {
-        name: "Gloria Little",
-        position: "Systems Administrator",
-        office: "New York",
-        age: "59",
-        date: "2009/04/10",
-        salary: "$237",
-      },
-      {
-        name: "Bradley Greer",
-        position: "Software Engineer",
-        office: "London",
-        age: "41",
-        date: "2012/10/13",
-        salary: "$132",
-      },
-      {
-        name: "Dai Rios",
-        position: "Personnel Lead",
-        office: "Edinburgh",
-        age: "35",
-        date: "2012/09/26",
-        salary: "$217",
-      },
-      {
-        name: "Jenette Caldwell",
-        position: "Development Lead",
-        office: "New York",
-        age: "30",
-        date: "2011/09/03",
-        salary: "$345",
-      },
-      {
-        name: "Yuri Berry",
-        position: "Chief Marketing Officer (CMO)",
-        office: "New York",
-        age: "40",
-        date: "2009/06/25",
-        salary: "$675",
-      },
-      {
-        name: "Caesar Vance",
-        position: "Pre-Sales Support",
-        office: "New York",
-        age: "21",
-        date: "2011/12/12",
-        salary: "$106",
-      },
-      {
-        name: "Doris Wilder",
-        position: "Sales Assistant",
-        office: "Sidney",
-        age: "23",
-        date: "2010/09/20",
-        salary: "$85",
-      },
-      {
-        name: "Angelica Ramos",
-        position: "Chief Executive Officer (CEO)",
-        office: "London",
-        age: "47",
-        date: "2009/10/09",
-        salary: "$1",
-      },
-      {
-        name: "Gavin Joyce",
-        position: "Developer",
-        office: "Edinburgh",
-        age: "42",
-        date: "2010/12/22",
-        salary: "$92",
-      },
-      {
-        name: "Jennifer Chang",
-        position: "Regional Director",
-        office: "Singapore",
-        age: "28",
-        date: "2010/11/14",
-        salary: "$357",
-      },
-      {
-        name: "Brenden Wagner",
-        position: "Software Engineer",
-        office: "San Francisco",
-        age: "28",
-        date: "2011/06/07",
-        salary: "$206",
-      },
-      {
-        name: "Fiona Green",
-        position: "Chief Operating Officer (COO)",
-        office: "San Francisco",
-        age: "48",
-        date: "2010/03/11",
-        salary: "$850",
-      },
-      {
-        name: "Shou Itou",
-        position: "Regional Marketing",
-        office: "Tokyo",
-        age: "20",
-        date: "2011/08/14",
-        salary: "$163",
-      },
-      {
-        name: "Michelle House",
-        position: "Integration Specialist",
-        office: "Sidney",
-        age: "37",
-        date: "2011/06/02",
-        salary: "$95",
-      },
-      {
-        name: "Suki Burks",
-        position: "Developer",
-        office: "London",
-        age: "53",
-        date: "2009/10/22",
-        salary: "$114",
-      },
-      {
-        name: "Prescott Bartlett",
-        position: "Technical Author",
-        office: "London",
-        age: "27",
-        date: "2011/05/07",
-        salary: "$145",
-      },
-      {
-        name: "Gavin Cortez",
-        position: "Team Leader",
-        office: "San Francisco",
-        age: "22",
-        date: "2008/10/26",
-        salary: "$235",
-      },
-      {
-        name: "Martena Mccray",
-        position: "Post-Sales support",
-        office: "Edinburgh",
-        age: "46",
-        date: "2011/03/09",
-        salary: "$324",
-      },
-      {
-        name: "Unity Butler",
-        position: "Marketing Designer",
-        office: "San Francisco",
-        age: "47",
-        date: "2009/12/09",
-        salary: "$85",
-      },
-      {
-        name: "Howard Hatfield",
-        position: "Office Manager",
-        office: "San Francisco",
-        age: "51",
-        date: "2008/12/16",
-        salary: "$164",
-      },
-      {
-        name: "Hope Fuentes",
-        position: "Secretary",
-        office: "San Francisco",
-        age: "41",
-        date: "2010/02/12",
-        salary: "$109",
-      },
-      {
-        name: "Vivian Harrell",
-        position: "Financial Controller",
-        office: "San Francisco",
-        age: "62",
-        date: "2009/02/14",
-        salary: "$452",
-      },
-      {
-        name: "Timothy Mooney",
-        position: "Office Manager",
-        office: "London",
-        age: "37",
-        date: "2008/12/11",
-        salary: "$136",
-      },
-      {
-        name: "Jackson Bradshaw",
-        position: "Director",
-        office: "New York",
-        age: "65",
-        date: "2008/09/26",
-        salary: "$645",
-      },
-      {
-        name: "Olivia Liang",
-        position: "Support Engineer",
-        office: "Singapore",
-        age: "64",
-        date: "2011/02/03",
-        salary: "$234",
-      },
-      {
-        name: "Bruno Nash",
-        position: "Software Engineer",
-        office: "London",
-        age: "38",
-        date: "2011/05/03",
-        salary: "$163",
-      },
-      {
-        name: "Sakura Yamamoto",
-        position: "Support Engineer",
-        office: "Tokyo",
-        age: "37",
-        date: "2009/08/19",
-        salary: "$139",
-      },
-      {
-        name: "Thor Walton",
-        position: "Developer",
-        office: "New York",
-        age: "61",
-        date: "2013/08/11",
-        salary: "$98",
-      },
-      {
-        name: "Finn Camacho",
-        position: "Support Engineer",
-        office: "San Francisco",
-        age: "47",
-        date: "2009/07/07",
-        salary: "$87",
-      },
-      {
-        name: "Serge Baldwin",
-        position: "Data Coordinator",
-        office: "Singapore",
-        age: "64",
-        date: "2012/04/09",
-        salary: "$138",
-      },
-      {
-        name: "Zenaida Frank",
-        position: "Software Engineer",
-        office: "New York",
-        age: "63",
-        date: "2010/01/04",
-        salary: "$125",
-      },
-      {
-        name: "Zorita Serrano",
-        position: "Software Engineer",
-        office: "San Francisco",
-        age: "56",
-        date: "2012/06/01",
-        salary: "$115",
-      },
-      {
-        name: "Jennifer Acosta",
-        position: "Junior Javascript Developer",
-        office: "Edinburgh",
-        age: "43",
-        date: "2013/02/01",
-        salary: "$75",
-      },
-      {
-        name: "Cara Stevens",
-        position: "Sales Assistant",
-        office: "New York",
-        age: "46",
-        date: "2011/12/06",
-        salary: "$145",
-      },
-      {
-        name: "Hermione Butler",
-        position: "Regional Director",
-        office: "London",
-        age: "47",
-        date: "2011/03/21",
-        salary: "$356",
-      },
-      {
-        name: "Lael Greer",
-        position: "Systems Administrator",
-        office: "London",
-        age: "21",
-        date: "2009/02/27",
-        salary: "$103",
-      },
-      {
-        name: "Jonas Alexander",
-        position: "Developer",
-        office: "San Francisco",
-        age: "30",
-        date: "2010/07/14",
-        salary: "$86",
-      },
-      {
-        name: "Shad Decker",
-        position: "Regional Director",
-        office: "Edinburgh",
-        age: "51",
-        date: "2008/11/13",
-        salary: "$183",
-      },
-      {
-        name: "Michael Bruce",
-        position: "Javascript Developer",
-        office: "Singapore",
-        age: "29",
-        date: "2011/06/27",
-        salary: "$183",
-      },
-      {
-        name: "Donna Snider",
-        position: "Customer Support",
-        office: "New York",
-        age: "27",
-        date: "2011/01/25",
-        salary: "$112",
+        cid: "MK0001",
+        cname: "SRV Infotech",
+        code: "SRV",
+        pname: "abc",
+        mobile: "9999999999",
+        city: "Kannur",
+        addedby: "admin",
+        action: (
+          <>
+            {" "}
+            <RemoveRedEye />
+            <EditIcon />
+            <DeleteIcon />
+          </>
+        ),
       },
     ],
   };
@@ -522,78 +307,132 @@ const DatatableTables = () => {
       <div className="page-content">
         <div className="container-fluid">
           <Breadcrumbs title="Home" breadcrumbItem="Company" />
+
+          {/*Text field 1*/}
           <Row>
             <Col xl="12">
               <Card>
                 <CardBody>
                   <AvForm className="needs-validation">
                     <Row>
-                      <Col md="6">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">First name</Label>
+                          <Label htmlFor="validationCustom01">
+                            Company Name
+                          </Label>
                           <AvField
-                            name="firstname"
-                            placeholder="First name"
+                            name="companyname"
+                            placeholder="Company Name"
                             type="text"
-                            errorMessage="Enter First Name"
+                            errorMessage="Enter Company Name"
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom01"
                           />
                         </div>
                       </Col>
-                      <Col md="6">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom02">Last name</Label>
+                          <Label htmlFor="validationCustom01">Short Code</Label>
                           <AvField
-                            name="lastname"
-                            placeholder="Last name"
+                            name="shortcode"
+                            placeholder="Short Code"
                             type="text"
-                            errorMessage="Enter Last name"
+                            errorMessage="Enter Short code"
                             className="form-control"
                             validate={{ required: { value: true } }}
-                            id="validationCustom02"
+                            id="validationCustom01"
                           />
                         </div>
                       </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom01">
+                            Contact Person
+                          </Label>
+                          <AvField
+                            name="contactperson"
+                            placeholder="Contact Person"
+                            type="text"
+                            errorMessage="Enter Contact Person"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom01">
+                            Designation
+                          </Label>
+                          <AvField
+                            name="designation"
+                            placeholder="Designation"
+                            type="text"
+                            errorMessage="Enter Designation"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                          />
+                        </div>
+                      </Col>
+
+                      {/*Text field 2*/}
                     </Row>
                     <Row>
-                      <Col md="4">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom03">City</Label>
+                          <Label htmlFor="validationCustom03">Mobile No.</Label>
                           <AvField
-                            name="city"
-                            placeholder="City"
+                            name="mobileno"
+                            placeholder="Mobile No."
                             type="text"
-                            errorMessage=" Please provide a valid city."
+                            errorMessage="Enter Mobile No.."
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom03"
                           />
                         </div>
                       </Col>
-                      <Col md="4">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom04">State</Label>
+                          <Label htmlFor="validationCustom04">
+                            Landline No.
+                          </Label>
                           <AvField
-                            name="state"
-                            placeholder="State"
+                            name="landlineno"
+                            placeholder="Landline No."
                             type="text"
-                            errorMessage="Please provide a valid state."
+                            errorMessage="Enter Landline No."
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom04"
                           />
                         </div>
                       </Col>
-                      <Col md="4">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom05">Zip</Label>
+                          <Label htmlFor="validationCustom05">Email ID</Label>
                           <AvField
-                            name="zip"
-                            placeholder="Zip Code"
+                            name="email"
+                            placeholder="Email ID"
                             type="text"
-                            errorMessage=" Please provide a valid zip."
+                            errorMessage=" Please provide a valid Email ID."
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">Website</Label>
+                          <AvField
+                            name="website"
+                            placeholder="Website"
+                            type="text"
+                            errorMessage=" Please provide a Website url."
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom05"
@@ -601,25 +440,258 @@ const DatatableTables = () => {
                         </div>
                       </Col>
                     </Row>
-                    <div className="form-check mb-3">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        id="invalidCheck"
-                        required
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="invalidCheck"
-                      >
-                        Agree to terms and conditions
-                      </label>
-                      <div className="invalid-feedback">
-                        You must agree before submitting.
-                      </div>
-                    </div>
+
+                    {/*Text field 3*/}
+                    <Row>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom03">Address</Label>
+                          <AvField
+                            name="address"
+                            placeholder="Address"
+                            type="text"
+                            errorMessage="Enter Your Address"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom03"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">
+                            Select State
+                          </Label>
+                          <FormControl sx={{ m: 1, width: 273 }}>
+                            {/* <InputLabel id="demo-controlled-open-select-label">
+                              Age
+                            </InputLabel> */}
+                            <Select
+                              labelId="demo-controlled-open-select-label"
+                              id="demo-controlled-open-select"
+                              open={open}
+                              onClose={handleClose}
+                              onOpen={handleOpen}
+                              value={state}
+                              label="State"
+                              onChange={handleChange}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+
+                              <MenuItem value={10}>Andhra Pradesh</MenuItem>
+                              <MenuItem value={20}>Arunachal Pradesh</MenuItem>
+                              <MenuItem value={30}>Assam</MenuItem>
+                              <MenuItem value={10}>Bihar</MenuItem>
+                              <MenuItem value={20}>Chhattisgarh</MenuItem>
+                              <MenuItem value={30}>Goa</MenuItem>
+                              <MenuItem value={10}>Gujarat</MenuItem>
+                              <MenuItem value={20}>Haryana</MenuItem>
+                              <MenuItem value={30}>Himachal Pradesh</MenuItem>
+                              <MenuItem value={10}>Jammu and Kashmir</MenuItem>
+                              <MenuItem value={20}>Jharkhand</MenuItem>
+                              <MenuItem value={30}>Karnataka</MenuItem>
+                              <MenuItem value={20}>Kerala</MenuItem>
+
+                              <MenuItem value={10}>Madhya Pradesh</MenuItem>
+                              <MenuItem value={20}>Maharashtra</MenuItem>
+                              <MenuItem value={30}>Manipur</MenuItem>
+                              <MenuItem value={10}>Meghalaya</MenuItem>
+                              <MenuItem value={20}>Mizoram</MenuItem>
+                              <MenuItem value={30}>Nagaland</MenuItem>
+                              <MenuItem value={10}>Odisha</MenuItem>
+                              <MenuItem value={20}>Punjab</MenuItem>
+                              <MenuItem value={30}>Rajasthan</MenuItem>
+                              <MenuItem value={10}>Sikkim</MenuItem>
+                              <MenuItem value={20}>Tamil Nadu</MenuItem>
+                              <MenuItem value={30}>Telangana</MenuItem>
+                              <MenuItem value={10}>Tripura</MenuItem>
+                              <MenuItem value={20}>Uttar Pradesh</MenuItem>
+                              <MenuItem value={30}>Uttarakhand</MenuItem>
+                              <MenuItem value={10}>West Bengal</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">
+                            Select City
+                          </Label>
+                          <FormControl sx={{ m: 1, width: 273 }}>
+                            {/* <InputLabel id="demo-controlled-open-select-label">
+                              Age
+                            </InputLabel> */}
+                            <Select
+                              labelId="demo-controlled-open-select-label"
+                              id="demo-controlled-open-select"
+                              open={open1}
+                              onClose={handleClose1}
+                              onOpen={handleOpen1}
+                              value={city}
+                              label="City"
+                              onChange={handleChange1}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={10}>City1</MenuItem>
+                              <MenuItem value={20}>City2</MenuItem>
+                              <MenuItem value={30}>City3</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">Pincode</Label>
+                          <AvField
+                            name="pincode"
+                            placeholder="Pincode"
+                            type="text"
+                            errorMessage=" Please provide a Pincode."
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+
+                    {/*Text field 4*/}
+                    <Row>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom03">GSTIN</Label>
+                          <AvField
+                            name="gstin"
+                            placeholder="GSTIN"
+                            type="text"
+                            errorMessage="Enter Your GSTIN"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom03"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom04">PAN No.</Label>
+                          <AvField
+                            name="panno"
+                            placeholder="PAN No"
+                            type="text"
+                            errorMessage="Enter PAN No."
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom04"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">CIN No.</Label>
+                          <AvField
+                            name="cinno"
+                            placeholder="CIN No."
+                            type="text"
+                            errorMessage="Enter Your CIN No."
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">TDS No.</Label>
+                          <AvField
+                            name="tdsno"
+                            placeholder="TDS No"
+                            type="text"
+                            errorMessage="Enter Your TDS No."
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+
+                    {/*Text field 5*/}
+                    <Row>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom03">
+                            Company Logo(300x400)
+                          </Label>
+                          <br />
+                          <Button variant="contained" component="label">
+                            <Upload></Upload>
+                            {"  "}
+                            Upload File
+                            <input type="file" hidden />
+                          </Button>
+                        </div>
+                      </Col>
+
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom03">Latitude</Label>
+                          <AvField
+                            name="latitude"
+                            placeholder="Latitude"
+                            type="text"
+                            errorMessage="Enter Latitude"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom03"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom04">Longitude</Label>
+                          <AvField
+                            name="longitude"
+                            placeholder="Longitude"
+                            type="text"
+                            errorMessage="Enter Longitude"
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom04"
+                          />
+                        </div>
+                      </Col>
+                      <Col md="3" style={{ marginTop: "3%" }}>
+                        <div className="mb-3">
+                          <div className="form-check mb-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              value=""
+                              id="invalidCheck"
+                              required
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="invalidCheck"
+                            >
+                              Agree to terms and conditions
+                            </label>
+                            <div className="invalid-feedback">
+                              You must agree before submitting.
+                            </div>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+
+                    {/*Text Field End*/}
+
                     <Button color="primary" type="submit">
+                      <Save></Save> {"  "}
                       Submit
                     </Button>
                   </AvForm>

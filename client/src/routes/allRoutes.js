@@ -7,7 +7,11 @@ import User from "../pages/User/index";
 
 
 import Company from "../pages/MasterSettings/Company";
+import Branch from "../pages/MasterSettings/Manage Branch";
 import Privilage from "../pages/MasterSettings/Privilage";
+import Rules from "../pages/MasterSettings/Rules";
+import Settings from "../pages/MasterSettings/Master_Settings";
+
 
 //Pages
 import PagesStarter from "../pages/Utility/pages-starter";
@@ -118,7 +122,10 @@ const userRoutes = [
   { path: "/user", component: User },
 
   { path: "/company", component: Company },
+  {path: "/branch", component:Branch},
   { path: "/privilage", component: Privilage },
+  {path: "/rules", component: Rules},
+  {path: "/settings", component:Settings},
 
   //Utility
   { path: "/pages-starter", component: PagesStarter },

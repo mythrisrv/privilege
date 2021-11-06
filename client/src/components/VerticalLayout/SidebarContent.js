@@ -379,8 +379,9 @@ const SidebarContent = (props) => {
                     {props.t("Company")}
                   </Link>
                 </li>
+                
                 <li>
-                  <Link to="/tables-datatable">
+                  <Link to="/branch">
                     <i className="uil-shop"></i>
                     {props.t("Manage Branch")}
                   </Link>
@@ -392,9 +393,15 @@ const SidebarContent = (props) => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tables-datatable">
-                    <i className="uil-newspaper"></i>
+                  <Link to="/rules">
+                    <i className="uil-brightness-empty"></i>
                     {props.t("Rules")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/settings">
+                    <i className="uil-newspaper"></i>
+                    {props.t("Settings")}
                   </Link>
                 </li>
               </ul>
