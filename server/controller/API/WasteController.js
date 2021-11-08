@@ -7,6 +7,7 @@ let models = require("../../model");
       try {
         customer_id= req.body.customer_id;
         qr_code = req.body.qr_code;
+        console.log(customer_id);
         let waste = await models.WasteItem.aggregate([
            {
             $match: {'waste_items_status':0},
@@ -42,41 +43,63 @@ let models = require("../../model");
                 }
             }
     ])
+//if(waste.length>0){
+//   let package = await models.TariffAssign.find({'tariff_assign_active_status':0,'tariff_assign_customer_id':customer_id}).populate(
+//      {
+//       model: 'Customer',
+//       path: 'customer',
+//       match: { 'cust_qr_code':qr_code},
+//       select:'_id,cust_id'
+//      })
+//      console.log(package);
+//     //   match: {'cust_qr_code': qr_code,'_id':customer_id}},
+//     //  "Customer", "_id-cust_id")
+//     //   console.log(package);
+// }
 
     if(waste.length>0){
-        if(customer_id!=''){
-            let package = await models.Customer.aggregate([
+            let package = await models.TariffAssign.aggregate([
                 {$match:
-                      {
-                        $or: [
-                          {'cust_qr_code': qr_code},
-                          {'_id':customer_id},
-                           ]
-                      }
-                    },
+                       {'tariff_assign_status':0},
+            
+                      },
                      {
                              $lookup:
                              {
-                               from: "tbl_tariff_assign",
-                               localField: "_id",
-                               foreignField: "tariff_assign_customer_id",
+                               from: "tbl_customer",
+                               localField: "tariff_assign_customer_id",
+                               foreignField: "_id",
                                as: "details" 
                              }
                      },
                     
                  {
                   $project: {
-                     id:'$_id',
-                     package_details:'$details'
+                     tariff_assign_pack_id:'$tariff_assign_pack_id',
+                     cust_name: { $arrayElemAt: ['$details.cust_name',0] },
+                     cust_address: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_address1: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_house_num: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_address: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_address: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_address: { $arrayElemAt: ['$details.cust_address',0] },
+                     cust_address: { $arrayElemAt: ['$details.cust_address',0] },
+                     //qr_code:{ $arrayElemAt: ['$details.cust_qr_code', 0] },
                      }
                  }
-         ])
-         console.log(package);
+               
+         ]).then((result)=>{
+           console.log(result);
+          // if(customer_id!=''){
+          //   result.forEach()
+          // }
+         })
         }
+       
+    // if(customer_id!=''){
+
+    // }
     
-    }else{
-        console.log("errrrrrrrrr");
-    }
         resolve(waste);
       } catch (err) {
         console.log(err);

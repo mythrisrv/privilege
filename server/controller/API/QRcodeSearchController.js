@@ -6,7 +6,32 @@ getUserData = (req) => {
   //console.log(cust_qr_code);
     return new Promise(async (resolve, reject) => {
       try {
-        // let group = await models.Customer.aggregate([
+      
+        let user = await models.Customer.find(
+          {"$or":[
+             {cust_name: { $regex:new RegExp(keyword,"i")}},
+             {cust_qr_code: { $regex:keyword }},
+             {cust_reg_no: { $regex:new RegExp(keyword,"i")}},
+             {cust_phone: { $regex:keyword }},
+             {cust_house_num:  { $regex:new RegExp(keyword,"i")}},
+             ]
+       }).select("cust_name cust_phone cust_email cust_address cust_house_num cust_designation cust_latitude cust_longitude localbody_type localbody_name ward").populate("localbody_type","localbody_type_name").populate("localbody_name","localbody_name").populate("ward","ward_name")
+       console.log(user)
+        resolve(user);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
+  module.exports = {
+    getUserData,
+  };
+
+
+   // let group = await models.Customer.aggregate([
         //   {
         //     $lookup:
         //     {
@@ -27,18 +52,7 @@ getUserData = (req) => {
         //   }
         // ])
         // console.log('group',group);
-        let user = await models.Customer.find(
-          {"$or":[
-             {cust_name: { $regex:new RegExp(keyword,"i")}},
-             {cust_qr_code: { $regex:keyword }},
-             {cust_reg_no: { $regex:new RegExp(keyword,"i")}},
-             {cust_phone: { $regex:keyword }},
-             {cust_house_num:  { $regex:new RegExp(keyword,"i")}},
-             
-            ]
-       }
-        
-        //  [ {$match:
+  //  [ {$match:
         //   {
         //     $or: [
         //       {'cust_qr_code': keyword},
@@ -52,17 +66,3 @@ getUserData = (req) => {
         //       ]
         //   }
         //  }]
-      );
-      
-        resolve(user);
-      } catch (err) {
-        console.log(err);
-        reject({
-          message: err.message,
-        });
-      }
-    });
-  };
-  module.exports = {
-    getUserData,
-  };

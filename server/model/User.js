@@ -39,7 +39,7 @@ let userSchema = new Schema(
     },
     privilage: {
       type: Schema.Types.ObjectId,
-      ref: "privilage",
+      ref: "privilege",
     },
     devision: {
       type: Number,

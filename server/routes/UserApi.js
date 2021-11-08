@@ -15,6 +15,7 @@ const {
     } catch (err) {
       console.log(err);
       res.status(400).json({
+        status: 400,
         message: err.message,
       });
     }

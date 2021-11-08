@@ -8,11 +8,11 @@ let privilageSchema = new Schema(
       required: true,
       unique: true,
     },
-    name: {
+    privilege_name: {
       type: String,
       required: true,
     },
-    shortCode: {
+    privilege_code: {
       type: String,
       required: true,
     },
@@ -24,6 +24,6 @@ let privilageSchema = new Schema(
   { timestamps: true }
 );
 
-let privilage = mongoose.model("privilage", privilageSchema);
+let privilage = mongoose.model("privilege", privilageSchema);
 
 module.exports = privilage;

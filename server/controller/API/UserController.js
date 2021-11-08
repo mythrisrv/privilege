@@ -11,7 +11,18 @@ userProfile = (req) => {
         let userProfile = await models.User.find({
           status: 0,_id:user_id
         }).populate("company","company_name").populate("branch","name")
-   resolve(userProfile);
+        console.log(userProfile);
+        if(userProfile.length>0)
+        {
+          resolve(userProfile);
+        }
+        else{
+          reject({
+            message: "user not found",
+          });
+        }
+   
+   
       } catch (err) {
         reject({
           message: err.message,

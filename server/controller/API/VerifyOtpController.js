@@ -11,7 +11,7 @@ exports.verifyOtp = async(req,res)=>{
         const result = await models.Otpmessage.findOne({ mobile:contact}).sort({createdAt:-1}).limit(1) 
         if(result){
             if(result.otp==otp){
-                 let user = await models.User.findOne({mobile:mob})
+                 let user = await models.User.findOne({mobile:mob}).select("fname lname mobile user_email user_group privilage user_company")
                 if(user){
                   user = user
                     user.token = jwt.sign(
@@ -20,7 +20,7 @@ exports.verifyOtp = async(req,res)=>{
                         },
                         config.secret,
                         {
-                          expiresIn: "30m",
+                          expiresIn: "30d",
                         }
                       )
                     res.send({"success":true,"message":"Otp verified Successfully",data:user,token:user.token

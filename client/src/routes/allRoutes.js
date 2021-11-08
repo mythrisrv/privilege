@@ -111,9 +111,41 @@ import Ward from "../pages/Manage/Ward";
 import Group from "../pages/Manage/Group";
 
 // Add Customer
-import Customer from "../pages/Customers/AddCustomer";
+
 import AddCustomer from "../pages/Customers/AddCustomer";
 
+import viewTariff from "../pages/Customers/viewTariff";
+import QrCode from "../pages/Customers/QrCode";
+
+
+//account
+import AccountType from "../pages/Accounts/Account-Type";
+import AccountDetails from "../pages/Accounts/AccountDetails";
+import Chart from "../pages/Accounts/Chart";
+import FundTransfer from "../pages/Accounts/FundTransfer";
+import CreditDebit from "../pages/Accounts/CreditDebit";
+import IncomeExpenses from "../pages/Accounts/IncomeExpenses";
+import TransactionLog from "../pages/Accounts/TransactionLog";
+
+//Waste Collection
+import HelperCollection from "../pages/WasteCollection/HelperCollection";
+import HelperDrop from "../pages/WasteCollection/HelperDrop";
+import DriverCollection from "../pages/WasteCollection/DriverCollection";
+import DriverDrop from "../pages/WasteCollection/DriverDrop";
+import WastePlot from "../pages/WasteCollection/WastePlot";
+import GroupWasteSpot from "../pages/WasteCollection/GroupWasteSpot";
+
+
+//package
+import AddTariff from "../pages/Package/AddTariff";
+import AddWaste from "../pages/Package/AddWaste";
+
+//Invoice
+import ViewInvoice from "../pages/Invoice/ViewInvoice";
+import AutoInvoice from "../pages/Invoice/AutoInvoice";
+
+//Receipt
+import Receipt from "../pages/Receipt";
 
 
 const userRoutes = [
@@ -204,6 +236,38 @@ const userRoutes = [
 
    //Customers
    {path:"/Customer",component:AddCustomer},
+
+   { path: "/view-tariff", component:viewTariff },
+  { path: "/qr-code" , component:QrCode },
+
+   //accounts
+   {path:"/account-type" , component:AccountType},
+   {path:"/account-details" , component:AccountDetails},
+   {path:"/accounts-chart" , component:Chart},
+   {path:"/fund-transfer" , component: FundTransfer},
+   {path:"/credit-debit-fund" , component: CreditDebit},
+   {path:"/income-expense" , component: IncomeExpenses},
+   {path:"/transaction-log" , component: TransactionLog},
+
+
+   //Waste Collection
+{ path: "/waste-collect", component: HelperCollection },
+{ path: "/waste-collect/helper", component: HelperDrop },
+{ path: "/waste-collect/driver-collect", component: DriverCollection },
+{ path: "/waste-collect/driver-drop", component: DriverDrop },
+{ path: "/waste-collect/waste-plots", component: WastePlot },
+{path: "/waste-collect/waste-spots",component:GroupWasteSpot},
+
+//package
+{path:"/add-tariff" , component:AddTariff},
+{path:"/add-waste",component:AddWaste},
+
+//Invoice
+{path:"/view-invoice", component:ViewInvoice},
+{path:"/auto-invoice", component:AutoInvoice},
+
+//Receipt
+{ path: "/view-receipt", component: Receipt },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
