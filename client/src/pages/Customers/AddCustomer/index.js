@@ -317,7 +317,15 @@ const {
     // item.type=item.cust_type.customer_type_name;
    // item.district=item.district.district_name
       item.localbody=item.localbody_name.localbody_name;
-     item.ward=item.ward.ward_name
+    if(item.ward!=null){item.ward=item.ward.ward_name}
+    else{item.ward="ward"}
+    if(item.district!=null){item.district=item.district.district_name}
+    else{item.district="district"}
+     
+      if (item.cust_type!=null){
+        item.cust_type=item.cust_type.customer_type_name
+      }
+      else item.cust_type="customer type"
       customerData.push(item);
     });
     setUsersForTable(customerData);
@@ -339,7 +347,7 @@ const {
               },
               {
                 label: "Type",
-                field: "type",
+                field: "cust_type",
                 sort: "asc",
                 width: 200,
               },

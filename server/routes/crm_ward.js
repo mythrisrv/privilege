@@ -54,6 +54,7 @@ router.get("/list/options/:localbodyId", [jwtauth], async (req, res) => {
   console.log(req.params)
   try {
     let item = await getWardsListOptions(req);
+   
     res.status(200).json({
       status: 200,
       data: item,

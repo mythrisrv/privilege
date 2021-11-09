@@ -49,7 +49,7 @@ const Group = (props) => {
   const [groupDataForTable, setgroupDataForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
   const [selectedLocalbody, setselectedLocalbody] = useState({});
-  
+  const [wardOption,setWardOption]=useState([])
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -95,6 +95,7 @@ const Group = (props) => {
     // dispatch(getWardOptions(selectedLocalbody))
      
     }, []);
+   
 
   
 
@@ -293,6 +294,7 @@ let groupsData=[];
 
     function handleSelectedLocalbody(value) {
       setselectedLocalbody(value.value);
+    
      dispatch(getWardOptions(value.value))
       let newValue = {
        name: value.label,
@@ -302,7 +304,8 @@ let groupsData=[];
       
       //setUserObject({ ...userObject, privilage: newValue });
      }
-    console.log(selectedLocalbody)
+   
+    
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -398,6 +401,7 @@ let groupsData=[];
                             classNamePrefix="select2-selection"
                             onChange={
                               handleSelectedLocalbody
+                              
                             }
                           />
                         </div>
@@ -407,7 +411,9 @@ let groupsData=[];
                         <div className="mb-3">
                           <Label>select ward</Label>
                         <Select  
-                        isMulti 
+                        isMulti
+                       
+                      options={console.log(wardOptions)}
                        />
                           
                           
