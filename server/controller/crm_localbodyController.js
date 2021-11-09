@@ -131,7 +131,8 @@ updateLocalbody = (req) => {
       localbody_type:req.body.localbody_type,
       localbody_name:req.body.localbody_name,
       short_code:req.body.short_code,
-      localbody_updatedby:req.user._id
+      localbody_updatedby:req.user._id,
+      updatedAt:Date.now(),
 
     }
     // console.log(req.body);

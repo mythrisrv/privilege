@@ -6,6 +6,7 @@ import {
   DELETE_WARD,
   UPDATE_WARD,
   GET_WARDS,
+  GET_WARD_OPTIONS,
 } from "./actionTypes";
 
 import {
@@ -19,6 +20,9 @@ import {
   updateWardSuccess,
   deleteWardFail,
   deleteWardSuccess,
+  getWardOptionsSuccess,
+  getWardOptionsFail,
+  
 } from "./actions";
 
 //Include Both Helper File with needed methods
@@ -28,6 +32,7 @@ import {
   addWard,
   updateWard,
   deleteWard,
+  getWardOptions
 } from "../../helpers/backend_helper";
 
 function* fetchWards() {
@@ -36,6 +41,16 @@ function* fetchWards() {
     yield put(getWardsSuccess(response));
   } catch (error) {
     yield put(getWardsFail(error));
+  }
+}
+
+function* fetchWardOptions({ payload: localbodyId }) {
+  try {
+    const response = yield call(getWardOptions, localbodyId);
+    yield put(getWardOptionsSuccess(response));
+  } catch (error) {
+    console.log(error);
+    yield put(getWardOptionsFail(error));
   }
 }
 
@@ -93,6 +108,7 @@ function* onDeleteWard({ payload: wardId }) {
 
 function* wardSaga() {
   yield takeEvery(GET_WARDS, fetchWards);
+  yield takeEvery(GET_WARD_OPTIONS,fetchWardOptions);
   yield takeEvery(GET_WARD, onGetWard);
   yield takeEvery(ADD_WARD, onAddWard);
   yield takeEvery(UPDATE_WARD, onUpdateWard);

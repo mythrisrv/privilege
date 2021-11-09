@@ -317,7 +317,7 @@ const {
     // item.type=item.cust_type.customer_type_name;
    // item.district=item.district.district_name
       item.localbody=item.localbody_name.localbody_name;
-    //  item.ward=item.ward.ward_name
+     item.ward=item.ward.ward_name
       customerData.push(item);
     });
     setUsersForTable(customerData);

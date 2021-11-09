@@ -90,3 +90,6 @@ export const getGroups  = () => get(url.GET_GROUPS);
 
 //get customers
 export const getCustomers = () =>get(url.GET_CUSTOMERS);
+
+export const getWardOptions = (localbodyId) =>
+  get(`${url.GET_WARD_OPTIONS}/${localbodyId}`, { localbodyId: localbodyId });

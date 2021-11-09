@@ -28,13 +28,14 @@ export const GET_WARD = "/ward";
 export const UPDATE_WARD = "/ward";
 export const DELETE_WARD = "/ward";
 
+
 //LOCALBODY
 export const GET_LOCALBODIES = "/localbody/list";
 export const ADD_LOCALBODY = "/localbody";
 export const GET_LOCALBODY = "/localbody";
 export const UPDATE_LOCALBODY = "/localbody";
 export const DELETE_LOCALBODY = "/localbody";
-
+export const GET_WARD_OPTIONS="/ward/list/options"
 
 // Privilages options
 export const GET_PRIVILAGES_OPTIONS = "/privilage/list/options";

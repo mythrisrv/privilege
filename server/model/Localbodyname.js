@@ -68,8 +68,16 @@ let localbodynameSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    createdAt:{
+      type:Date,
+      default:Date.now()
+    },
+    updatedAt:{
+      type:Date,
+
+    }
   },
-  { timestamps: true,collection:'tbl_local_body_name'}
+  { /*timestamps: true,*/collection:'tbl_local_body_name'}
 );
 
 let localbodyname = mongoose.model("tbl_local_body_name",localbodynameSchema);

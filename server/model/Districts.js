@@ -35,9 +35,16 @@ let districtSchema = new Schema(
     district_time: {
       type: String,
     },
-    
+    createdAt:{
+      type:Date,
+      default:Date.now()
+
+    },
+    updatedAt:{
+      type:Date,
+    }
   },
-  { timestamps: true,collection:'districts' }
+  {/* timestamps: true,*/collection:'districts' }
 );
 
 let district = mongoose.model("districts", districtSchema);

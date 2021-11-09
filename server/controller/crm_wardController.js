@@ -82,10 +82,11 @@ getWardsList = (req) => {
 // };
 
 getWardsListOptions = (req) => {
+  console.log(req.params)
   return new Promise(async (resolve, reject) => {
     try {
       let wards = await models.Ward.find({
-        ward_status:0,
+      $and:[  {localbody_name_id:req.params.localbodyId},{ward_status:0}]
       }).select("ward_name");
       resolve(wards);
     } catch (err) {
@@ -125,7 +126,8 @@ updateWard = (req) => {
       ward_name:req.body.ward_name,
       ward_no:req.body.ward_no,
       localbody_name_id:localbody._id,
-      ward_updatedby:req.user._id
+      ward_updatedby:req.user._id,
+      updatedAt:Date.now(),
 
   }
        

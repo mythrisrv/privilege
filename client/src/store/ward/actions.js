@@ -14,6 +14,7 @@ import {
   DELETE_WARD,
   DELETE_WARD_FAIL,
   DELETE_WARD_SUCCESS,
+  GET_WARD_OPTIONS,GET_WARD_OPTIONS_SUCCESS,GET_WARD_OPTIONS_FAIL
 } from "./actionTypes";
 
 export const getWards = () => ({
@@ -87,5 +88,19 @@ export const deleteWardSuccess = (ward) => ({
 
 export const deleteWardFail = (error) => ({
   type: DELETE_WARD_FAIL,
+  payload: error,
+});
+export const getWardOptions = (localbodyId) => ({
+  type: GET_WARD_OPTIONS,
+  payload: localbodyId,
+});
+
+export const getWardOptionsSuccess = (wards) => ({
+  type: GET_WARD_OPTIONS_SUCCESS,
+  payload: wards,
+});
+
+export const getWardOptionsFail = (error) => ({
+  type: GET_WARD_OPTIONS_FAIL,
   payload: error,
 });

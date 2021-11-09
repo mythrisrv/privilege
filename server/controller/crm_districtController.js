@@ -117,6 +117,7 @@ updateDistrict = (req) => {
      let data={
        district_name:req.body.district_name,
        district_updatedby:req.user._id,
+       updatedAt:Date.now()
        
 
      }

@@ -50,7 +50,8 @@ router.get("/list", [jwtauth], async (req, res) => {
 
 // router.get('/list/',validationMiddleware.getDistrictList,getDistrictList);
 // // Get list options
-router.get("/list/options", [jwtauth], async (req, res) => {
+router.get("/list/options/:localbodyId", [jwtauth], async (req, res) => {
+  console.log(req.params)
   try {
     let item = await getWardsListOptions(req);
     res.status(200).json({

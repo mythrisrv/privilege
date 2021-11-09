@@ -18,6 +18,9 @@ import {
   getBranchesOptions,
   updateUser,
   getGroups,
+  getLocalbodies,
+  getWardOptions,
+  getWards
 
   //getPrivilagesOptions,
 } from "../../../store/actions";
@@ -45,6 +48,8 @@ const Group = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [groupDataForTable, setgroupDataForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [selectedLocalbody, setselectedLocalbody] = useState({});
+  
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -63,6 +68,7 @@ const Group = (props) => {
   const{
     groups
   } =useSelector((state)=>state.groups)
+  const localbodiesOPtions=useSelector((state)=>state.localbodies.localbodies)
  
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
@@ -74,8 +80,8 @@ const Group = (props) => {
   const companiesOptions = useSelector(
     (state) => state.companies.companiesOptions
   );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
+  const wardOptions = useSelector(
+    (state) => state.wards.wardOptions.data
   );
 
   const dispatch = useDispatch();
@@ -85,6 +91,9 @@ const Group = (props) => {
   useEffect(() => {
   // dispatch(getUsers())
      dispatch(getGroups());
+     dispatch(getLocalbodies());
+    // dispatch(getWardOptions(selectedLocalbody))
+     
     }, []);
 
   
@@ -194,13 +203,19 @@ let groupsData=[];
         width: 200,
       },
       {
+        label: "Group Name	",
+        field: "group_name",
+        sort: "asc",
+        width: 200,
+      },
+      {
         label: "Local Body",
         field: "group_localbody_type_id",
         width: 300,
       },
       {
         label: "Ward",
-        field: "ward",
+        field: "group_ward",
         width: 300,
       },
       {
@@ -268,7 +283,7 @@ let groupsData=[];
   //     {
   //       options: branchesOptionsData,
   //     },
-  //   ];
+  //   ]
 
   //   function handleChangeUser(e) {
   //     let name = e.target.name;
@@ -276,15 +291,18 @@ let groupsData=[];
   //     setUserObject({ ...userObject, [name]: value });
   //   }
 
-  //   function handleSelectedPrivilage(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedPrivilage(value);
-  //     setUserObject({ ...userObject, privilage: newValue });
-  //   }
-
+    function handleSelectedLocalbody(value) {
+      setselectedLocalbody(value.value);
+     dispatch(getWardOptions(value.value))
+      let newValue = {
+       name: value.label,
+        _id: value.value,
+      };
+      
+      
+      //setUserObject({ ...userObject, privilage: newValue });
+     }
+    console.log(selectedLocalbody)
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -335,7 +353,7 @@ let groupsData=[];
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Breadcrumbs title="Home" breadcrumbItem="Qr Code" />
+          <Breadcrumbs title="Home" breadcrumbItem="Manage Group" />
           <Row>
             <Col xl="12">
               <Card>
@@ -366,12 +384,21 @@ let groupsData=[];
                           <Label>Localbody</Label>
                           <Select
                             name="localbody_name"
-                            //   value={selectCommunity}
+                            value={selectedLocalbody}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
-                            //   options={communitiesOptionsGroup}
+                              options={localbodiesOPtions.map((localbodies,)=>{
+                                return{
+                                label:localbodies.localbody_name,
+                                value:localbodies._id,
+                                }
+                              })
+                              }
                             classNamePrefix="select2-selection"
+                            onChange={
+                              handleSelectedLocalbody
+                            }
                           />
                         </div>
                       </Col>
@@ -380,7 +407,8 @@ let groupsData=[];
                         <div className="mb-3">
                           <Label>select ward</Label>
                         <Select  
-                        isMulti  />
+                        isMulti 
+                       />
                           
                           
                         </div>

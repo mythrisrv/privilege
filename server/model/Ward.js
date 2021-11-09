@@ -51,9 +51,16 @@ let wardSchema = new Schema(
       },
     ward_company:{
         type: String,
+    },
+    createdAt:{
+       type:Date,
+       default:Date.now(),
+    },
+    updatedAt:{
+       type:Date
     }
   },
-  { timestamps: true,collection:'tbl_ward' }
+  { /*timestamps: true,*/collection:'tbl_ward' }
 );
 
 let ward = mongoose.model("tbl_ward", wardSchema);

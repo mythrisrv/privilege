@@ -11,6 +11,8 @@ import {
   UPDATE_WARD,
   UPDATE_WARD_SUCCESS,
   UPDATE_WARD_FAIL,
+  GET_WARD_OPTIONS_FAIL,
+  GET_WARD_OPTIONS_SUCCESS,
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -22,6 +24,7 @@ const INIT_STATE = {
   deleteWardResponse: {},
   wardIdToBeDeleted: "",
   ward: {},
+  wardOptions:[],
   error: {},
 };
 
@@ -142,6 +145,18 @@ const Ward = (state = INIT_STATE, action) => {
         },
         error: action.payload,
       };
+      case GET_WARD_OPTIONS_SUCCESS:
+        console.log(action.payload, "ward reducer");
+        return {
+          ...state,
+          wardOptions: action.payload,
+        };
+  
+      case GET_WARD_OPTIONS_FAIL:
+        return {
+          ...state,
+          error: action.payload,
+        };
 
     default:
       return state;
