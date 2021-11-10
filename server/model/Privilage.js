@@ -3,16 +3,30 @@ let Schema = mongoose.Schema;
 
 let privilageSchema = new Schema(
   {
-    privilageId: {
-      type: String,
-      required: true,
-      unique: true,
+    status: {
+      type: Number,
     },
     privilege_name: {
       type: String,
       required: true,
     },
     privilege_code: {
+      type: String,
+      required: true,
+    },
+    alloted_divisions: {
+      type: String,
+      required: true,
+    },
+    alloted_branches: {
+      type: String,
+      required: true,
+    },
+    alloted_mainmenus: {
+      type: String,
+      required: true,
+    },
+    alloted_submenus: {
       type: String,
       required: true,
     },

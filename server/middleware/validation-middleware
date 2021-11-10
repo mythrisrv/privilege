@@ -137,7 +137,6 @@ const createLocalbody = (req, res, next) => {
 const getWasteitems = (req, res, next) => {
     const validationRule = {
         "type": "required",
-        "customer_id":"required",
         "user-id":"required"
     }
     validator(req.body, validationRule, {}, (err, status) => {

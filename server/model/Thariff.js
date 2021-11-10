@@ -69,11 +69,11 @@ let Thariff_Schema = new Schema(
         type: Number,
         required: true,
       },
-      pacakage_billing_id: {
-        type: Number,
-        required: true,
+      package_billing_id: {
+        type:Array,
+        ref: "tbl_waste_items",
       },
-      pacakage_bags: {
+      package_bags: {
         type: String,
         required: true,
       },

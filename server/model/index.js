@@ -17,6 +17,8 @@ const TariffAssign = require("./ThariffAssign");
 const Invoice = require("./Invoice");
 const InvoiceItem = require("./InvoiceItem");
 const WasteItem = require("./WasteItems");
+const UpdateWaste = require("./WasteUpdate");
+const WasteCollect = require("./WasteCollect");
 
 
 module.exports = {
@@ -38,5 +40,7 @@ module.exports = {
   TariffAssign,
   Invoice,
   InvoiceItem,
-  WasteItem
+  WasteItem,
+  UpdateWaste,
+  WasteCollect
 };
