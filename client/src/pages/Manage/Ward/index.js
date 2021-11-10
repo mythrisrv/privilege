@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr, { options } from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input, FormText, } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal,FormGroup,Input, FormText } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import {
@@ -297,6 +297,7 @@ setWardname(item.ward_name)
       setLocalbodyname("");
       setwardno("");
       setWardname("")
+      
   };
 
   const handleValidSubmitPassword = (event, values) => {
@@ -418,12 +419,14 @@ setWardname(item.ward_name)
                             className="form-control"
                            // validate={{ required: { value: true } }}
                             id="validationCustom01"
-                            value={wardshortcode}
+                           // value={wardshortcode}
                             onChange={handleChangeWard}
-                          />
-                        
+                         />
+                         
+                       
                         </div>
                       </Col>
+                    
 
                       <Col md="3">
                         <div className="mb-3">
@@ -438,8 +441,15 @@ setWardname(item.ward_name)
                             id="validationCustom01"
                             value={wardname}
                             onChange={handleChangeWard}
+                            
                           />
                               </div>
+
+                      </Col>
+                      <Col md="3">
+                      <div className="mb-3">
+                       <p>{localbodyname}/{wardname}/{wardno}</p>
+                      </div>
 
                       </Col>
                      

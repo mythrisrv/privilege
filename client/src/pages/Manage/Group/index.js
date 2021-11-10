@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal, Input } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 
@@ -50,6 +50,8 @@ const Group = (props) => {
   const [accountType, setAccountType] = useState("");
   const [selectedLocalbody, setselectedLocalbody] = useState({});
   const [wardOption,setWardOption]=useState([])
+  const[groupObject,setgroupObject]=useState({})
+  const [selectedWard, setSelectedWard] = useState({});
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -79,10 +81,12 @@ const Group = (props) => {
   );
   const companiesOptions = useSelector(
     (state) => state.companies.companiesOptions
-  );
-  const wardOptions = useSelector(
-    (state) => state.wards.wardOptions.data
-  );
+  )
+ 
+    const WardOptions= useSelector(
+      (state) => state.wards.wardOptions.data
+    )
+  
 
   const dispatch = useDispatch();
 
@@ -178,6 +182,12 @@ let groupsData=[];
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
       //   item.branch1 = item.branch && item.branch.name;
+      if(item.group_localbody_name_id!=null){
+        item.localbody=item.group_localbody_name_id.localbody_name
+      }
+      if(item.group_addedby!=null){
+        item.addedby=item.group_addedby.username
+      }
          groupsData.push(item);
     });
     setgroupDataForTable(groupsData);
@@ -211,7 +221,7 @@ let groupsData=[];
       },
       {
         label: "Local Body",
-        field: "group_localbody_type_id",
+        field: "localbody",
         width: 300,
       },
       {
@@ -226,7 +236,7 @@ let groupsData=[];
       },
       {
         label: "staff",
-        field: "",
+        field: "addedby",
         width: 300,
       },
       {
@@ -293,19 +303,34 @@ let groupsData=[];
   //   }
 
     function handleSelectedLocalbody(value) {
-      setselectedLocalbody(value.value);
+      console.log(value)
+      setselectedLocalbody(value);
     
      dispatch(getWardOptions(value.value))
+    setWardOption(WardOptions)
       let newValue = {
        name: value.label,
         _id: value.value,
       };
       
       
-      //setUserObject({ ...userObject, privilage: newValue });
+      setgroupObject({ ...groupObject, localbody: newValue });
+     }
+    
+     function handleSelectedWard(value) {
+      setSelectedWard(value);
+    
+    // dispatch(getWardOptions(value.value))
+    // setWardOption(wardOptions)
+      let newValue = {
+       name: value.label,
+        _id: value.value,
+      };
+      
+      
+      setgroupObject({ ...groupObject, ward: newValue });
      }
    
-    
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -376,6 +401,7 @@ let groupsData=[];
                             placeholder="Start"
                             type="text"
                             errorMessage="Enter Start"
+                           //value={}
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom05"
@@ -391,10 +417,11 @@ let groupsData=[];
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
-                              options={localbodiesOPtions.map((localbodies,)=>{
+                              options={localbodiesOPtions.map((localbodies)=>{
                                 return{
                                 label:localbodies.localbody_name,
                                 value:localbodies._id,
+                                key:localbodies._id,
                                 }
                               })
                               }
@@ -403,6 +430,8 @@ let groupsData=[];
                               handleSelectedLocalbody
                               
                             }
+                              
+                            
                           />
                         </div>
                       </Col>
@@ -413,7 +442,16 @@ let groupsData=[];
                         <Select  
                         isMulti
                        
-                      options={console.log(wardOptions)}
+                     options={WardOptions?.map((ward)=>{
+                      return{
+                        label:ward.ward_name,
+                        value:ward._id
+                      }
+                     })}
+                      onChange={(e)=>{
+                        handleSelectedWard(e);
+                       
+                      }}
                        />
                           
                           
@@ -433,6 +471,7 @@ let groupsData=[];
                           />
                         </div>
                       </Col>
+                     
                       <Col md="2">
                         <div className="mt-4">
                           <Button style={{ fontSize:12}} color="primary" type="submit">

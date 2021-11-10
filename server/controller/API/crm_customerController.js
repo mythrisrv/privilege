@@ -361,6 +361,7 @@ customerProfile = (req) => {
         .populate("ward","ward_name -_id")
         .populate("cust_type","customer_type_name -_id")
         .populate("district","district_name -_id")
+        .populate("cust_added_by","username -_id")
         resolve(customer);
       }catch(err){
         console.log(err);

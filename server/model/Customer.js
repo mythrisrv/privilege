@@ -26,7 +26,7 @@ let customerSchema = new Schema(
       },
       cust_added_by: {
         type: Schema.Types.ObjectId,
-        ref: "users",
+        ref: "user",
       },
       cust_updated_by: {
         type: Schema.Types.ObjectId,

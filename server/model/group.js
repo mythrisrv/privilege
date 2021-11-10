@@ -23,7 +23,8 @@ let groupSchema = new Schema(
         type:Date,
       },
       group_addedby: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"user"
       },
       group_name: {
         type: String,

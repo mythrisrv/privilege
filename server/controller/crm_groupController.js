@@ -40,9 +40,8 @@ getGroupsList = (req) => {
       try {
         let group = await models.group.find({
           group_status: 0,
-        }).populate("group-localbody_name_id","localbody_name -_id")
-        .populate("group_district","district_name -_id")
-      
+        }).populate("group_localbody_name_id","localbody_name -_id")
+       .populate("group_addedby","username -_id")
         resolve(group);
       } catch (err) {
         console.log(err);

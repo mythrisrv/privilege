@@ -318,14 +318,18 @@ const {
    // item.district=item.district.district_name
       item.localbody=item.localbody_name.localbody_name;
     if(item.ward!=null){item.ward=item.ward.ward_name}
-    else{item.ward="ward"}
+    else{item.ward=""}
     if(item.district!=null){item.district=item.district.district_name}
-    else{item.district="district"}
+    else{item.district=""}
      
       if (item.cust_type!=null){
         item.cust_type=item.cust_type.customer_type_name
       }
-      else item.cust_type="customer type"
+      else item.cust_type=""
+      if(item.cust_added_by!=null){
+        item.addedby=item.cust_added_by.username
+      }
+      else item.addedby=""
       customerData.push(item);
     });
     setUsersForTable(customerData);
@@ -384,7 +388,7 @@ const {
               },
               {
                 label: "Staff",
-                field: "staff",
+                field: "addedby",
                 sort: "asc",
                 width: 100,
               },

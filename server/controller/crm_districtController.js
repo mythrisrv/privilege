@@ -7,7 +7,7 @@ createDistrict = (req) => {
    var date2 = new Date();
    
 date = moment(date2).format(format2);
-time = moment(date2,"hh:mm A").format("HH:mm ");
+time = moment(date2).format("hh:mm A");
 ;
   return new Promise(async (resolve, reject) => {
     try {
