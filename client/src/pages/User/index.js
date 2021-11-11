@@ -76,10 +76,11 @@ const Users = (props) => {
   useEffect(() => {
     setUserObject({ ['addedby']: 1 });
     if (localStorage.getItem('authUser')) {
-      const obj = jwt_decode(localStorage.getItem('authUser'));
+      var data = localStorage.getItem('authUser');
+      const obj = JSON.parse(data);
       console.log(obj);
 
-      setUserId(obj.user);
+      setUserId(obj._id);
       setUserObject({ ['addedby']: userId });
     }
   }, [userId]);

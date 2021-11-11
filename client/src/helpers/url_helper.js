@@ -7,6 +7,10 @@ export const CHECK_AUTH = "/auth";
 export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile";
 export const POST_EDIT_PROFILE = "/post-fake-profile";
 
+// Menu Options
+
+export const GET_Menu_OPTIONS = '/menu/list';
+
 //USERS
 export const GET_USERS = "/user/list";
 export const ADD_USER = "/user";

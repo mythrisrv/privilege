@@ -19,6 +19,8 @@ const InvoiceItem = require("./InvoiceItem");
 const WasteItem = require("./WasteItems");
 const UpdateWaste = require("./WasteUpdate");
 const WasteCollect = require("./WasteCollect");
+const MainMenu = require("./Menu");
+const SubMenu = require("./SubMenu");
 
 
 module.exports = {
@@ -42,5 +44,7 @@ module.exports = {
   InvoiceItem,
   WasteItem,
   UpdateWaste,
-  WasteCollect
+  WasteCollect,
+  MainMenu,
+  SubMenu
 };

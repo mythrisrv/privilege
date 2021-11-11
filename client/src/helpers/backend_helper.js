@@ -19,6 +19,8 @@ const login = (data) => post(url.POST_LOGIN, data);
 
 export const checkAuth = (data) => post(url.CHECK_AUTH, data);
 
+// get menu options
+export const getMenusOptions = (userId) => get(`${url.GET_Menu_OPTIONS}?id=${userId}`);
 // postForgetPwd
 // const postJwtForgetPwd = (data) =>
 //   post(url.POST_FAKE_JWT_PASSWORD_FORGET, data);

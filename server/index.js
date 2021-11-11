@@ -31,7 +31,7 @@ const customer = require("./routes/crm_customer");
 const group=require("./routes/crm_group")
 const wasteItem = require("./routes/wasteItemApi");
 const userapi = require("./routes/UserApi");
-
+const menuRouter = require("./routes/menu");
 
 app.use(logger("dev"));
 
@@ -74,7 +74,7 @@ app.use("/searchCustomerData",getUserData);
 app.use("/customer",customer);
 app.use("/wasteIteam",wasteItem);
 app.use("/staff",userapi);
-
+app.use("/menu",menuRouter);
 
 app.listen(port, function () {
   console.log("Runnning on " + port);

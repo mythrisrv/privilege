@@ -8,6 +8,7 @@ import Login from "./auth/login/reducer";
 import Account from "./auth/register/reducer";
 import ForgetPassword from "./auth/forgetpwd/reducer";
 import Profile from "./auth/profile/reducer";
+import Menus from "./menu/reducer";
 
 import users from "./users/reducer";
 import privilages from "./privilages/reducer";
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   localbodies,
   groups,
   customers,
+  Menus
 });
 
 export default rootReducer;

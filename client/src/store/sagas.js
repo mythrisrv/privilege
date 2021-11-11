@@ -21,6 +21,8 @@ import groupSaga from "./group/saga"
 //customer
 import customerSaga from "./customer/saga"
 
+import menuSaga from './menu/saga';
+
 
 export default function* rootSaga() {
   yield all([
@@ -39,5 +41,6 @@ export default function* rootSaga() {
     fork(localbodySaga),
     fork(groupSaga),
     fork(customerSaga),
+    fork(menuSaga),
   ]);
 }

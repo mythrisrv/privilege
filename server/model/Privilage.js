@@ -35,7 +35,7 @@ let privilageSchema = new Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true,collection:'privilege' }
 );
 
 let privilage = mongoose.model("privilege", privilageSchema);
