@@ -16,8 +16,15 @@ let groupSchema = new Schema(
       group_status: {
         type: Number,
       },
-      created_at: {
+      group_date:{
+        type:String
+      },
+      group_time:{
+        type:String
+      },
+      created_At: {
         type: Date,
+        default:Date.now(),
       },
       updated_at: {
         type:Date,
@@ -53,7 +60,7 @@ let groupSchema = new Schema(
         type: String,
       },
     },
-    { timestamps: true ,collection:'tbl_group' }
+    { /*timestamps: true ,*/collection:'tbl_group' }
   );
   let group = mongoose.model("tbl_group",groupSchema);
 

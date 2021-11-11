@@ -50,6 +50,10 @@ export const GET_USER_PROFILE = "/user";
 
 //Groups
 export const GET_GROUPS= "/group/list";
+export const ADD_GROUP = "/group";
+export const GET_GROUP = "/group";
+export const UPDATE_GROUP = "/group";
+export const DELETE_GROUP = "/group";
 
 //get customers
 export const GET_CUSTOMERS = "/customer/list_crm";

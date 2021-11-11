@@ -5,7 +5,11 @@ const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
    createGroup,
-   getGroupsList
+   getGroupsList,
+   deleteGroup,
+   updateGroup,
+   getGroupData,
+   getGroupsListOptions
 } = require('../controller/crm_groupController');
 
 
@@ -31,6 +35,7 @@ router.get("/list", [jwtauth], async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getGroupsList(req)
+    //console.log(item)
     res.status(200).json({
       status: 200,
       data: item,
@@ -42,6 +47,77 @@ router.get("/list", [jwtauth], async (req, res) => {
     });
   }
 });
+
+router.get("/list/options", [jwtauth], async (req, res) => {
+  try {
+    let item = await getGroupsListOptions(req);
+    console.log(item)
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
+// Get localbody data
+router.get("/:group_Id", [jwtauth], async (req, res) => {
+  try {
+    let item = await getGroupData(req);
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+
+// Updata localbody data
+router.put("/:group_Id", [jwtauth], async (req, res) => {
+  try {
+    let item = await updateGroup(req);
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
+//Delete localbody by id
+router.delete("/:group_Id", [jwtauth], async (req, res) => {
+  try {
+    let item = await deleteGroup(req);
+    res.status(200).json({
+      status: 200,
+      message: "Item deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+
 
 
 

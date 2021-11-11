@@ -88,6 +88,12 @@ export { getLoggedInUser, isUserAuthenticated, login };
 // get Groups
 export const getGroups  = () => get(url.GET_GROUPS);
 
+export const addGroup = (group) => post(url.ADD_GROUP, group);
+export const getGroup = (groupname) => get(url.GET_GROUP, groupname);
+export const updateGroup = (group) => put(`${url.UPDATE_GROUP}/${group._id}`, group);
+export const deleteGroup= (groupId) => del(url.DELETE_GROUP, groupId);
+
+
 //get customers
 export const getCustomers = () =>get(url.GET_CUSTOMERS);
 

@@ -19,6 +19,8 @@ import {
   updateUser,
   getGroups,
   getLocalbodies,
+  getGroup,
+  addGroup,deleteGroup,updateGroup,
   getWardOptions,
   getWards
 
@@ -42,16 +44,18 @@ const Group = (props) => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [userObject, setUserObject] = useState({});
-  const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
-  const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
+  const [groupIdTobeUpdated, setGroupIdToBeUpdated] = useState(null);
+  const [groupIdToBeDeleted, setGroupIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [groupDataForTable, setgroupDataForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
   const [selectedLocalbody, setselectedLocalbody] = useState({});
-  const [wardOption,setWardOption]=useState([])
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [groupname, setGroupname] = useState("");
+  
   const[groupObject,setgroupObject]=useState({})
-  const [selectedWard, setSelectedWard] = useState({});
+ 
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -68,7 +72,10 @@ const Group = (props) => {
     error,
   } = useSelector((state) => state.users);
   const{
-    groups
+    groups,addingGroup,
+    addGroupResponse,
+    deleteGroupResponse,
+    updateGroupResponse
   } =useSelector((state)=>state.groups)
   const localbodiesOPtions=useSelector((state)=>state.localbodies.localbodies)
  
@@ -100,10 +107,55 @@ const Group = (props) => {
      
     }, []);
    
+    useEffect(() => {
+      if (addGroupResponse.type === "success") {
+        dispatch(getGroups())
+        toastr.success(addGroupResponse.message);
+        setSelectedPrivilage({});
+        setSelectedCompany(null);
+        setSelectedBranch(null);
+      } else if (addGroupResponse.type === "failure") {
+        toastr.error(error.data.message, addGroupResponse.message);
+      }
+    }, [addGroupResponse]);
+    useEffect(() => {
+      if (deleteGroupResponse.type === "success") {
+        dispatch(getGroups())
+        toastr.success(deleteGroupResponse.message);
+        setGroupIdToBeDeleted(null);
+      } else if (deleteGroupResponse.type === "failure") {
+        toastr.error(error.data.message, deleteGroupResponse.message);
+      }
+    }, [deleteGroupResponse]);
+  
+    useEffect(() => {
+      if (updateGroupResponse.type === "success") {
+        dispatch(getGroups())
+        setShowModal(false);
+        setGroupIdToBeUpdated(null);
+        setPasswordObject({});
+        toastr.success(updateGroupResponse.message);
+      } else if (updateGroupResponse.type === "failure") {
+        toastr.error(error.data.message, updateGroupResponse.message);
+      }
+    }, [updateGroupResponse]);
 
   
-
+let preUpdateGroup=(item)=>{
+  console.log(item)
+ setGroupname(item.group_name)
+ if(item.group_localbody_name_id){
+   setselectedLocalbody(item.localbody)
+   setGroupIdToBeUpdated(item._id);
+   setgroupObject({ ...item, password: null });
+ }
+}
  
+let preUpdateLocalbodyPassword = (item) => {
+  setGroupIdToBeUpdated(item._id);
+  setShowModal(true);
+};
+
 
   
 
@@ -163,15 +215,15 @@ let groupsData=[];
               marginRight: "1rem",
             }}
             onClick={() => {
-              //   preUpdateUser(item);
+                preUpdateGroup(item);
             }}
           ></i>
           <i
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              //   setUserIdToBeDeleted(item._id);
-              //   setConfirmDeleteAlert(true);
+                 setGroupIdToBeDeleted(item._id);
+                 setConfirmDeleteAlert(true);
             }}
           ></i>
         </div>
@@ -303,34 +355,50 @@ let groupsData=[];
   //   }
 
     function handleSelectedLocalbody(value) {
-      console.log(value)
-      setselectedLocalbody(value);
+     
+     setselectedLocalbody(value);
+     let newValue = {
+      name: value.label,
+       _id: value.value,
+     };
+    dispatch(getWardOptions(value.value))
+    setgroupObject({ ...groupObject, localbody: newValue })
     
-     dispatch(getWardOptions(value.value))
-    setWardOption(WardOptions)
-      let newValue = {
-       name: value.label,
-        _id: value.value,
-      };
-      
-      
-      setgroupObject({ ...groupObject, localbody: newValue });
      }
     
-     function handleSelectedWard(value) {
-      setSelectedWard(value);
-    
-    // dispatch(getWardOptions(value.value))
-    // setWardOption(wardOptions)
-      let newValue = {
-       name: value.label,
-        _id: value.value,
-      };
+     function handleSelectedWard(values) {
+      //console.log(value)
+     setSelectedWard(values)
+    let ward=[];
+      values ?.map((v)=>ward.push(v.label));
+     // Object.assign({},ward)
+     // console.log(ward)
+     setgroupObject({...groupObject, wards:ward})
+
+      }
+     
       
-      
-      setgroupObject({ ...groupObject, ward: newValue });
-     }
-   
+     
+     
+    //console.log(selectedWard)
+   function handleGroupname(e){
+     let name=e.target.name;
+     let value=e.target.value;
+     setGroupname(value)
+     setgroupObject({...groupObject,[name]:value})
+   }
+
+   const handleValidSubmit = (event, values) => {
+   console.log(groupObject)
+    groupIdTobeUpdated
+      ? dispatch(updateGroup(groupObject))
+      : dispatch(addGroup(groupObject));
+
+      setselectedLocalbody({})
+      setGroupname("")
+      setSelectedWard(null)
+  
+  };
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -379,6 +447,22 @@ let groupsData=[];
 
   return (
     <React.Fragment>
+      {confirmDeleteAlert ? (
+        <SweetAlert
+          title=""
+          showCancel
+          confirmButtonText="Delete"
+          confirmBtnBsStyle="success"
+          cancelBtnBsStyle="danger"
+          onConfirm={() => {
+            dispatch(deleteGroup(groupIdToBeDeleted));
+            setConfirmDeleteAlert(false);
+          }}
+          onCancel={() => setConfirmDeleteAlert(false)}
+        >
+          Are you sure you want to delete it?
+        </SweetAlert>
+      ) : null}
       <div className="page-content">
         <div className="container-fluid">
           <Breadcrumbs title="Home" breadcrumbItem="Manage Group" />
@@ -388,23 +472,24 @@ let groupsData=[];
                 <CardBody>
                   <AvForm
                     className="needs-validation"
-                    // onValidSubmit={(e, v) => {
-                    //   handleValidSubmit(e, v);
-                    // }}
+                    onValidSubmit={(e, v) => {
+                     handleValidSubmit(e, v);
+                     }}
                   >
                     <Row>
                     <Col md="3">
                         <div className="mb-3">
                           <Label htmlFor="validationCustom05">Group Name</Label>
                           <AvField
-                            name="Start"
+                            name="group_name"
                             placeholder="Start"
                             type="text"
                             errorMessage="Enter Start"
-                           //value={}
+                           value={groupname}
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                           // validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleGroupname}
                           />
                         </div>
                       </Col>
@@ -413,7 +498,7 @@ let groupsData=[];
                           <Label>Localbody</Label>
                           <Select
                             name="localbody_name"
-                            value={selectedLocalbody}
+                           value={selectedLocalbody}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
@@ -441,17 +526,17 @@ let groupsData=[];
                           <Label>select ward</Label>
                         <Select  
                         isMulti
-                       
+                       name="ward_name"
+                      value={selectedWard}
                      options={WardOptions?.map((ward)=>{
+                       
                       return{
+                        
                         label:ward.ward_name,
                         value:ward._id
                       }
                      })}
-                      onChange={(e)=>{
-                        handleSelectedWard(e);
-                       
-                      }}
+                      onChange={ handleSelectedWard }
                        />
                           
                           
@@ -471,26 +556,31 @@ let groupsData=[];
                           />
                         </div>
                       </Col>
-                     
-                      <Col md="2">
-                        <div className="mt-4">
-                          <Button style={{ fontSize:12}} color="primary" type="submit">
-                            Generate Qr Code
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col md="1">
-                        <div className="mt-4">
-                          <Button
-                          style={{ fontSize:12}}
-                            color="danger"
-                            type="reset"
-                            onClick={() => setAccountType("")}
-                          >
-                            Reset
-                          </Button>
-                        </div>
-                      </Col>
+                    
+                      
+                      <Col>
+                     <div className="mb-3">
+                     {groupIdTobeUpdated ? (
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={addingGroup ? true : false}
+                      >
+                        {addingGroup ? "Updating" : "Update"}
+                      </Button>
+                    ) : (
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={addingGroup ? true : false}
+                      >
+                        {addingGroup ? "Adding" : "Submit"}
+                      </Button>
+                    )}
+                    </div>
+                     </Col>
+                      
+                      
                     </Row>
                   </AvForm>
                 </CardBody>
