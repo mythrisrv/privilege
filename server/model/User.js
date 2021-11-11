@@ -44,6 +44,10 @@ let userSchema = new Schema(
     devision: {
       type: Number,
     },
+    local_body: {
+      type: Schema.Types.ObjectId,
+      ref: "tbl_local_body",
+    },
     company: {
       type: Schema.Types.ObjectId,
       ref: "tbl_company",
@@ -51,6 +55,14 @@ let userSchema = new Schema(
     branch: {
       type: Schema.Types.ObjectId,
       ref: "branch",
+    },
+    ward: {
+      type: Schema.Types.ObjectId,
+      ref: "tbl_ward",
+    },
+    user_group: {
+      type: Schema.Types.ObjectId,
+      ref: "tbl_group",
     },
     address: {
       type: String,

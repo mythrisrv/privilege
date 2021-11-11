@@ -6,8 +6,8 @@ let moment = require("moment");
   WasteItemsList = (req) => {
     return new Promise(async (resolve, reject) => {
       try {
-        customer_id= req.body.customer_id;
-        qr_code = req.body.qr_code;
+       let customer_id= req.body.customer_id;
+        let qr_code = req.body.qr_code;
         let waste = await models.WasteItem.aggregate([
            {
             $match: {'waste_items_status':0},
@@ -49,6 +49,7 @@ let visit;
 let bags;
 let free_bags=[];
 let items ="";
+let wasteUpdates;
     if(waste.length>0){
             let package = await models.TariffAssign.aggregate([
                 {$match:
@@ -68,6 +69,7 @@ let items ="";
                  {
                   $project: {
                      tariff_assign_pack_id:'$tariff_assign_pack_id',
+                     cu_id: { $arrayElemAt: ['$details._id',0] },
                      cust_name: { $arrayElemAt: ['$details.cust_name',0] },
                      cust_address: { $arrayElemAt: ['$details.cust_address',0] },
                      cust_address1: { $arrayElemAt: ['$details.cust_address1',0] },
@@ -81,9 +83,8 @@ let items ="";
                  }
                
          ])
-       
            package.forEach(data => {
-            var cust_id=data._id;
+            var cust_id=data.cu_id;
             var qrcode = data.qr_code;
            if(customer_id!=''){
              if(customer_id==cust_id){
@@ -99,17 +100,18 @@ let items ="";
         }
         
      if(packages!=''){
-       customers_id=packages._id;
+       customers_id=packages.cu_id;
        package_id = packages.cust_package_id
      }
-     console.log("customers_id",customers_id);
      let thariffDetails = await models.Thariff.findOne({"package_active_status":0,"tariff_status":0,"_id":package_id})
     if(thariffDetails!=''){
       visit = thariffDetails.package_visit_month;
       bags = thariffDetails.package_bags;
-      free_bags =thariffDetails.package_bags;
-     items = thariffDetails.package_billing_id
-    }
+      free_bags =thariffDetails.package_bags.split((','))
+     items = thariffDetails.package_billing_id.split((','))
+     
+   }
+  
 let date = new Date();
     let currentMonth = date.getMonth()+1;
     let cureentyear = date.getFullYear();
@@ -131,9 +133,61 @@ let date = new Date();
 
 
 
-     waste.forEach(data => {
-      wasteId = data._id;
-    })
+     waste.forEach(async(data) => {
+    let waste_Id = ""+data._id;
+     let wasteUpdate = await models.UpdateWaste.aggregate([
+      {$match:
+        {'cust_update_wasteitem_id':waste_Id},
+      },
+      {
+        $lookup:
+        {
+          from: "tbl_customer",
+          localField: "cust_update_customer_id",
+          foreignField: "_id",
+          as: "customerDetails" 
+        }
+     },
+     {
+      $project: {
+        cust_update_customer_id:'$cust_update_customer_id',
+        cust_update_wasteitem_id:'$cust_update_wasteitem_id',
+         custo_id: { $arrayElemAt: ['$customerDetails._id',0] },
+         qr_code: { $arrayElemAt: ['$customerDetails.cust_qr_code',0] },
+         cust_package_id: { $arrayElemAt: ['$customerDetails.cust_package_id',0] },
+         cust_company: { $arrayElemAt: ['$customerDetails.cust_company',0] },
+         }
+     }
+     ])
+     console.log(wasteUpdate);
+     wasteUpdate.forEach(data => {
+      var cust_id=data.custo_id;
+      var qrcode = data.qr_code;
+      if(customer_id!=''){
+       if(cust_id==customer_id){
+        wasteUpdate = data; 
+         }
+      }
+      if(qr_code!=''){
+        if(qr_code==qrcode){
+          wasteUpdate = data; 
+         }
+      }
+      console.log(wasteUpdates);
+     })
+     console.log(wasteUpdates);
+     if(numberOfVisit <= visit){
+     if(items.includes(waste_Id)!=false){
+      let index = items.indexOf(waste_Id); 
+      let free = free_bags[index];
+      if(wasteUpdate){
+        let updateQuantity =wasteUpdate.cust_update_quantity;
+        console.log(updateQuantity);
+      }
+     }
+     }
+     })
+     
      resolve(waste);
 
       } catch (err) {

@@ -10,7 +10,8 @@ userProfile = (req) => {
       try {
         let userProfile = await models.User.find({
           status: 0,_id:user_id
-        }).populate("company","company_name").populate("branch","name")
+        }).select("firstName lastName email mobile privilage company ward username local_body user_group").populate("company","company_name").populate("branch","name").populate("privilage","privilege_name").populate("ward","ward_name").populate("local_body","localbody_type_name").populate("user_group","group_name")
+        
         console.log(userProfile);
         if(userProfile.length>0)
         {

@@ -89,10 +89,27 @@ DistrictList = (req) => {
       }
     });
   };
+   /*****************************/
+  /*localbody list
+  /*****************************/
+  localbody = (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let localbody = await models.Localbody.find({localbody_status:0}).select("localbody_type_name")
+        resolve(localbody);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
   module.exports = {
     DistrictList,
     WardList,
     GroupList,
     CustomerTypeList,
-    PackageList
+    PackageList,
+    localbody
   };

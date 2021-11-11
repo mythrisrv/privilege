@@ -70,7 +70,7 @@ let Thariff_Schema = new Schema(
         required: true,
       },
       package_billing_id: {
-        type:Array,
+        type:String,
         ref: "tbl_waste_items",
       },
       package_bags: {

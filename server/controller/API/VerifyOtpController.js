@@ -11,7 +11,7 @@ exports.verifyOtp = async(req,res)=>{
         const result = await models.Otpmessage.findOne({ mobile:contact}).sort({createdAt:-1}).limit(1) 
         if(result){
             if(result.otp==otp){
-                 let user = await models.User.findOne({mobile:mob}).select("fname lname mobile user_email user_group privilage user_company")
+                 let user = await models.User.findOne({mobile:mob}).select("firstName lastName mobile user_email user_group privilage user_company").populate("privilage","privilege_name")
                 if(user){
                   user = user
                     user.token = jwt.sign(
