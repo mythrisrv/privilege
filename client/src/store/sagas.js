@@ -19,9 +19,10 @@ import localbodySaga from "./localbody/saga";
 import groupSaga from "./group/saga"
 
 //customer
-import customerSaga from "./customer/saga"
+import customerSaga from "./customer/saga";
 
-import menuSaga from './menu/saga';
+//wasteitem
+import wasteItemSaga from "./wasteItem/saga";
 
 
 export default function* rootSaga() {
@@ -41,6 +42,6 @@ export default function* rootSaga() {
     fork(localbodySaga),
     fork(groupSaga),
     fork(customerSaga),
-    fork(menuSaga),
+    fork(wasteItemSaga),
   ]);
 }

@@ -17,3 +17,6 @@ export * from "./ward/actions";
 export * from "./localbody/actions";
 export * from "./group/actions";
 export * from "./customer/actions";
+export * from "./wasteItem/actions";
+
+

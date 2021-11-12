@@ -27,6 +27,9 @@ import groups from "./group/reducer";
 
 import customers  from "./customer/reducer"
 
+//wasteitems
+import wasteItems from "./wasteItem/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -43,7 +46,8 @@ const rootReducer = combineReducers({
   localbodies,
   groups,
   customers,
-  Menus
+
+  wasteItems,
 });
 
 export default rootReducer;

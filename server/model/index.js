@@ -19,9 +19,8 @@ const InvoiceItem = require("./InvoiceItem");
 const WasteItem = require("./WasteItems");
 const UpdateWaste = require("./WasteUpdate");
 const WasteCollect = require("./WasteCollect");
-const MainMenu = require("./Menu");
-const SubMenu = require("./SubMenu");
-
+const WasteType=require("./Waste_type");
+const WasteCategory=require("./WasteCategory")
 
 module.exports = {
   User,
@@ -45,6 +44,6 @@ module.exports = {
   WasteItem,
   UpdateWaste,
   WasteCollect,
-  MainMenu,
-  SubMenu
+  WasteType,
+  WasteCategory,
 };

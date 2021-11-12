@@ -25,6 +25,7 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getWasteItems,
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -49,7 +50,7 @@ const AddWaste = (props) => {
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [wasteItemsForTable, setWasteItemsForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
 
   const [passwordObject, setPasswordObject] = useState({
@@ -66,6 +67,10 @@ const AddWaste = (props) => {
     updateUserResponse,
     error,
   } = useSelector((state) => state.users);
+
+  const {
+    wasteItems,
+  }=useSelector((state)=>state.wasteItems);
 
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
@@ -87,7 +92,8 @@ const AddWaste = (props) => {
     dispatch(getUsers());
     dispatch(getPrivilagesOptions());
     dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
+   
+    dispatch(getWasteItems())
   }, []);
 
   useEffect(() => {
@@ -161,9 +167,9 @@ const AddWaste = (props) => {
   //   };
 
   useEffect(() => {
-    let userData = [];
+    let wasteItemsData = [];
 
-    users.map((item, index) => {
+    wasteItems.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -207,16 +213,20 @@ const AddWaste = (props) => {
           ></i>
         </div>
       );
-      //   item.id = index + 1;
+         item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
       //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+      if(item.waste_items_type) item.wastetype=item.waste_items_type.waste_cat_name;
+      if(item.waste_item_cat) item.category=item.waste_item_cat.waste_category_name;
+      if(item.waste_item_addedby)item.staff=item.waste_item_addedby.username;
+      item.image=item.waste_items_image[0].img
+        wasteItemsData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+     setWasteItemsForTable(wasteItemsData);
+  }, [wasteItems]);
 
   const data = {
     columns: [
@@ -228,50 +238,52 @@ const AddWaste = (props) => {
       },
       {
         label: "Waste item	 ",
-        field: "district",
+        field: "waste_items_name",
         sort: "asc",
         width: 400,
       },
 
       {
         label: "Category	",
-        field: "action",
+        field: "category",
         width: 300,
       },
 
       {
         label: "Type		",
-        field: "action",
+        field: "wastetype",
         width: 300,
       },
       {
         label: "Bags	",
-        field: "action",
+        field: "waste_items_bag",
         width: 300,
       },
       {
         label: "kg		",
-        field: "action",
+        field: "waste_items_kg",
         width: 300,
       },
       {
         label: "Amount	",
-        field: "action",
+        field: "waste_items_amount",
         width: 300,
       },
       {
         label: "Image	",
-        field: "action",
+
+       field:"image",
+      
         width: 300,
       },
       {
         label: "Staff	",
-        field: "action",
+        field: "staff",
         width: 300,
       },
       {
         label: "Active/Inactive",
-        field: "action",
+        field: "",
         width: 300,
       },
       {
@@ -280,9 +292,10 @@ const AddWaste = (props) => {
         width: 300,
       },
     ],
-    rows: usersForTable,
+    rows: wasteItemsForTable,
+   
   };
-
+console.log(wasteItemsForTable)
   //   let privilagesOptionsData =
   //     privilagesOptions &&
   //     privilagesOptions.data &&
@@ -606,7 +619,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(AddWaste));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ AddWaste.propTypes = {
+  error: PropTypes.any,
+  wasteItems: PropTypes.array,
+ };
