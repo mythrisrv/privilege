@@ -126,15 +126,35 @@ div.dataTables_scrollHead table.table-bordered {
 div.table-responsive > div.dataTables_wrapper > div.row {
   margin: 0;
 }
-div.table-responsive
-  > div.dataTables_wrapper
-  > div.row
-  > div[class^="col-"]:first-child {
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:first-child {
   padding-left: 0;
 }
-div.table-responsive
-  > div.dataTables_wrapper
-  > div.row
-  > div[class^="col-"]:last-child {
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:last-child {
   padding-right: 0;
+}
+
+// .check-fields {
+//   @media only screen and (min-width: 768px) {
+//     margin-left: -12px;
+//   }
+//   @media only screen and (min-width: 1200px) {
+//     margin-left: -12px;
+//   }
+
+// }
+
+.check-fields {
+  @media only screen and ((min-width: 480px)) {
+    margin-left: 18%;
+    margin-top: 3%;
+  }
+  @media only screen and (max-width: 768px) {
+    margin-left: -12;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-left: -248px;
+  }
+  @media only screen and (min-width: 1280px) {
+    margin-left: -248px;
+  }
 }

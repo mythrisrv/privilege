@@ -10,7 +10,7 @@ import Company from "../pages/MasterSettings/Company";
 import Branch from "../pages/MasterSettings/Manage Branch";
 import Privilage from "../pages/MasterSettings/Privilage";
 import Rules from "../pages/MasterSettings/Rules";
-import Settings from "../pages/MasterSettings/Master_Settings";
+import Settings from "../pages/MasterSettings/Master_Setting";
 
 
 //Pages

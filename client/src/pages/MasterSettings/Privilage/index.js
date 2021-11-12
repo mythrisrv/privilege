@@ -114,13 +114,16 @@ const DatatableTables = () => {
                 />
 
                 <Grid item lg="5"></Grid>
-
+<Row style={{marginLeft: "-237px"}} >
+  <Col md="3">
                 <FormControlLabel
+                className="check-fields"
+                // style={{marginLeft:"-248px"}}
                   value="end"
                   control={<Checkbox />}
                   label="Australia"
                   labelPlacement="end"
-                />
+                /></Col></Row>
               </FormGroup>
             </FormControl>
           </>

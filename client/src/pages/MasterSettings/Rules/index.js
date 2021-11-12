@@ -1859,6 +1859,7 @@ const DatatableTables = () => {
                               Age
                             </InputLabel> */}
                             <Select
+                            
                               labelId="demo-controlled-open-select-label"
                               id="demo-controlled-open-select"
                               open={open}
@@ -1895,7 +1896,7 @@ const DatatableTables = () => {
 
                       <Col md="3">
                         <div className="mt-4">
-                          <Button color="primary" type="submit">
+                          <Button color="primary" type="submit" className="rules">
                             <Settings></Settings>
                             {"  "}Set Rules
                           </Button>

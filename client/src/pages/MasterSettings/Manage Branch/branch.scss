@@ -138,3 +138,11 @@ div.table-responsive
   > div[class^="col-"]:last-child {
   padding-right: 0;
 }
+
+
+.select-fields {
+  @media only screen and (min-width: 1280px) {
+    width: 88%;
+  }
+  
+}

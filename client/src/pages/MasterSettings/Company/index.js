@@ -6,9 +6,9 @@ import FormControl from "@mui/material/FormControl";
 import ListItemText from "@mui/material/ListItemText";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
+import DeleteIcon from "@mui/icons-material/DeleteForeverOutlined";
+import EditIcon from "@mui/icons-material/EditOutlined";
+import RemoveRedEye from "@mui/icons-material/VpnKey";
 import Save from "@mui/icons-material/Save";
 import Upload from "@mui/icons-material/Upload";
 
@@ -462,11 +462,12 @@ const DatatableTables = () => {
                           <Label htmlFor="validationCustom05">
                             Select State
                           </Label>
-                          <FormControl sx={{ m: 1, width: 273 }}>
+                          <FormControl style={{width: "97%"}} sx={{ m: 1, width: 273 }}>
                             {/* <InputLabel id="demo-controlled-open-select-label">
                               Age
                             </InputLabel> */}
                             <Select
+                            style={{height: "30px"}}
                               labelId="demo-controlled-open-select-label"
                               id="demo-controlled-open-select"
                               open={open}
@@ -480,36 +481,36 @@ const DatatableTables = () => {
                                 <em>None</em>
                               </MenuItem>
 
-                              <MenuItem value={10}>Andhra Pradesh</MenuItem>
-                              <MenuItem value={20}>Arunachal Pradesh</MenuItem>
-                              <MenuItem value={30}>Assam</MenuItem>
-                              <MenuItem value={10}>Bihar</MenuItem>
-                              <MenuItem value={20}>Chhattisgarh</MenuItem>
-                              <MenuItem value={30}>Goa</MenuItem>
-                              <MenuItem value={10}>Gujarat</MenuItem>
-                              <MenuItem value={20}>Haryana</MenuItem>
-                              <MenuItem value={30}>Himachal Pradesh</MenuItem>
+                              <MenuItem value={1}>Andhra Pradesh</MenuItem>
+                              <MenuItem value={2}>Arunachal Pradesh</MenuItem>
+                              <MenuItem value={3}>Assam</MenuItem>
+                              <MenuItem value={4}>Bihar</MenuItem>
+                              <MenuItem value={5}>Chhattisgarh</MenuItem>
+                              <MenuItem value={6}>Goa</MenuItem>
+                              <MenuItem value={7}>Gujarat</MenuItem>
+                              <MenuItem value={8}>Haryana</MenuItem>
+                              <MenuItem value={9}>Himachal Pradesh</MenuItem>
                               <MenuItem value={10}>Jammu and Kashmir</MenuItem>
-                              <MenuItem value={20}>Jharkhand</MenuItem>
-                              <MenuItem value={30}>Karnataka</MenuItem>
-                              <MenuItem value={20}>Kerala</MenuItem>
+                              <MenuItem value={11}>Jharkhand</MenuItem>
+                              <MenuItem value={12}>Karnataka</MenuItem>
+                              <MenuItem value={13}>Kerala</MenuItem>
 
-                              <MenuItem value={10}>Madhya Pradesh</MenuItem>
-                              <MenuItem value={20}>Maharashtra</MenuItem>
-                              <MenuItem value={30}>Manipur</MenuItem>
-                              <MenuItem value={10}>Meghalaya</MenuItem>
-                              <MenuItem value={20}>Mizoram</MenuItem>
-                              <MenuItem value={30}>Nagaland</MenuItem>
-                              <MenuItem value={10}>Odisha</MenuItem>
-                              <MenuItem value={20}>Punjab</MenuItem>
-                              <MenuItem value={30}>Rajasthan</MenuItem>
-                              <MenuItem value={10}>Sikkim</MenuItem>
-                              <MenuItem value={20}>Tamil Nadu</MenuItem>
-                              <MenuItem value={30}>Telangana</MenuItem>
-                              <MenuItem value={10}>Tripura</MenuItem>
-                              <MenuItem value={20}>Uttar Pradesh</MenuItem>
-                              <MenuItem value={30}>Uttarakhand</MenuItem>
-                              <MenuItem value={10}>West Bengal</MenuItem>
+                              <MenuItem value={14}>Madhya Pradesh</MenuItem>
+                              <MenuItem value={15}>Maharashtra</MenuItem>
+                              <MenuItem value={16}>Manipur</MenuItem>
+                              <MenuItem value={17}>Meghalaya</MenuItem>
+                              <MenuItem value={18}>Mizoram</MenuItem>
+                              <MenuItem value={19}>Nagaland</MenuItem>
+                              <MenuItem value={20}>Odisha</MenuItem>
+                              <MenuItem value={21}>Punjab</MenuItem>
+                              <MenuItem value={22}>Rajasthan</MenuItem>
+                              <MenuItem value={23}>Sikkim</MenuItem>
+                              <MenuItem value={24}>Tamil Nadu</MenuItem>
+                              <MenuItem value={25}>Telangana</MenuItem>
+                              <MenuItem value={26}>Tripura</MenuItem>
+                              <MenuItem value={27}>Uttar Pradesh</MenuItem>
+                              <MenuItem value={28}>Uttarakhand</MenuItem>
+                              <MenuItem value={29}>West Bengal</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
@@ -519,11 +520,12 @@ const DatatableTables = () => {
                           <Label htmlFor="validationCustom05">
                             Select City
                           </Label>
-                          <FormControl sx={{ m: 1, width: 273 }}>
+                          <FormControl style={{width: "97%"}} sx={{ m: 1, width: 273 }}>
                             {/* <InputLabel id="demo-controlled-open-select-label">
                               Age
                             </InputLabel> */}
                             <Select
+                            style={{height: "30px"}}
                               labelId="demo-controlled-open-select-label"
                               id="demo-controlled-open-select"
                               open={open1}
@@ -536,9 +538,9 @@ const DatatableTables = () => {
                               <MenuItem value="">
                                 <em>None</em>
                               </MenuItem>
-                              <MenuItem value={10}>City1</MenuItem>
-                              <MenuItem value={20}>City2</MenuItem>
-                              <MenuItem value={30}>City3</MenuItem>
+                              <MenuItem value={1}>City1</MenuItem>
+                              <MenuItem value={2}>City2</MenuItem>
+                              <MenuItem value={3}>City3</MenuItem>
                             </Select>
                           </FormControl>
                         </div>
