@@ -102,5 +102,7 @@ export const getCustomers = () =>get(url.GET_CUSTOMERS);
 export const getWardOptions = (localbodyId) =>
   get(`${url.GET_WARD_OPTIONS}/${localbodyId}`, { localbodyId: localbodyId });
 
-
+//waste items
   export const getWasteItems = () => get(url.GET_WASTEITEMS);
+  export const getWasteTypes = () => get(url.GET_WASTE_TYPES);
+  export const getWasteCategories = () => get(url.GET_WASTE_CATEGORIES);

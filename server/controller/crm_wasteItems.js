@@ -18,9 +18,41 @@ WasteItemsList = (req) => {
       }
     });
   };
+  WasteTypesList = (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let wasteTypes = await models.WasteType.find({
+          waste_cat_status: 0,
+        }).select("waste_cat_name ")
+        resolve(wasteTypes);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
+  WasteCategoryList = (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let wasteTypes = await models.WasteCategory.find({
+          waste_category_status: 0,
+        }).select("waste_category_name ")
+        resolve(wasteTypes);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
 
 
   module.exports = {
       WasteItemsList,
+      WasteTypesList,
+      WasteCategoryList,
 
   }

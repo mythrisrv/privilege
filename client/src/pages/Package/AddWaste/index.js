@@ -26,6 +26,8 @@ import {
   getBranchesOptions,
   updateUser,
   getWasteItems,
+  getWasteTypes,
+  getWasteCategories,
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -42,10 +44,10 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 const AddWaste = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [uploadProgress, setUploadProgress] = useState();
-  const [selectedPrivilage, setSelectedPrivilage] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [userObject, setUserObject] = useState({});
+  const [wasteObject, setWasteObject] = useState({});
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
@@ -70,6 +72,8 @@ const AddWaste = (props) => {
 
   const {
     wasteItems,
+    wasteTypes,
+    categories,
   }=useSelector((state)=>state.wasteItems);
 
   // const districtsOptions = useSelector(
@@ -93,7 +97,9 @@ const AddWaste = (props) => {
     dispatch(getPrivilagesOptions());
     dispatch(getCompaniesOptions());
    
-    dispatch(getWasteItems())
+    dispatch(getWasteItems());
+    dispatch(getWasteTypes());
+    dispatch(getWasteCategories())
   }, []);
 
   useEffect(() => {
@@ -105,7 +111,7 @@ const AddWaste = (props) => {
   useEffect(() => {
     if (addUserResponse.type === "success") {
       toastr.success(addUserResponse.message);
-      setSelectedPrivilage({});
+      setSelectedType({});
       setSelectedCompany(null);
       setSelectedBranch(null);
       //  setSelectedDistrict(null);
@@ -134,7 +140,15 @@ const AddWaste = (props) => {
     }
   }, [updateUserResponse]);
 
-  //   let preUpdateUser = (item) => {
+     let preUpdateData = (item) => {
+       console.log(item.waste_items_type)
+       if(item.waste_items_type){
+       let waste_items_type={
+         label:item.waste_items_type.waste_cat_name,
+         value:item.waste_items_type.waste_cat_name,
+       }
+       handleSelectedType(waste_items_type)
+     }}
   //     if (item.privilage) {
   //       let privilage = {
   //         label: item.privilage.name,
@@ -188,7 +202,7 @@ const AddWaste = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
-              //   preUpdateUser(item);
+                 preUpdateData(item);
             }}
           ></i>
           <i
@@ -200,7 +214,7 @@ const AddWaste = (props) => {
               marginRight: "1rem",
             }}
             onClick={() => {
-              //   preUpdateUser(item);
+                 preUpdateData(item);
             }}
           ></i>
           <i
@@ -350,15 +364,18 @@ console.log(wasteItemsForTable)
   //     setUserObject({ ...userObject, [name]: value });
   //   }
 
-  //   function handleSelectedPrivilage(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedPrivilage(value);
-  //     setUserObject({ ...userObject, privilage: newValue });
-  //   }
-
+    function handleSelectedType(value) {
+      console.log(value )
+      //console.log(e)
+      let newValue = {
+        name: value.label,
+         _id: value.value,
+       };
+      setSelectedType(value);
+     setWasteObject({ ...wasteObject, wasteType: newValue });
+    }
+    console.log(selectedType)
+console.log(wasteObject)
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -426,12 +443,14 @@ console.log(wasteItemsForTable)
                           <Label htmlFor="validationCustom05">Waste Item</Label>
                           <AvField
                             name="WasteItem"
-                            placeholder="Start"
+                            placeholder=""
                             type="text"
                             errorMessage="Enter Waste Item"
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom05"
+                           
+                           
                           />
                         </div>
                       </Col>
@@ -439,13 +458,23 @@ console.log(wasteItemsForTable)
                         <div className="mb-3">
                           <Label>Waste Category</Label>
                           <Select
-                            name="customer_community_id"
+                            name="waste_category"
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
                             classNamePrefix="select2-selection"
+                            options={
+                              categories.map((cat)=>{
+                              return{
+                                label:cat.waste_category_name,
+                                value:cat._id,
+                                key:cat._id
+                              }
+                              })
+                            }
+                          
                           />
                         </div>
                       </Col>
@@ -453,14 +482,32 @@ console.log(wasteItemsForTable)
                         <div className="mb-3">
                           <Label>Waste Type</Label>
                           <Select
-                            name="customer_community_id"
+                            name="waste_type"
+                            
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
+                          
                             classNamePrefix="select2-selection"
-                          />
+                            value={selectedType}
+                           options={
+                             wasteTypes.map((types)=>{
+                             return{
+                               label:types.waste_cat_name,
+                               value:types._id,
+                               key:types._id
+                             }
+                             })
+                           }
+                          onChange={handleSelectedType}  
+                            />
+                              
+                           
+                        
+                    
+                         
                         </div>
                       </Col>
                       <Col md="3">

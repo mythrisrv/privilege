@@ -1,13 +1,21 @@
 import{
     GET_WASTEITEMS,
     GET_WASTEITEMS_SUCCESS,
-    GET_WASTEITEMS_FAIL
+    GET_WASTEITEMS_FAIL,
+    GET_WASTE_TYPES,
+    GET_WASTE_TYPES_SUCCESS,
+    GET_WASTE_TYPES_FAIL,
+    GET_WASTE_CATEGORIES,
+    GET_WASTE_CATEGORIES_FAIL,
+    GET_WASTE_CATEGORIES_SUCCESS
 
 } from "./actionTypes"
 
 const INIT_STATE={
     wasteItems:[],
-    error:{}
+    error:{},
+    wasteTypes:[],
+    categories:[],
 }
 
 const WasteItems = (state=INIT_STATE, action) => {
@@ -29,6 +37,47 @@ const WasteItems = (state=INIT_STATE, action) => {
           ...state,
           error: action.payload,
         };
+
+
+
+      case GET_WASTE_TYPES:
+       return{
+         ...state,
+         params:action.payload,
+       };
+       case GET_WASTE_TYPES_SUCCESS:
+        return{
+          ...state,
+          wasteTypes:action.payload.data,
+        } ;
+        case GET_WASTE_TYPES_FAIL:
+          return{
+            ...state,
+            error:action.payload,
+          } ; 
+
+
+        case GET_WASTE_CATEGORIES:
+          return{
+            ...state,
+            params:action.payload,
+
+          };
+          case GET_WASTE_CATEGORIES_SUCCESS:
+            return{
+              ...state,
+              categories:action.payload.data,
+  
+            };
+            case GET_WASTE_CATEGORIES_FAIL:
+              return{
+                ...state,
+                error:action.payload,
+    
+              };
+  
+
+          
         default:
             return state
     }

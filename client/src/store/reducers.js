@@ -46,7 +46,7 @@ const rootReducer = combineReducers({
   localbodies,
   groups,
   customers,
-
+Menus,
   wasteItems,
 });
 

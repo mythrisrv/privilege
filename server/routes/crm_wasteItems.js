@@ -4,7 +4,9 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
-    WasteItemsList
+    WasteItemsList,
+    WasteTypesList,
+    WasteCategoryList
   } = require("../controller/crm_wasteItems");
   /*****************************
        Waste item list
@@ -25,6 +27,38 @@ const {
     }
   });
 
+  router.get("/list/types",/*[jwtauth],*/async (req, res) => {
+    try {
+      let item = await WasteTypesList(req);
+      console.log(item)
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
+
+
+  router.get("/list/categories",/*[jwtauth],*/async (req, res) => {
+    try {
+      let item = await WasteCategoryList(req);
+      console.log(item)
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
 
 
 

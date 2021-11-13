@@ -21,7 +21,8 @@ const UpdateWaste = require("./WasteUpdate");
 const WasteCollect = require("./WasteCollect");
 const WasteType=require("./Waste_type");
 const WasteCategory=require("./WasteCategory")
-
+const MainMenu=require("./Menu")
+const SubMenu=require("./SubMenu")
 module.exports = {
   User,
   Privilage,
@@ -46,4 +47,6 @@ module.exports = {
   WasteCollect,
   WasteType,
   WasteCategory,
+  MainMenu,
+  SubMenu,
 };

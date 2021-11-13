@@ -64,3 +64,5 @@ export const GET_CUSTOMERS = "/customer/list_crm";
 
 //get wasteitems
 export const GET_WASTEITEMS= "/wasteItems/list";
+export const GET_WASTE_TYPES= "/wasteItems/list/types";
+export const GET_WASTE_CATEGORIES= "/wasteItems/list/categories";
