@@ -79,6 +79,8 @@ export const getPrivilagesOptions = () => get(url.GET_PRIVILAGES_OPTIONS);
 
 // get companies options
 export const getCompaniesOptions = () => get(url.GET_COMPANIES_OPTIONS);
+export const getCompaniesMasterOptions = (company_id) => get(url.GET_COMPANIES_MASTER_OPTIONS+"?id="+company_id);
+export const getLocalbodiesMasterOptions = (company_id) => get(url.GET_LOCALBODIES_MASTER_OPTIONS+"?id="+company_id);
 
 // get Branches options
 export const getBranchesOptions = (companyId) =>

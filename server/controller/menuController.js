@@ -2,9 +2,11 @@ let models = require("../model");
 let moment = require("moment");
 var ObjectId = require('mongodb').ObjectID;
 getMenuList = (req) => {
-    var id = req.query.id;
+    var user_id = req.query.id;
     return new Promise(async (resolve, reject) => {
       try {
+        var userInfo = await models.User.findOne({_id:user_id});
+        var id = userInfo.privilage;
         let privilege =  await models.Privilage.findOne({
             "_id":id
         });
@@ -19,7 +21,6 @@ getMenuList = (req) => {
           sub_menu=sub_menu.replace('[',"");
           sub_menu= sub_menu.replace(']',"");
           sub_menu=sub_menu.split(',');
-          console.log(sub_menu);
           var menuwhereStatement = {main_status: 0};
           if(main_menu.length>0)
           {
@@ -47,7 +48,6 @@ getMenuList = (req) => {
         }
         
       } catch (err) {
-        console.log(err);
         reject({
           message: err.message,
         });

@@ -22,14 +22,14 @@ const Sidebar = (props) => {
 
   return (
     <React.Fragment>
-      <div className="vertical-menu">
+      <div className="vertical-menu" >
         <div className="navbar-brand-box">
           <Link to="/" className="logo logo-dark">
             <span className="logo-sm">
               <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
-              <img src={logoDark} alt="" width="90%" height="auto" />
+              <img src={logoDark} alt="" className="img-fluid" />
             </span>
           </Link>
 

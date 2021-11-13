@@ -31,7 +31,8 @@ const customer = require("./routes/crm_customer");
 const group=require("./routes/crm_group")
 const wasteItem = require("./routes/wasteItemApi");
 const userapi = require("./routes/UserApi");
-const wasteItems=require("./routes/crm_wasteItems")
+const wasteItems=require("./routes/crm_wasteItems");
+const menuRouter = require("./routes/menu");
 const menu=require("./routes/menu")
 
 app.use(logger("dev"));

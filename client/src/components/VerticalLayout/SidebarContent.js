@@ -24,10 +24,8 @@ const SidebarContent = (props) => {
   const [userId, setUserId] = useState(1);
 
   useEffect(() => {
-    if (localStorage.getItem('authUser')) {
       var data = localStorage.getItem('authUser');
-      dispatch(getMenusOptions(JSON.parse(data).privilage));
-    }
+      dispatch(getMenusOptions(JSON.parse(data)._id));
   }, [dispatch]);
 
   return (

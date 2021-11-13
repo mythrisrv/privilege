@@ -46,6 +46,8 @@ export const GET_PRIVILAGES_OPTIONS = "/privilage/list/options";
 
 // Companies options
 export const GET_COMPANIES_OPTIONS = "/company/list/options";
+export const GET_COMPANIES_MASTER_OPTIONS = "/company/list/single_options";
+export const GET_LOCALBODIES_MASTER_OPTIONS = "/company/list/localbodies";
 
 // Branches options
 export const GET_BRANCHES_OPTIONS = "/branch/list/options";

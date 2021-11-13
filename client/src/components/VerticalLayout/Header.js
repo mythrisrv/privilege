@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
-
+import React, { useState,useEffect } from "react";
 import { connect } from "react-redux";
 import { Form, Input, Button, Row, Col } from "reactstrap";
+import accessToken from "../../helpers/jwt-token-access/accessToken";
+import axios from "axios";
 
 import { Link } from "react-router-dom";
 
@@ -27,7 +28,7 @@ import dribbble from "../../assets/images/brands/dribbble.png";
 import dropbox from "../../assets/images/brands/dropbox.png";
 import mail_chimp from "../../assets/images/brands/mail_chimp.png";
 import slack from "../../assets/images/brands/slack.png";
-
+import Select from "react-select";
 //i18n
 import { withTranslation } from "react-i18next";
 
@@ -39,11 +40,110 @@ import {
 } from "../../store/actions";
 
 const Header = (props) => {
+  const [userId, setUserId] = useState(null);
   const [search, setsearch] = useState(false);
   const [socialDrp, setsocialDrp] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const [selectedMasterCompany, setselectedMasterCompany] = useState(null);
+  const [selectedMasterLocalbody, setselectedMasterLocalbody] = useState(null);
+  const [masterLocalbodyOptionsGroup,setMasterLocalbodyOptionsGroup] = useState(null);
+  const [masterComanyOptionsGroup,setMasterCompaniesOptionsGroup] = useState(null);
 
+  const API_URL = process.env.REACT_APP_APIURL || "http://localhost:3099/";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+
+useEffect(()=>{
+      if (localStorage.getItem('authUser')) {
+        var data = localStorage.getItem('authUser');
+        var user_obj = JSON.parse(data);
+        setUserId(user_obj._id);
+       fetchMasterCompanies(user_obj._id);
+       fetchMasterLocalbodies(user_obj._id);
+      }
+      
+      
+    
+  },[])
+  function fetchMasterCompanies(user_id)
+  {
+    axios
+    .get(`${API_URL}company/list/single_options?id=` + user_id,
+    {
+      headers: {
+        'x-access-token': accessToken,
+      },
+    })
+    .then((res) => {
+      var companies =
+        res.data.data &&
+        res.data.data.map((item) => {
+          return {
+            label: item.company_name,
+            value: item._id,
+          };
+        });
+        var user_company =
+        res.data.user_company &&
+        res.data.user_company.map((item) => {
+          return {
+            label: item.company_name,
+            value: item._id,
+          };
+        });
+      setMasterCompaniesOptionsGroup([
+        {
+          options: companies,
+        },
+      ]);
+      handleSelectedMasterCompany(user_company[0]);
+    });
+  
+  }
+  
+function fetchMasterLocalbodies(user_id,id=null)
+{
+  if(id!=null)
+  {
+    var url = `${API_URL}company/list/localbodies?id=` + user_id+`&cid=`+id;
+  }
+  else
+  {
+    var url = `${API_URL}company/list/localbodies?id=` + user_id;
+  }
+  axios
+  .get( url, 
+  {
+    headers: {
+      'x-access-token': accessToken,
+    },
+  })
+  .then((res) => {
+    var localbodies =
+      res.data.data &&
+      res.data.data.map((item) => {
+        return {
+          label: item.localbody_name,
+          value: item._id,
+        };
+      });
+      var user_localbodies =
+      res.data.user_localbody &&
+      res.data.user_localbody.map((item) => {
+        return {
+          label: item.localbody_name,
+          value: item._id,
+        };
+      });
+    setMasterLocalbodyOptionsGroup([
+      {
+        options: localbodies,
+      },
+    ]);
+    setselectedMasterLocalbody(user_localbodies[0]);
+  });
+
+}
 
   function toggleFullscreen() {
     if (
@@ -90,11 +190,23 @@ const Header = (props) => {
   function toggleMegaMenu() {
     setShowMegaMenu(!showMegaMenu);
   }
+  function handleSelectedMasterCompany(value) {
+    setselectedMasterCompany(value);
+    fetchMasterLocalbodies(userId,value.value);
+
+  }
+  function handleSelectedMasterLocalbody(value) {
+    let newValue = {
+      name: value.label,
+      _id: value.value,
+    };
+    setselectedMasterLocalbody(value);
+  }
 
   return (
     <React.Fragment>
       {showMegaMenu ? <MegaMenu /> : null}
-      <header id="page-topbar">
+      <header id="page-topbar" >
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
@@ -149,6 +261,34 @@ const Header = (props) => {
                   placeholder={props.t("Search") + "..."}
                 />
                 <span className="uil-search"></span>
+              </div>
+            </Form>
+            <Form className="app-search d-none d-lg-block">
+              <div className="position-relative" style={{width:'200px'}}>
+              <Select
+                            name="master_company"
+                            value={selectedMasterCompany}
+                            onChange={(value) => {
+                             handleSelectedMasterCompany(value);
+                            }}
+                            options={masterComanyOptionsGroup}
+                            classNamePrefix="select2-selection"
+                            placeholder="Company"
+                          />
+              </div>
+            </Form>
+            <Form className="app-search d-none d-lg-block">
+              <div className="position-relative" style={{width:'200px'}}>
+              <Select
+                            name="master_localbody"
+                            value={selectedMasterLocalbody}
+                            onChange={(value) => {
+                             handleSelectedMasterLocalbody(value);
+                            }}
+                            options={masterLocalbodyOptionsGroup}
+                            classNamePrefix="select2-selection"
+                            placeholder="Localboy"
+                          />
               </div>
             </Form>
           </div>

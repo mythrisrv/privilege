@@ -52,6 +52,9 @@ let userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "tbl_company",
     },
+    local_body: {
+      type:String,
+    },
     branch: {
       type: Schema.Types.ObjectId,
       ref: "branch",
@@ -86,7 +89,7 @@ let userSchema = new Schema(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true,collection:'users' }
 );
 
 userSchema.methods.generatePasswordHash = (password) => {
@@ -101,6 +104,6 @@ userSchema.methods.validatePassword = (password, hashedPassword) => {
   return res;
 };
 
-let User = mongoose.model("user", userSchema);
+let User = mongoose.model("users", userSchema);
 
 module.exports = User;
