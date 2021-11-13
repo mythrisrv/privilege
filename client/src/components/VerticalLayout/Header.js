@@ -103,6 +103,9 @@ useEffect(()=>{
   
 function fetchMasterLocalbodies(user_id,id=null)
 {
+  var data = localStorage.getItem('authUser');
+  var user_obj = JSON.parse(data);
+  user_id = user_obj._id;
   if(id!=null)
   {
     var url = `${API_URL}company/list/localbodies?id=` + user_id+`&cid=`+id;

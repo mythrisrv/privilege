@@ -87,7 +87,7 @@ getMasterCompaniesListOptions = (req) => {
       }
       else
       {
-        resolve([]);
+        resolve([[],[]]);
       }
       
       
@@ -134,7 +134,7 @@ getMasterLocalbodiesListOptions = (req) => {
           }
           else
           {
-            resolve([]);
+            resolve([[],[]]);
           }
           
         }
@@ -143,7 +143,7 @@ getMasterLocalbodiesListOptions = (req) => {
       }
       else
       {
-        resolve([]);
+        resolve([[],[]]);
       }
       
       

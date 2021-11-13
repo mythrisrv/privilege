@@ -263,6 +263,31 @@ customerProfile = (req) => {
     }
   });
 };
+customerProfileNew = (req) => {
+  let customer_id= req.params.id;
+  return new Promise(async (resolve, reject) => {
+  
+    try {
+      let customerProfile = await models.Customer.findOne({
+        cust_status: 0,_id:customer_id
+      })
+      .populate('ward','ward_name')
+      .populate('cust_group_id','group_name')
+      .populate('cust_type','customer_type_name')
+      .populate('district','district_name')
+      .populate('localbody_type','localbody_type_name')
+      .populate('localbody_name','localbody_name')
+      .populate('cust_package_id','package_name package_reg_fee package_basic_fee')
+      .select('cust_name cust_phone cust_landline_no cust_watsapp_no cust_image cust_verification_status cust_serial_no cust_designation cust_no_members cust_house_num cust_address cust_address1 cust_billing_type');
+      resolve(customerProfile);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
 /********************
  * profile update
  * ******************/
@@ -378,7 +403,8 @@ module.exports = {
   customerProfile,
   updateCustomer,
   CustomerList,
-  getCustomersList
+  getCustomersList,
+  customerProfileNew
   //uploadCustomerImage,
   //uploadCustomerSingleImage
 };

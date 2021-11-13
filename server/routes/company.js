@@ -78,10 +78,20 @@ router.get("/list/single_options", [jwtauth], async (req, res) => {
 router.get("/list/localbodies", [jwtauth], async (req, res) => {
   try {
     let item = await getMasterLocalbodiesListOptions(req);
+    if(item)
+    {
+      var data = item[0];
+      var user_data = item[1];
+    }
+    else
+    {
+      var data=[];
+      var user_data =[];
+    }
     res.status(200).json({
       status: 200,
-      data: item[0],
-      user_localbody:item[1],
+      data: data,
+      user_localbody:user_data,
     });
   } catch (err) {
     console.log(err);

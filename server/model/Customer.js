@@ -139,6 +139,9 @@ let customerSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "tbl_company",
       },
+      cust_billing_type:{
+        type: String
+      }
      
     },
    
