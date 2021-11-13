@@ -124,6 +124,7 @@ router.post('/create',[validationMiddleware.createCustomervalidator,jwtauth], as
     } catch (err) {
       console.log(err);
       res.status(400).json({
+        response:"failed",
         message: err.message,
       });
     }

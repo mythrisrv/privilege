@@ -279,7 +279,15 @@ customerProfileNew = (req) => {
       .populate('localbody_name','localbody_name')
       .populate('cust_package_id','package_name package_reg_fee package_basic_fee')
       .select('cust_name cust_phone cust_landline_no cust_watsapp_no cust_image cust_verification_status cust_serial_no cust_designation cust_no_members cust_house_num cust_address cust_address1 cust_billing_type');
-      resolve(customerProfile);
+      if(customerProfile)
+      {
+        resolve(customerProfile);
+      }
+      else
+      {
+        reject({message: "Customer not exist"})
+      }
+      
     } catch (err) {
       console.log(err);
       reject({
