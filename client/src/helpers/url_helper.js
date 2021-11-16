@@ -68,3 +68,6 @@ export const GET_CUSTOMERS = "/customer/list_crm";
 export const GET_WASTEITEMS= "/wasteItems/list";
 export const GET_WASTE_TYPES= "/wasteItems/list/types";
 export const GET_WASTE_CATEGORIES= "/wasteItems/list/categories";
+export const ADD_WASTE_ITEM = "/wasteItems/upload";
+export const UPDATE_WASTE_ITEM = "/wasteItems";
+export const DELETE_WASTE_ITEM = "/wasteItems";

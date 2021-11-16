@@ -108,3 +108,6 @@ export const getWardOptions = (localbodyId) =>
   export const getWasteItems = () => get(url.GET_WASTEITEMS);
   export const getWasteTypes = () => get(url.GET_WASTE_TYPES);
   export const getWasteCategories = () => get(url.GET_WASTE_CATEGORIES);
+  export const addWasteItem = (wasteItem) => post(url.ADD_WASTE_ITEM, wasteItem);
+  export const updateWasteItem = (wasteItem) => put(`${url.UPDATE_WASTE_ITEM}/${wasteItem._id}`, wasteItem);
+ export const deleteWasteItem= (wasteItemId) => del(url.DELETE_WASTE_ITEM, wasteItemId);

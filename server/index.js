@@ -6,6 +6,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const fs = require("express-fileupload");
 const multer = require("multer");
+const path=require("path");
 
 const port = process.env.PORT || 3099;
 const env = process.env.NODE_ENV || "development";
@@ -53,6 +54,9 @@ mongoose.connect(dbUrl, options, (err) => {
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use('/', express.static(path.join(__dirname, 'public'))); 
+
 app.use("/setup", setup);
 app.use("/register", register);
 app.use("/login", login);

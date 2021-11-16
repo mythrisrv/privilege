@@ -49,10 +49,82 @@ WasteItemsList = (req) => {
     });
   };
 
+  createWasteItem = (req) => {
+    
+    var ip = req.ip;
+    const format2 = "YYYY-MM-DD"
+    var date2 = new Date();
+    date = moment(date2).format(format2);
+    time = moment(date2).format("HH:mm A");
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(req.body);
+      console.log(req.file);
+      console.log(req.user)
+
+      let wasteItem= new models.WasteItem( 
+        { waste_items_ip:ip,
+         waste_items_name:req.body.name,
+       waste_items_date:date,
+         waste_items_status:0,
+         waste_items_time:time,
+         waste_items_bag:req.body.bags,
+         waste_items_amount:req.body.amount,
+         waste_items_weight:req.body.weight,
+         waste_item_cat:req.body.category,
+         waste_items_type:req.body.Type,
+         waste_item_addedby:req.user._id
+
+
+         }
+        
+       );
+       wasteItem.waste_items_image.push({
+       img:req.file.filename
+       })
+      
+      
+      
+
+
+      
+      wasteItem.markModified('waste_items_image');
+       wasteItem= await wasteItem.save();
+      resolve(wasteItem);
+    } catch (err) {
+      console.log(err);
+      reject({
+      message: err.message,
+      });
+    }
+  });
+};
+deleteWasteItem= (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let wasteItem = await models.WasteItem.findByIdAndUpdate(
+        req.params.wasteItem_Id,
+        { waste_items_status:1 },
+        { new: true }
+      )
+     
+      resolve(wasteItem);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
+
 
   module.exports = {
       WasteItemsList,
       WasteTypesList,
       WasteCategoryList,
+      createWasteItem,
+      deleteWasteItem,
 
   }

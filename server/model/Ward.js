@@ -13,12 +13,12 @@ let wardSchema = new Schema(
     },
     ward_addedby:{
         type: Schema.Types.ObjectId,
-         ref: "user",
+         ref: "users",
   
      },
     ward_updatedby:{
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "users",
     
        },
      ward_date:{

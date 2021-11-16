@@ -43,9 +43,10 @@ getGroupsList = (req) => {
       try {
         let group = await models.group.find({
           group_status: 0,
-        }).populate("group_localbody_name_id","localbody_name -_id")
-       .populate("group_addedby","username -_id")
-       .sort({created_At :-1})
+        })
+        .populate("group_localbody_name_id","localbody_name -_id")
+         .populate("group_addedby","username -_id")
+         .sort({created_At :-1})
         resolve(group);
       } catch (err) {
         console.log(err);

@@ -20,7 +20,9 @@ export async function get(url, config) {
     .get(url, {
       ...config,
       headers: {
+       
         "x-access-token": accessToken,
+
       },
     })
     .then((response) => response.data);
@@ -28,16 +30,20 @@ export async function get(url, config) {
 
 export async function post(url, data, config) {
   console.log("ch");
+  
   return axiosApi
     .post(
       url,
-      { ...data },
+       data ,
       {
         ...config,
         headers: {
-          "x-access-token": accessToken,
-        },
-      }
+         
+         "x-access-token": accessToken,
+        
+         
+        
+      }}
     )
     .then((response) => response.data);
 }

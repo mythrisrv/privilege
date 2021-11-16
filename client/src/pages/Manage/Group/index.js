@@ -482,7 +482,7 @@ let groupsData=[];
                           <Label htmlFor="validationCustom05">Group Name</Label>
                           <AvField
                             name="group_name"
-                            placeholder="Start"
+                            placeholder=""
                             type="text"
                             errorMessage="Enter Start"
                            value={groupname}

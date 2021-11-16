@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
+import axios from "axios";
 import toastr from "toastr";
 import {
   Row,
@@ -13,6 +14,7 @@ import {
   Modal,
   Table,
   Progress,
+  Input,
 } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
@@ -28,6 +30,9 @@ import {
   getWasteItems,
   getWasteTypes,
   getWasteCategories,
+  addWasteItem,
+  updateWasteItem,
+  deleteWasteItem
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -42,18 +47,27 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import "./user.scss";
 
 const AddWaste = (props) => {
+const API_URL = process.env.REACT_APP_APIURL;
+
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [uploadProgress, setUploadProgress] = useState();
   const [selectedType, setSelectedType] = useState(null);
+  const [category, setCategory] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
   const [wasteObject, setWasteObject] = useState({});
-  const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
-  const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
+  const [itemsIdTobeUpdated, setItemsIdToBeUpdated] = useState(null);
+  const [itemsIdToBeDeleted, setItemsIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [wasteItemsForTable, setWasteItemsForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [itemname, setItemname] = useState("");
+  const [bags, setBags] = useState("");
+  const [weight, setWeight] = useState("");
+  const [amount, setAmount] = useState("")
+  const[selectedImage,setSelectedImage]=useState(null);
+  const[loadedImage,setLoadedImage]=useState(null);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -74,6 +88,11 @@ const AddWaste = (props) => {
     wasteItems,
     wasteTypes,
     categories,
+    addWasteItemResponse,
+    updateWasteItemResponse,
+    deleteWasteItemResponse,
+    addingWasteItem,
+    
   }=useSelector((state)=>state.wasteItems);
 
   // const districtsOptions = useSelector(
@@ -109,46 +128,63 @@ const AddWaste = (props) => {
   }, [selectedCompany]);
 
   useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
-      setSelectedType({});
-      setSelectedCompany(null);
-      setSelectedBranch(null);
+    if (addWasteItemResponse.type === "success") {
+      dispatch(getWasteItems())
+      toastr.success(addWasteItemResponse.message);
+     
       //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
+    } else if (addWasteItemResponse.type === "failure") {
+      toastr.error(error.data.message, addWasteItemResponse.message);
     }
-  }, [addUserResponse]);
+  }, [addWasteItemResponse]);
 
   useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
+    if (deleteWasteItemResponse.type === "success") {
+     dispatch(getWasteItems())
+      toastr.success(deleteWasteItemResponse.message);
+      setItemsIdToBeDeleted(null);
+    } else if (deleteWasteItemResponse.type === "failure") {
+      toastr.error(error.data.message, deleteWasteItemResponse.message);
     }
-  }, [deleteUserResponse]);
+  }, [deleteWasteItemResponse]);
 
   useEffect(() => {
-    if (updateUserResponse.type === "success") {
+    if (updateWasteItemResponse.type === "success") {
       setShowModal(false);
-      setUserIdToBeUpdated(null);
+      setItemsIdToBeUpdated(null);
       setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
+      toastr.success(updateWasteItemResponse.message);
+    } else if (updateWasteItemResponse.type === "failure") {
+      toastr.error(error.data.message, updateWasteItemResponse.message);
     }
-  }, [updateUserResponse]);
+  }, [updateWasteItemResponse]);
 
      let preUpdateData = (item) => {
-       console.log(item.waste_items_type)
+       console.log(item)
+       setItemname(item.waste_items_name)
+       setBags(item.waste_items_bag)
+       setWeight(item.waste_items_kg)
+       setAmount(item.waste_items_amount)
+       
        if(item.waste_items_type){
        let waste_items_type={
          label:item.waste_items_type.waste_cat_name,
          value:item.waste_items_type.waste_cat_name,
        }
        handleSelectedType(waste_items_type)
-     }}
+     }
+    if(item.waste_item_cat){
+      let waste_item_cat={
+        label:item.waste_item_cat.waste_category_name,
+        value:item.waste_item_cat.waste_category_name,
+      }
+      handleChangeCategory(waste_item_cat)
+    }
+    
+    setItemsIdToBeUpdated(item._id)
+     setWasteObject({...item,password:null})
+    }
+    console.log(wasteObject)
   //     if (item.privilage) {
   //       let privilage = {
   //         label: item.privilage.name,
@@ -184,6 +220,30 @@ const AddWaste = (props) => {
     let wasteItemsData = [];
 
     wasteItems.map((item, index) => {
+      item.image=(
+        <div style={{display:"flex",justifyContent:"space-evenly", height:"70px" ,with:"100px"}}>
+          <img src={`${API_URL}uploads/waste_images/${item.waste_items_image[0].img}`}></img>
+        </div>
+
+      );
+      item.active = (
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            className=""
+            style={{
+              cursor: "pointer",
+              color: "black",
+              fontSize: ".7em",
+              padding: ".5rem",
+              borderRadius: ".3rem",
+              background: "#fb6262",
+            }}
+            //onClick={() => }
+          >
+            Active
+          </div>
+        </div>
+      );
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -221,8 +281,8 @@ const AddWaste = (props) => {
             className="uil-trash-alt"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
             onClick={() => {
-              //   setUserIdToBeDeleted(item._id);
-              //   setConfirmDeleteAlert(true);
+                setItemsIdToBeDeleted(item._id);
+                 setConfirmDeleteAlert(true);
             }}
           ></i>
         </div>
@@ -236,7 +296,7 @@ const AddWaste = (props) => {
       if(item.waste_items_type) item.wastetype=item.waste_items_type.waste_cat_name;
       if(item.waste_item_cat) item.category=item.waste_item_cat.waste_category_name;
       if(item.waste_item_addedby)item.staff=item.waste_item_addedby.username;
-      item.image=item.waste_items_image[0].img
+     // item.image=item.waste_items_image[0].img
         wasteItemsData.push(item);
     });
      setWasteItemsForTable(wasteItemsData);
@@ -297,7 +357,7 @@ const AddWaste = (props) => {
       },
       {
         label: "Active/Inactive",
-        field: "",
+        field: "active",
         width: 300,
       },
       {
@@ -363,9 +423,33 @@ console.log(wasteItemsForTable)
   //     let value = e.target.value;
   //     setUserObject({ ...userObject, [name]: value });
   //   }
+  const handleValidSubmit = (event, values) => {
+const data=new FormData();
+data.append("name",itemname)
+data.append("bags",bags)
+data.append("weight",weight)
+data.append("amount",amount)
+data.append("category",category.value)
+data.append("Type",selectedType.value)
+data.append("file",selectedImage)
+
+//console.log(data)
+    itemsIdTobeUpdated
+      ? dispatch(updateWasteItem(itemsIdTobeUpdated))
+     : dispatch(addWasteItem(data));
+     setSelectedType(null);
+     setCategory(null);
+     setBags("");
+     setWeight("");
+     setAmount("");
+     setItemname("");
+     setLoadedImage(null);
+    //axios.post("http://localhost:3099/wasteItems/upload",data).then(res=>console.log(res))
+  
+  };
 
     function handleSelectedType(value) {
-      console.log(value )
+     // console.log(value )
       //console.log(e)
       let newValue = {
         name: value.label,
@@ -374,8 +458,57 @@ console.log(wasteItemsForTable)
       setSelectedType(value);
      setWasteObject({ ...wasteObject, wasteType: newValue });
     }
-    console.log(selectedType)
-console.log(wasteObject)
+    function handleChangeCategory(value) {
+     // console.log(value )
+      //console.log(e)
+      let newValue = {
+        name: value.label,
+         _id: value.value,
+       };
+      setCategory(value);
+     setWasteObject({ ...wasteObject, category: newValue });
+    }
+   
+    function handleChangeItemname(e) {
+     let name=e.target.name;
+     let value=e.target.value;
+    
+      setItemname(value);
+     setWasteObject({ ...wasteObject, [name]: value});
+    }
+    function handleChangeBags(e) {
+      let name=e.target.name;
+      let value=e.target.value;
+     
+       setBags(value);
+      setWasteObject({ ...wasteObject, [name]: value});
+     }
+     function handleChangeWeight(e) {
+      let name=e.target.name;
+      let value=e.target.value;
+     
+       setWeight(value);
+      setWasteObject({ ...wasteObject, [name]: value});
+     }
+     function handleChangeAmount(e) {
+      let name=e.target.name;
+      let value=e.target.value;
+     
+       setAmount(value);
+      setWasteObject({ ...wasteObject, [name]: value});
+     }
+     function handleSelectedImage(e){
+      let  name=e.target.name;
+     let  value=e.target.files[0];
+       
+
+setLoadedImage(URL.createObjectURL(value))
+       setSelectedImage(value)
+       setWasteObject({ ...wasteObject, [name]:value});
+     }
+     
+     console.log(selectedImage)
+    console.log(wasteObject)
   //   function handleSelectedCompany(value) {
   //     let newValue = {
   //       name: value.label,
@@ -424,6 +557,22 @@ console.log(wasteObject)
 
   return (
     <React.Fragment>
+       {confirmDeleteAlert ? (
+        <SweetAlert
+          title=""
+          showCancel
+          confirmButtonText="Delete"
+          confirmBtnBsStyle="success"
+          cancelBtnBsStyle="danger"
+          onConfirm={() => {
+            dispatch(deleteWasteItem(itemsIdToBeDeleted));
+            setConfirmDeleteAlert(false);
+          }}
+          onCancel={() => setConfirmDeleteAlert(false)}
+        >
+          Are you sure you want to delete it?
+        </SweetAlert>
+      ) : null}
       <div className="page-content">
         <div className="container-fluid">
           <Breadcrumbs title="Home" breadcrumbItem="Add Waste" />
@@ -432,10 +581,11 @@ console.log(wasteObject)
               <Card>
                 <CardBody>
                   <AvForm
-                    className="needs-validation"
-                    // onValidSubmit={(e, v) => {
-                    //   handleValidSubmit(e, v);
-                    // }}
+                    className="form-control"
+                     onValidSubmit={(e, v) => {
+                       handleValidSubmit(e, v);
+                     }}
+                    enctype="multipart/form-data" 
                   >
                     <Row>
                       <Col md="3">
@@ -445,11 +595,12 @@ console.log(wasteObject)
                             name="WasteItem"
                             placeholder=""
                             type="text"
+                            value={itemname}
                             errorMessage="Enter Waste Item"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                           // validate={{ required: { value: true } }}
                             id="validationCustom05"
-                           
+                           onChange={handleChangeItemname}
                            
                           />
                         </div>
@@ -459,6 +610,7 @@ console.log(wasteObject)
                           <Label>Waste Category</Label>
                           <Select
                             name="waste_category"
+                            value={category}
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
@@ -474,7 +626,7 @@ console.log(wasteObject)
                               }
                               })
                             }
-                          
+                          onChange={handleChangeCategory}
                           />
                         </div>
                       </Col>
@@ -513,16 +665,18 @@ console.log(wasteObject)
                       <Col md="3">
                         <div className="mb-3">
                           <Label htmlFor="validationCustom05">
-                            No. of Pages
+                            No.of Bags
                           </Label>
                           <AvField
-                            name="Pages"
-                            placeholder="No. of Pages"
+                            name="bags"
+                            placeholder=""
                             type="text"
+                            value={bags}
                             errorMessage="Enter No. of Pages"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                            //validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleChangeBags}
                           />
                         </div>
                       </Col>
@@ -532,11 +686,13 @@ console.log(wasteObject)
                           <AvField
                             name="Kg"
                             placeholder="No. of Kg"
+                            value={weight}
                             type="text"
                             errorMessage="Enter No. of Kg"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                            //validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleChangeWeight}
                           />
                         </div>
                       </Col>
@@ -546,11 +702,13 @@ console.log(wasteObject)
                           <AvField
                             name="Amount"
                             placeholder="Amount"
+                            value={amount}
                             type="text"
                             errorMessage="Enter Amount"
                             className="form-control"
-                            validate={{ required: { value: true } }}
+                            //validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleChangeAmount}
                           />
                         </div>
                       </Col>
@@ -591,16 +749,19 @@ console.log(wasteObject)
                               </button>
                             </div>
                           ) : ( */}
-                            <AvField
-                              name="product_image_main"
+                            <Input
+                              name="image"
                               type="file"
                               errorMessage="Select Image"
                               className="form-control"
                               id="validationCustom04"
+                              enctype="multipart/form-data"
+                              onChange={handleSelectedImage}
                               //  id="getFile" style={{display:"none"}}
                               // onChange={handleChangeInput}
                             //   onChange={uploadImage}
                             />
+                            <img src={loadedImage} style={{height:"30px"}}></img>
                            {/* )} */}
 
                           {uploadProgress && uploadProgress < 100 && (
@@ -616,24 +777,31 @@ console.log(wasteObject)
                     </Row>
 
                     <Row>
-                      <Col md="1">
-                        <div className="mt-4">
-                          <Button color="primary" type="submit">
-                            Save
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col md="1">
-                        <div className="mt-4">
-                          <Button
-                            color="danger"
-                            type="reset"
-                            onClick={() => setAccountType("")}
-                          >
-                            Reset
-                          </Button>
-                        </div>
-                      </Col>
+                    <Col>
+                     <div className="mb-3" style={{paddingTop:"30px"}}>
+                     {itemsIdTobeUpdated ? (
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={addingWasteItem ? true : false}
+                       
+                      >
+                        {addingWasteItem ? "Updating" : "Update"}
+                      </Button>
+                    ) : (
+                      <Button
+                        color="primary"
+                        type="submit"
+                        disabled={addingWasteItem ? true : false}
+                       >
+                        {addingWasteItem ? "Adding" : "Submit"}
+                        
+                      </Button>
+                      
+                    )
+                    }
+                    </div>
+                     </Col>
                     </Row>
                   </AvForm>
                 </CardBody>

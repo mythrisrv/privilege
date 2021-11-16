@@ -33,11 +33,11 @@ let localbodynameSchema = new Schema(
       },
       localbody_addedby: {
         type: Schema.Types.ObjectId,
-        ref:"user",
+        ref:"users",
       },
       localbody_updateddby: {
         type: Schema.Types.ObjectId,
-        ref:"user",
+        ref:"users",
       },
       localbody_name: {
         type: String,

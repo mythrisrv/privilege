@@ -3,7 +3,10 @@ import { takeEvery, put, call, takeLatest } from "redux-saga/effects";
 import{
 GET_WASTEITEMS,
 GET_WASTE_TYPES,
-GET_WASTE_CATEGORIES
+GET_WASTE_CATEGORIES,
+ADD_WASTE_ITEM,
+UPDATE_WASTE_ITEM,
+DELETE_WASTE_ITEM
 } from "./actionTypes"
 
 import{
@@ -13,10 +16,21 @@ getWasteTypesSuccess,
 getWasteTypesFail,
 getWasteCategoriesSuccess,
 getWasteCategoriesFail,
+addWasteItemFail,
+addWasteItemSuccess,
+updateWasteItemFail,
+updateWasteItemSuccess,
+deleteWasteItemFail,
+deleteWasteItemSuccess
 
 } from "./actions"
 
-import {getWasteItems,getWasteTypes,getWasteCategories} from "../../helpers/backend_helper"
+import {getWasteItems,
+  getWasteTypes,
+  getWasteCategories,
+  addWasteItem,
+  updateWasteItem,
+deleteWasteItem} from "../../helpers/backend_helper"
 
 function* fetchWasteItems() {
     try {
@@ -44,10 +58,60 @@ function* fetchWasteItems() {
     }
   }
 
+ 
+
+  function* onAddWasteItem({ payload: wasteItem }) {
+    try {
+      const response = yield call(addWasteItem, wasteItem);
+      yield put(addWasteItemSuccess(response));
+    } catch (error) {
+      yield put(addWasteItemFail(error.response));
+    }
+  }
+  function* onUpdateWasteItem({ payload: wasteItem }) {
+    delete wasteItem.name1;
+    delete wasteItem.privilage1;
+    delete wasteItem.company1;
+    delete wasteItem.branch1;
+    delete wasteItem.action;
+    console.log(wasteItem);
+    if (wasteItem.privilage) {
+      wasteItem.privilage = wasteItem.privilage._id;
+    }
+    if (wasteItem.company) {
+      wasteItem.company = wasteItem.company._id;
+    }
+    if (wasteItem.branch) {
+      wasteItem.branch = wasteItem.branch._id;
+    }
+  
+    try {
+      const response = yield call(updateWasteItem, wasteItem);
+      yield put(updateWasteItemSuccess(response));
+    } catch (error) {
+      yield put(updateWasteItemFail(error.response));
+    }
+  }
+  
+  function* onDeleteWasteItem({ payload: wasteItemId }) {
+    try {
+      const response = yield call(deleteWasteItem, wasteItemId);
+      yield put(deleteWasteItemSuccess(response));
+    } catch (error) {
+      yield put(deleteWasteItemFail(error.response));
+    }
+  }
   function* wasteItemSaga() {
     yield takeEvery(GET_WASTEITEMS, fetchWasteItems);
     yield takeEvery(GET_WASTE_TYPES, fetchWasteTypes);
     yield takeEvery(GET_WASTE_CATEGORIES, fetchWasteCategories);
+    yield takeEvery(ADD_WASTE_ITEM,onAddWasteItem);
+    yield takeEvery(UPDATE_WASTE_ITEM,onUpdateWasteItem);
+    yield takeEvery(DELETE_WASTE_ITEM,onDeleteWasteItem);
   }
+  
+
+
+
 
   export default wasteItemSaga;

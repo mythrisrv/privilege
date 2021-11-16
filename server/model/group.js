@@ -31,7 +31,7 @@ let groupSchema = new Schema(
       },
       group_addedby: {
         type: Schema.Types.ObjectId,
-        ref:"user"
+        ref:"users"
       },
       group_name: {
         type: String,
