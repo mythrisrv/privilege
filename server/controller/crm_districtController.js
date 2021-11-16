@@ -3,7 +3,7 @@ let moment = require("moment");
 
 createDistrict = (req) => {
   var ip = req.ip;
-  const format2 = "YYYY-MM-DD"
+  const format2 = "DD-MM-YYYY"
    var date2 = new Date();
    
 date = moment(date2).format(format2);

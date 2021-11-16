@@ -17,11 +17,11 @@ let districtSchema = new Schema(
     },
     district_addedby: {
       type: Schema.Types.ObjectId,
-       ref: "user",
+       ref: "users",
     },
     district_updatedby: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "users",
     },
     state_id: {
       type: Number,
