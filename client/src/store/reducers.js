@@ -30,6 +30,9 @@ import customers  from "./customer/reducer"
 //wasteitems
 import wasteItems from "./wasteItem/reducer"
 
+//customer category
+import customerCategory from "./customerCategory/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -48,6 +51,7 @@ const rootReducer = combineReducers({
   customers,
 Menus,
   wasteItems,
+  customerCategory,
 });
 
 export default rootReducer;

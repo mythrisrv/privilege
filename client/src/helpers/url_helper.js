@@ -71,3 +71,10 @@ export const GET_WASTE_CATEGORIES= "/wasteItems/list/categories";
 export const ADD_WASTE_ITEM = "/wasteItems/upload";
 export const UPDATE_WASTE_ITEM = "/wasteItems";
 export const DELETE_WASTE_ITEM = "/wasteItems";
+
+//get custome categories
+export const GET_CUST_CATEGORIES="/custCategory/list";
+export const ADD_CUST_CATEGORY = "/custCategory";
+export const GET_CUST_CATEGORY = "/custCategory";
+export const UPDATE_CUST_CATEGORY = "/custCategory";
+export const DELETE_CUST_CATEGORY = "/custCategory";

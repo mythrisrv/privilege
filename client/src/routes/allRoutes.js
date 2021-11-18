@@ -147,6 +147,9 @@ import AutoInvoice from "../pages/Invoice/AutoInvoice";
 //Receipt
 import Receipt from "../pages/Receipt";
 
+//Customer Category
+import CustomerCategory from "../pages/Manage/CustomerCategory"
+
 
 const userRoutes = [
   { path: "/dashboard", component: Dashboard },
@@ -233,6 +236,7 @@ const userRoutes = [
    { path: "/Localbody", component: Localbody },
    { path: "/Ward", component: Ward },
    {path:"/Group",component:Group},
+   {path:"/Customer-Cat",component:CustomerCategory},
 
    //Customers
    {path:"/Customer",component:AddCustomer},

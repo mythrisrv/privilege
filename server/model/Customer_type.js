@@ -20,31 +20,32 @@ let customer_type_Schema = new Schema(
       },
       createdAt: {
         type: Date,
-        required: true,
+        //required: true,
       },
       updatedAt: {
         type: Date,
-        required: true,
+        //required: true,
       },
       customer_type_addedby: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"users"
       },
       customer_type_updatedby: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"users",
       },
       customer_type_date: {
-        type:Date,
+        type:String,
         required: true,
       },
       customer_type_time: {
-        type:Date,
+        type:String,
       },
-      cust_name: {
-        type: String,
-      },
+     
       customer_type_name: {
         type: String,
         required: true,
+        unique:true,
       },
       
     },

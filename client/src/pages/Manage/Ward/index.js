@@ -239,17 +239,13 @@ setWardname(item.ward_name)
     console.log(values)
   }
   function handelChangeLocalbody(e){
-    
+    dispatch(getLocalbody(e.target.value))
     let name=e.target.name;
     let value=e.target.value;
     setLocalbodyname(value)
 
-    const shortcode=localbodyOptions.find( ({ localbody_name }) => localbody_name === localbodyname)
-    if(shortcode){
-      let wardcode=shortcode.short_code;
-      setwardShortcode(wardcode);
-    }
-  
+    
+  console.log(localbody.localbody)
     setWardObject({ ...wardObject, [name]: value });
     
     
@@ -362,7 +358,7 @@ setWardname(item.ward_name)
                             onChange={handelChangeLocalbody}
                             
                             onClick={()=>{
-                             
+                             console.log(localbody)
                               setlocalbodyOptions(localbody.localbodies)
                               console.log(localbodyOptions)
                             }}>
@@ -408,25 +404,7 @@ setWardname(item.ward_name)
       </FormGroup>
                         </div>
                       </Col>
-                      <Col md="3">
-                        <div className="mb-3">
-                         
-                          <AvField
-                            name="ward_name"
-                            placeholder=" Enter Ward name"
-                            type="text"
-                            errorMessage="Enter ward Name"
-                            className="form-control"
-                           // validate={{ required: { value: true } }}
-                            id="validationCustom01"
-                           // value={wardshortcode}
-                            onChange={handleChangeWard}
-                         />
-                         
-                       
-                        </div>
-                      </Col>
-                    
+                     
 
                       <Col md="3">
                         <div className="mb-3">
@@ -446,12 +424,9 @@ setWardname(item.ward_name)
                               </div>
 
                       </Col>
-                      <Col md="3">
-                      <div className="mb-3">
-                       <p>{localbodyname}/{wardname}/{wardno}</p>
-                      </div>
+                     
 
-                      </Col>
+                     
                      
                      
                      <Col>

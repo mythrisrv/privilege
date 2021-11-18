@@ -65,7 +65,7 @@ export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
 
 // add localbodies
 export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
-export const getLocalbody = (localbodyname) => get(url.GET_LOCALBODY, localbodyname);
+export const getLocalbody = (localbodyname) => get(`${url.GET_LOCALBODY}/${localbodyname}`, {localbodyname:localbodyname});
 export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
 export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
 
@@ -111,3 +111,10 @@ export const getWardOptions = (localbodyId) =>
   export const addWasteItem = (wasteItem) => post(url.ADD_WASTE_ITEM, wasteItem);
   export const updateWasteItem = (wasteItem) => put(`${url.UPDATE_WASTE_ITEM}/${wasteItem._id}`, wasteItem);
  export const deleteWasteItem= (wasteItemId) => del(url.DELETE_WASTE_ITEM, wasteItemId);
+
+ //customer categories
+ export const getCustomerCategories=()=>get(url.GET_CUST_CATEGORIES)
+ export const addCategory= (category) => post(url.ADD_CUST_CATEGORY, category);
+export const getCategory = (catId) => get(url.GET_CUST_CATEGORY, catId);
+export const updateCategory = (category) => put(`${url.UPDATE_CUST_CATEGORY}/${category._id}`, category);
+export const deleteCategory = (catId) => del(url.DELETE_CUST_CATEGORY, catId);

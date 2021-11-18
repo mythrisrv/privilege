@@ -169,6 +169,23 @@ const createGroup = (req, res, next) => {
         }
     });
 }
+const createCustCategory = (req, res, next) => {
+    const validationRule = {
+        "category_name": "required",
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 /*const createWasteItemvalidator = (req, res, next) => {
     const validationRule = {
         "waste_name": "required",
@@ -195,5 +212,6 @@ module.exports = {
     updateCustomervalidator,
     getWasteitems,
     createGroup,
+    createCustCategory,
    
 }

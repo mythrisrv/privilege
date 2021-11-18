@@ -26,6 +26,7 @@ import wasteItemSaga from "./wasteItem/saga";
 
 import menusSaga from "./menu/saga";
 
+import customerCategorySaga from "./customerCategory/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -46,5 +47,6 @@ export default function* rootSaga() {
     fork(customerSaga),
     fork(wasteItemSaga),
     fork(menusSaga),
+    fork(customerCategorySaga)
   ]);
 }

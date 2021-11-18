@@ -163,7 +163,7 @@ const API_URL = process.env.REACT_APP_APIURL;
        console.log(item)
        setItemname(item.waste_items_name)
        setBags(item.waste_items_bag)
-       setWeight(item.waste_items_kg)
+       setWeight(item.waste_items_weight)
        setAmount(item.waste_items_amount)
        
        if(item.waste_items_type){
@@ -180,7 +180,15 @@ const API_URL = process.env.REACT_APP_APIURL;
       }
       handleChangeCategory(waste_item_cat)
     }
-    
+    if(item.waste_items_image)
+    {
+      
+
+     // setSelectedImage(`${API_URL}uploads/waste_images/${item.waste_items_image[0].img}`)
+    setLoadedImage(`${API_URL}uploads/waste_images/${item.waste_items_image[0].img}`)
+    }
+ 
+    console.log(loadedImage)
     setItemsIdToBeUpdated(item._id)
      setWasteObject({...item,password:null})
     }
@@ -335,7 +343,7 @@ const API_URL = process.env.REACT_APP_APIURL;
       },
       {
         label: "kg		",
-        field: "waste_items_kg",
+        field: "waste_items_weight",
         width: 300,
       },
       {
@@ -425,6 +433,7 @@ console.log(wasteItemsForTable)
   //   }
   const handleValidSubmit = (event, values) => {
 const data=new FormData();
+ data.append("id",itemsIdTobeUpdated)
 data.append("name",itemname)
 data.append("bags",bags)
 data.append("weight",weight)
@@ -435,7 +444,7 @@ data.append("file",selectedImage)
 
 //console.log(data)
     itemsIdTobeUpdated
-      ? dispatch(updateWasteItem(itemsIdTobeUpdated))
+      ? dispatch(updateWasteItem(wasteObject))
      : dispatch(addWasteItem(data));
      setSelectedType(null);
      setCategory(null);
@@ -498,6 +507,7 @@ data.append("file",selectedImage)
       setWasteObject({ ...wasteObject, [name]: value});
      }
      function handleSelectedImage(e){
+       console.log(e)
       let  name=e.target.name;
      let  value=e.target.files[0];
        
@@ -756,6 +766,8 @@ setLoadedImage(URL.createObjectURL(value))
                               className="form-control"
                               id="validationCustom04"
                               enctype="multipart/form-data"
+                              
+                              
                               onChange={handleSelectedImage}
                               //  id="getFile" style={{display:"none"}}
                               // onChange={handleChangeInput}

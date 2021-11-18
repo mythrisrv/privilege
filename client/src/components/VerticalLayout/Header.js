@@ -19,7 +19,7 @@ import MegaMenu from "../MegaMenu/MegaMenu";
 
 import logoSm from "../../assets/images/logo-sm.svg";
 import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-light.png";
+import logoLight from "../../assets/images/logo-new.png";
 
 // import images
 import github from "../../assets/images/brands/github.png";

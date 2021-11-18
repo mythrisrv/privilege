@@ -119,6 +119,41 @@ deleteWasteItem= (req) => {
   });
 };
 
+updateWasteItem = (req) => {
+  return new Promise(async (resolve, reject) => {
+      console.log(req.body)
+      console.log(req.file)
+  /*  try {
+        let =await models.LocalbodyName.findOne({
+            localbody_name:req.body.localbody_name
+        })
+
+  let data={
+      ward_name:req.body.ward_name,
+      ward_no:req.body.ward_no,
+      localbody_name_id:localbody._id,
+      ward_updatedby:req.user._id,
+      updatedAt:Date.now(),
+
+  }
+       
+      let ward = await models.Ward.findByIdAndUpdate(
+        req.params.ward_Id,
+        data,
+        {
+          new: true,
+        }
+      );
+     console.log(ward)
+      resolve(ward);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }*/
+  });
+};
 
   module.exports = {
       WasteItemsList,

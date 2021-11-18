@@ -66,6 +66,10 @@ let waste_items_Schema = new Schema(
         type: Date,
         //required: true,
       },
+      waste_items_weight:{
+        type:String
+
+      },
       waste_item_addedby: {
         type: Schema.Types.ObjectId,
         ref: "users",

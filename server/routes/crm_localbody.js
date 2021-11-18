@@ -68,7 +68,8 @@ router.get("/list/options", [jwtauth], async (req, res) => {
 
 
 // Get localbody data
-router.get("/:localbody_Id", [jwtauth], async (req, res) => {
+router.get("/:localbodyname", [jwtauth], async (req, res) => {
+  console.log(req.params)
   try {
     let item = await getLocalbodyData(req);
     res.status(200).json({
