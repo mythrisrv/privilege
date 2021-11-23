@@ -1,0 +1,7 @@
+export const GET_QRCODE = "GET_QRCODE";
+export const GET_QRCODE_SUCCESS = "GET_QRCODE_SUCCESS";
+export const GET_QRCODE_FAIL = "GET_QRCODE_FAIL";
+
+export const ADD_QRCODE = "ADD_QRCODE";
+export const ADD_QRCODE_SUCCESS = "ADD_QRCODE_SUCCESS";
+export const ADD_QRCODE_FAIL = "ADD_QRCODE_FAIL";

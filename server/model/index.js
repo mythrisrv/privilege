@@ -23,6 +23,7 @@ const WasteType=require("./Waste_type");
 const WasteCategory=require("./WasteCategory")
 const MainMenu=require("./Menu")
 const SubMenu=require("./SubMenu")
+const Qrcode=require("./QrCode")
 module.exports = {
   User,
   Privilage,
@@ -49,4 +50,5 @@ module.exports = {
   WasteCategory,
   MainMenu,
   SubMenu,
+  Qrcode,
 };

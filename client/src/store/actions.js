@@ -19,5 +19,7 @@ export * from "./group/actions";
 export * from "./customer/actions";
 export * from "./wasteItem/actions";
 export * from "./customerCategory/actions"
+export * from "./qrCode/actions"
+export * from "./tariff/actions"
 
 

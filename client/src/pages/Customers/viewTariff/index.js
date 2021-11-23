@@ -3,9 +3,29 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal, } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+
+//Dialogue box table content's
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import {
   getUsers,
   addUser,
@@ -15,6 +35,7 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getTariff
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -28,7 +49,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import "./user.scss";
 
-const ViewTraffic = (props) => {
+const ViewTariff = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -38,9 +59,10 @@ const ViewTraffic = (props) => {
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [tariffForTable, setTariffForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
-
+  const [form, setForm] = React.useState(false);
+const[tableData,setTableData]=useState([])
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -70,12 +92,15 @@ const ViewTraffic = (props) => {
     (state) => state.branches.branchesOptions
   );
 
+  const{tariff}=useSelector((state)=>state.tariff)
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getPrivilagesOptions());
     dispatch(getCompaniesOptions());
+    dispatch(getTariff())
     //  dispatch(getDistrictsOptions());
   }, []);
 
@@ -116,6 +141,18 @@ const ViewTraffic = (props) => {
       toastr.error(error.data.message, updateUserResponse.message);
     }
   }, [updateUserResponse]);
+  const handleClickOpenForm = (item) => {
+  let itemData=[];
+
+    itemData.push(item);
+    setTableData(itemData)
+    
+    setForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setForm(false);
+  };
 
   //   let preUpdateUser = (item) => {
   //     if (item.privilage) {
@@ -150,30 +187,14 @@ const ViewTraffic = (props) => {
   //   };
 
   useEffect(() => {
-    let userData = [];
+    let tariffData = [];
 
-    users.map((item, index) => {
+    tariff ?.map((item, index) => {
       item.action = (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {/* <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateUserPassword(item);
-            }}
-          ></i> */}
-          <i
-            className="uil-eye"
-            style={{
-              fontSize: "1.3em",
-              cursor: "pointer",
-              marginLeft: "1rem",
-              marginRight: "1rem",
-            }}
-            onClick={() => {
-              //   preUpdateUser(item);
-            }}
-          ></i>
+        <div style={{ display: "flex", justifyContent: "center" ,}}>
+          <RemoveRedEye onClick={()=>{handleClickOpenForm(item)}}
+              style={{ cursor: "pointer" }}/>
+         
         </div>
       );
       //   item.id = index + 1;
@@ -181,11 +202,11 @@ const ViewTraffic = (props) => {
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
-      //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+     
+        tariffData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+     setTariffForTable(tariffData);
+  }, [tariff]);
 
   const data = {
     columns: [
@@ -197,61 +218,67 @@ const ViewTraffic = (props) => {
       },
       {
         label: "Date",
-        field: "district",
+        field: "date",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Time",
+        field: "time",
         sort: "asc",
         width: 400,
       },
       {
         label: "Customer ID",
-        field: "localbodytype",
+        field: "customerId",
         sort: "asc",
         width: 200,
       },
       {
         label: "Name",
-        field: "localbodytype",
+        field: "cust_name",
         sort: "asc",
         width: 200,
       },
       {
         label: "Package",
-        field: "localbodytype",
+        field: "package",
         sort: "asc",
         width: 200,
       },
       {
         label: "Validity",
-        field: "localbodytype",
+        field: "validity",
         sort: "asc",
         width: 200,
       },
       {
         label: "Staff",
-        field: "localbodytype",
+        field: "staff",
         sort: "asc",
         width: 200,
       },
 
       {
         label: "Basic fee		",
-        field: "localbodytype",
+        field: "basicfee",
         sort: "asc",
         width: 200,
       },
       {
         label: "Status",
-        field: "localbodytype",
+        field: "status",
         sort: "asc",
         width: 200,
       },
       {
         label: "	Action	",
-        field: "localbodytype",
+        field: "action",
         sort: "asc",
         width: 200,
       },
     ],
-    rows: usersForTable,
+    rows: tariffForTable,
   };
 
   //   let privilagesOptionsData =
@@ -364,6 +391,7 @@ const ViewTraffic = (props) => {
   //   };
 
   return (
+    <>
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
@@ -470,12 +498,201 @@ const ViewTraffic = (props) => {
         </div>
       </div>
     </React.Fragment>
+    <div>
+        <Dialog open={form} onClose={handleCloseForm} fullWidth={true} maxWidth="xl">
+          <DialogTitle style={{ textAlign: "center" }}>
+          
+          </DialogTitle>
+          <DialogContent >
+            <DialogContentText>
+              <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} aria-label="caption table">
+                  <TableHead>
+                
+                     </TableHead>
+               
+                 
+                  <TableBody>
+                  {tableData.map((row) => (
+                    <TableRow>
+                   
+                      <TableCell style={{ fontWeight: "" }}>
+                         Date:
+                      </TableCell>
+                      <TableCell align="left">{row.date}</TableCell>
+                      <TableCell align="left" style={{ fontWeight: "" }}>
+                         Time:
+                      </TableCell>
+                      <TableCell align="left">{row.time}</TableCell>
+                      {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
+
+                    </TableRow>
+                   
+                  ))}
+                    {tableData.map((row) => (
+                     
+                      <TableRow key={row.name}>
+                        <TableCell component="th" scope="row">
+                        customerID
+                        </TableCell>
+                        <TableCell align="left">{row.customerId}</TableCell>
+                        <TableCell align="left">Name</TableCell>
+                       
+                        <TableCell align="left">{row.cust_name}</TableCell>
+                       
+
+                        
+                       
+            
+                      </TableRow>
+                    ))}
+                     {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                       <TableCell component="th" scope="row">
+                       Customer Type
+                       </TableCell>
+                       <TableCell align="left">{}</TableCell>
+                       <TableCell align="left">Localbody Type</TableCell>
+                      
+                       <TableCell align="left">{}</TableCell>
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                   ))}
+                    {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                       <TableCell component="th" scope="row">
+                       package Name
+                       </TableCell>
+                       <TableCell align="left">{row.package}</TableCell>
+                       <TableCell align="left">Package Validity</TableCell>
+                      
+                       <TableCell align="left">{row.validity}</TableCell>
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                     
+                   ))}
+                    {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                       <TableCell component="th" scope="row">
+                       Visit/month
+                       </TableCell>
+                       <TableCell align="left">{row.visitperMonth}</TableCell>
+                       <TableCell align="left">Registration Fee</TableCell>
+                      
+                       <TableCell align="left">{row.regFee}</TableCell>
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                   ))}
+                    {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                       <TableCell component="th" scope="row">
+                       Basic Fee
+                       </TableCell>
+                       <TableCell align="left">{row.basicfee}</TableCell>
+                       <TableCell align="left">Free Bags</TableCell>
+                      
+                       <TableCell align="left">{}</TableCell>
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                   ))}
+                    {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                       <TableCell component="th" scope="row">
+                       Staff
+                       </TableCell>
+                       <TableCell align="left"></TableCell>
+                       
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                   ))}
+                  </TableBody>
+                </Table>
+                <DialogTitle style={{ textAlign: "center" }}>
+                  Package Item Detailes
+          
+          </DialogTitle>
+          <Table>
+          <TableHead>
+                  {tableData.map((row) => (
+                    <TableRow>
+                   
+                      <TableCell style={{ fontWeight: "bold" }}>
+                         Item Name
+                      </TableCell>
+                     
+                      <TableCell align="left" style={{ fontWeight: "bold" }}>
+                         Free Bags
+                      </TableCell>
+                      
+                      {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
+
+                    </TableRow>
+                   
+                  ))}
+                  </TableHead>
+                  <TableBody>
+                   {tableData.map((row) => (
+                     
+                     <TableRow key={row.name}>
+                      
+                       <TableCell align="left">{}</TableCell>
+                      
+                      
+                       <TableCell align="left">{}</TableCell>
+                      
+
+                       
+                      
+           
+                     </TableRow>
+                     
+                   ))}
+                    </TableBody>
+                     </Table>
+              </TableContainer>
+             
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseForm} color="success">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </>
+    
   );
 };
 
 const mapStateToProps = (state) => {};
 
-export default withRouter(connect(mapStateToProps, { apiError })(ViewTraffic));
+export default withRouter(connect(mapStateToProps, { apiError })(ViewTariff));
 
 // Users.propTypes = {
 //   error: PropTypes.any,

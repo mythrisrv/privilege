@@ -33,6 +33,9 @@ import wasteItems from "./wasteItem/reducer"
 //customer category
 import customerCategory from "./customerCategory/reducer"
 
+import qrcodes from "./qrCode/reducer"
+import tariff from "./tariff/reducer"
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -52,6 +55,8 @@ const rootReducer = combineReducers({
 Menus,
   wasteItems,
   customerCategory,
+  qrcodes,
+  tariff,
 });
 
 export default rootReducer;

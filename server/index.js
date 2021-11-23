@@ -36,6 +36,8 @@ const wasteItems=require("./routes/crm_wasteItems");
 const menuRouter = require("./routes/menu");
 const menu=require("./routes/menu")
 const customerCategory=require("./routes/crm_custCategory")
+const qrcode=require("./routes/crm_qrCode")
+const tariff=require("./routes/crm_viewTariff")
 
 app.use(logger("dev"));
 
@@ -83,7 +85,9 @@ app.use("/wasteIteam",wasteItem);
 app.use("/staff",userapi);
 app.use("/wasteItems",wasteItems);
 app.use("/menu",menu),
-app.use("/custCategory",customerCategory)
+app.use("/custCategory",customerCategory),
+app.use("/qrcode",qrcode)
+app.use("/tariff",tariff)
 app.listen(port, function () {
   console.log("Runnning on " + port);
 });

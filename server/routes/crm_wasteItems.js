@@ -120,7 +120,7 @@ router.delete("/:wasteItem_Id", [jwtauth], async (req, res) => {
   }
 });
 
-router.put("/:wasteItem_Id", [jwtauth], async (req, res) => {
+router.put("/:wasteItem_Id", [jwtauth,fileupload.upload], async (req, res) => {
   
   try {
     let item = await updateWasteItem(req);

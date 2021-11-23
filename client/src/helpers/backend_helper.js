@@ -109,7 +109,7 @@ export const getWardOptions = (localbodyId) =>
   export const getWasteTypes = () => get(url.GET_WASTE_TYPES);
   export const getWasteCategories = () => get(url.GET_WASTE_CATEGORIES);
   export const addWasteItem = (wasteItem) => post(url.ADD_WASTE_ITEM, wasteItem);
-  export const updateWasteItem = (wasteItem) => put(`${url.UPDATE_WASTE_ITEM}/${wasteItem._id}`, wasteItem);
+  export const updateWasteItem = (wasteItem) => put(`${url.UPDATE_WASTE_ITEM}/${wasteItem.get('id')}`, wasteItem);
  export const deleteWasteItem= (wasteItemId) => del(url.DELETE_WASTE_ITEM, wasteItemId);
 
  //customer categories
@@ -118,3 +118,10 @@ export const getWardOptions = (localbodyId) =>
 export const getCategory = (catId) => get(url.GET_CUST_CATEGORY, catId);
 export const updateCategory = (category) => put(`${url.UPDATE_CUST_CATEGORY}/${category._id}`, category);
 export const deleteCategory = (catId) => del(url.DELETE_CUST_CATEGORY, catId);
+
+
+export const getQrcode  = () => get(url.GET_QRCODE);
+
+export const addQrcode = (data) => post(url.ADD_QRCODE, data);
+
+export const getTariff=()=>get(url.GET_TARIFF);

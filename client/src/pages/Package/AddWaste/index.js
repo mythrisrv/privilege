@@ -55,7 +55,7 @@ const API_URL = process.env.REACT_APP_APIURL;
   const [category, setCategory] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [wasteObject, setWasteObject] = useState({});
+  const [wasteObject, setWasteObject] = useState(null);
   const [itemsIdTobeUpdated, setItemsIdToBeUpdated] = useState(null);
   const [itemsIdToBeDeleted, setItemsIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
@@ -160,7 +160,7 @@ const API_URL = process.env.REACT_APP_APIURL;
   }, [updateWasteItemResponse]);
 
      let preUpdateData = (item) => {
-       console.log(item)
+       console.log(item.image)
        setItemname(item.waste_items_name)
        setBags(item.waste_items_bag)
        setWeight(item.waste_items_weight)
@@ -183,15 +183,21 @@ const API_URL = process.env.REACT_APP_APIURL;
     if(item.waste_items_image)
     {
       
+     
+    
+    
+    
 
      // setSelectedImage(`${API_URL}uploads/waste_images/${item.waste_items_image[0].img}`)
     setLoadedImage(`${API_URL}uploads/waste_images/${item.waste_items_image[0].img}`)
+    
     }
- 
-    console.log(loadedImage)
+   // console.log(wasteObject.category._id)
     setItemsIdToBeUpdated(item._id)
      setWasteObject({...item,password:null})
     }
+   
+    console.log(itemname)
     console.log(wasteObject)
   //     if (item.privilage) {
   //       let privilage = {
@@ -442,9 +448,29 @@ data.append("category",category.value)
 data.append("Type",selectedType.value)
 data.append("file",selectedImage)
 
+const update=new FormData();
+/*update.append("id",itemsIdTobeUpdated)
+if(wasteObject.Amount){
+update.append("amount",wasteObject.Amount)}
+if(wasteObject.WasteItem){
+update.append("itemname",wasteObject.WasteItem)}
+if(wasteObject.category._id){
+update.append("category",wasteObject.category._id)}
+if(wasteObject.wasteType){
+update.append("Type",wasteObject.wasteType._id)}
+if(wasteObject.Kg){
+update.append("kg",wasteObject.Kg)}
+if(wasteObject.bags){
+update.append("Bags",wasteObject.bags)}
+update.append("imageId",wasteObject.waste_items_image._id)*/
+update.append("id",itemsIdTobeUpdated)
+update.append("body",JSON.stringify(wasteObject))
+update.append("file",wasteObject.image)
 //console.log(data)
     itemsIdTobeUpdated
-      ? dispatch(updateWasteItem(wasteObject))
+      ? 
+     
+      dispatch(updateWasteItem(update))
      : dispatch(addWasteItem(data));
      setSelectedType(null);
      setCategory(null);
@@ -759,14 +785,15 @@ setLoadedImage(URL.createObjectURL(value))
                               </button>
                             </div>
                           ) : ( */}
-                            <Input
+                            <AvField
                               name="image"
                               type="file"
                               errorMessage="Select Image"
                               className="form-control"
-                              id="validationCustom04"
-                              enctype="multipart/form-data"
+                              id="myImageInput"
                               
+                              enctype="multipart/form-data"
+                             
                               
                               onChange={handleSelectedImage}
                               //  id="getFile" style={{display:"none"}}

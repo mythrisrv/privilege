@@ -6,6 +6,8 @@ import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import MyDocument from "./Document";
+import { PDFViewer } from '@react-pdf/renderer';
 import {
   getUsers,
   addUser,
@@ -15,6 +17,11 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getLocalbodies,
+  addQrcode,
+  getQrcode,
+  getQrcodesSuccess,
+  getQrcodeFail
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -33,19 +40,24 @@ const QrCode = (props) => {
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
-  const [userObject, setUserObject] = useState({});
+  const [qrObject, setQrObject] = useState({});
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [qrDataForTable, setqrDataForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [image, setImage] = useState("");
+  const [localbody,setLocalbody]=useState(null);
+  const[start,setStart]=useState("");
+  const[end,setEnd]=useState("");
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
     confirmPassword: "",
   });
+ 
 
   const {
     users,
@@ -59,23 +71,16 @@ const QrCode = (props) => {
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
   // );
-
-  const privilagesOptions = useSelector(
-    (state) => state.privilages.privilagesOptions
-  );
-  const companiesOptions = useSelector(
-    (state) => state.companies.companiesOptions
-  );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );
+  
+const {localbodies}=useSelector((state)=>state.localbodies)
+const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
+   
+    dispatch(getLocalbodies())
+    dispatch(getQrcode())
     //  dispatch(getDistrictsOptions());
   }, []);
 
@@ -86,16 +91,17 @@ const QrCode = (props) => {
   }, [selectedCompany]);
 
   useEffect(() => {
-    if (addUserResponse.type === "success") {
+    if (addResponse.type === "success") {
+      dispatch(getQrcode())
       toastr.success(addUserResponse.message);
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
       //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
+    } else if (addResponse.type === "failure") {
       toastr.error(error.data.message, addUserResponse.message);
     }
-  }, [addUserResponse]);
+  }, [addResponse]);
 
   useEffect(() => {
     if (deleteUserResponse.type === "success") {
@@ -150,9 +156,28 @@ const QrCode = (props) => {
   //   };
 
   useEffect(() => {
-    let userData = [];
+   
+    let qrData = [];
 
-    users.map((item, index) => {
+    qrcodes?.map((item, index) => {
+      item.active = (
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div
+            className=""
+            style={{
+              cursor: "pointer",
+              color: "black",
+              fontSize: ".7em",
+              padding: ".5rem",
+              borderRadius: ".3rem",
+              background: "#00bcd4",
+            }}
+            //onClick={() => }
+          >
+              View PDF
+          </div>
+        </div>
+      );
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -184,16 +209,19 @@ const QrCode = (props) => {
           ></i>
         </div>
       );
-      //   item.id = index + 1;
+        item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
       //   item.privilage1 = item.privilage && item.privilage.name;
-      //   item.company1 = item.company && item.company.name;
+      if(item.qrcode_localbody_id!=null)
+        item.localbody = item.qrcode_localbody_id.localbody_name;
+        if(item.qrcode_addedby!=null)
+        item.user=item.qrcode_addedby.username
       //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+         qrData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+     setqrDataForTable(qrData);
+  }, [qrcodes]);
 
   const data = {
     columns: [
@@ -205,33 +233,33 @@ const QrCode = (props) => {
       },
       {
         label: "Date",
-        field: "district",
+        field: "qrcode_date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Time	",
-        field: "localbodytype",
+        field: "qrcode_time",
         sort: "asc",
         width: 200,
       },
       {
         label: "Local Body",
-        field: "action",
+        field: "localbody",
         width: 300,
       },
       {
         label: "Added By",
-        field: "action",
+        field: "user",
         width: 300,
       },
       {
         label: "Action",
-        field: "action",
+        field: "active",
         width: 300,
       },
     ],
-    rows: usersForTable,
+    rows: qrDataForTable,
   };
 
   //   let privilagesOptionsData =
@@ -281,12 +309,33 @@ const QrCode = (props) => {
   //       options: branchesOptionsData,
   //     },
   //   ];
+  function handleChangeLocalbody(value) {
+    // console.log(value )
+     //console.log(e)
+     let newValue = {
+       name: value.label,
+        _id: value.value,
+      };
+     setLocalbody(value);
+    setQrObject({ ...qrObject, localbody: newValue });
+   }
+    function handleChangeStart(e) {
+       let name = e.target.name;
+      let value = e.target.value;
+      setQrObject({ ...qrObject, [name]: value });
+     }
+     function handleChangeEnd(e) {
+      let name = e.target.name;
+     let value = e.target.value;
+     setQrObject({ ...qrObject, [name]: value });
+    }
 
-  //   function handleChangeUser(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setUserObject({ ...userObject, [name]: value });
-  //   }
+    const handleValidSubmit = (event, values) => {
+     
+         dispatch(addQrcode(qrObject));
+       
+       
+    };
 
   //   function handleSelectedPrivilage(value) {
   //     let newValue = {
@@ -337,6 +386,11 @@ const QrCode = (props) => {
   //       toastr.error("Passwords are not matching");
   //     }
   //   };
+  // handleClick(){
+     
+ // let uri=data.toDataURl('image/png',0.3)
+ // setImage(uri)
+  //}
 
   //   let closeModal = () => {
   //     setShowModal(false);
@@ -354,9 +408,9 @@ const QrCode = (props) => {
                 <CardBody>
                   <AvForm
                     className="needs-validation"
-                    // onValidSubmit={(e, v) => {
-                    //   handleValidSubmit(e, v);
-                    // }}
+                     onValidSubmit={(e, v) => {
+                       handleValidSubmit(e, v);
+                     }}
                   >
                     <Row>
                       <Col md="3">
@@ -368,8 +422,15 @@ const QrCode = (props) => {
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
-                            //   options={communitiesOptionsGroup}
+                              options={localbodies?.map((data)=>{
+                                return{
+                                  label:data.localbody_name,
+                                  value:data._id,
+                                  key:data._id,
+                                }
+                              })}
                             classNamePrefix="select2-selection"
+                            onChange={handleChangeLocalbody}
                           />
                         </div>
                       </Col>
@@ -384,6 +445,7 @@ const QrCode = (props) => {
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleChangeStart}
                           />
                         </div>
                       </Col>
@@ -398,12 +460,14 @@ const QrCode = (props) => {
                             className="form-control"
                             validate={{ required: { value: true } }}
                             id="validationCustom05"
+                            onChange={handleChangeEnd}
                           />
                         </div>
                       </Col>
                       <Col md="2">
                         <div className="mt-4">
-                          <Button color="primary" type="submit">
+                          <Button color="primary" type="submit"
+                         >
                             Generate Qr Code
                           </Button>
                         </div>
@@ -417,6 +481,12 @@ const QrCode = (props) => {
                           >
                             Reset
                           </Button>
+                         <div>
+                           {
+                             image ?
+                             <PDFViewer> <MyDocument src={image}/></PDFViewer> : null
+                           }
+                         </div>
                         </div>
                       </Col>
                     </Row>
@@ -451,7 +521,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(QrCode));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ QrCode.propTypes = {
+  error: PropTypes.any,
+  qrcodes: PropTypes.array,
+ };

@@ -27,6 +27,8 @@ import wasteItemSaga from "./wasteItem/saga";
 import menusSaga from "./menu/saga";
 
 import customerCategorySaga from "./customerCategory/saga"
+import qrcodeSaga from "./qrCode/saga"
+import tariffSaga from "./tariff/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -47,6 +49,8 @@ export default function* rootSaga() {
     fork(customerSaga),
     fork(wasteItemSaga),
     fork(menusSaga),
-    fork(customerCategorySaga)
+    fork(customerCategorySaga),
+    fork(qrcodeSaga),
+    fork(tariffSaga),
   ]);
 }

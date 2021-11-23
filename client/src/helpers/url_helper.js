@@ -78,3 +78,8 @@ export const ADD_CUST_CATEGORY = "/custCategory";
 export const GET_CUST_CATEGORY = "/custCategory";
 export const UPDATE_CUST_CATEGORY = "/custCategory";
 export const DELETE_CUST_CATEGORY = "/custCategory";
+
+export const GET_QRCODE="/qrcode/list";
+export const ADD_QRCODE = "/qrcode";
+
+export const GET_TARIFF="/tariff/list"

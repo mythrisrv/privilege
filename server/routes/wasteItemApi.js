@@ -11,8 +11,9 @@ const {
   *****************************/
   router.post("/List",[validationMiddleware.getWasteitems],async (req, res) => {
     try {
+      
       let item = await WasteItemsList(req);
-      res.status(200).json({
+     res.status(200).json({
         status: 200,
         data: item,
       });
