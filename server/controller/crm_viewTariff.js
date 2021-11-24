@@ -6,7 +6,7 @@ getTariffDetailes=(req)=>{
         return new Promise(async (resolve, reject) => {
           try {
             let tariff = await models.TariffAssign.aggregate([
-                {
+              {
                     $match:{'tariff_assign_status':0},
                 },
                 {
@@ -44,13 +44,16 @@ getTariffDetailes=(req)=>{
                         visitperMonth:{ $arrayElemAt: ['$package_detailes.package_visit_month', 0] },
                         regFee:{ $arrayElemAt: ['$package_detailes.package_reg_fee', 0] },
                         freebags:{ $arrayElemAt: ['$package_detailes.package_bags', 0] },
-
+                        custType:{ $arrayElemAt: ['$package_detailes.cust_type', 0] },
+                        localbodyType:{ $arrayElemAt: ['$package_detailes.localbody_type', 0] },
 
                     }
                 }
 
 
             ])
+          
+          
            
             resolve(tariff)
           } catch (err) {

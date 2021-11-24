@@ -113,7 +113,7 @@ router.post('/create',[validationMiddleware.createCustomervalidator,jwtauth], as
       });
     }
   });
-  router.get("/profile_new/:id", [jwtauth], async (req, res) => {
+  router.get("/profile_new/:id", /*[jwtauth],*/ async (req, res) => {
     try {
       let item = await customerProfileNew(req);
       res.status(200).json({

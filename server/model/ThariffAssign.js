@@ -26,7 +26,8 @@ let ThariffAssign_Schema = new Schema(
         required: false,
       },
       tariff_assign_addedby: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"users"
       },
       tariff_assign_date: {
         type:Date,
