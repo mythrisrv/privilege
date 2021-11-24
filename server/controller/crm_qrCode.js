@@ -1,8 +1,7 @@
 let models = require("../model");
 let moment = require("moment");
-const qr=require("qrcode")
-const pdf=require("pdfkit")
-const fs=require("fs")
+
+
 
 createQrcode=(req)=>{
   /*
