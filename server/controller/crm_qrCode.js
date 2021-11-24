@@ -5,6 +5,7 @@ const pdf=require("pdfkit")
 const fs=require("fs")
 
 createQrcode=(req)=>{
+  /*
   const createPDF = (filenames) => {
 
     const doc = new pdf 
@@ -45,7 +46,7 @@ qr.toFile("./public/Qrcodes/"+filenames+".jpg","abcd").then(qr => {
 filename.forEach(element => {
   console.log(element)
   generateQrcode(element)
-});
+});*/
 var ip = req.ip;
 const format2 = "YYYY-MM-DD"
 var date2 = new Date();
