@@ -18,6 +18,7 @@ import {
   getLocalbodiesSuccess,
   updateWard,
   getLocalbody,
+  getDistrict,
   getLocalbodySuccess
 } from "../../../store/actions";
 
@@ -112,7 +113,7 @@ const Wards = (props) => {
   let preUpdateWard = (item) => {
    
      console.log(item)
-        setLocalbodyname(item.localbody_name);
+     setLocalbodyname(item.localbody_name)
 setwardno(item.ward_no);
 setWardname(item.ward_name)
     
@@ -239,18 +240,18 @@ setWardname(item.ward_name)
     console.log(values)
   }
   function handelChangeLocalbody(e){
-    dispatch(getLocalbody(e.target.value))
+   
+   
     let name=e.target.name;
     let value=e.target.value;
+    dispatch(getLocalbody(value))
     setLocalbodyname(value)
 
     
   console.log(localbody.localbody)
     setWardObject({ ...wardObject, [name]: value });
-    
-    
-    
-  }
+   
+    }
     
   
 
@@ -353,8 +354,7 @@ setWardname(item.ward_name)
                         <div className="mb-3">
                          
                         <FormGroup>
-        
-        <Input type="select" name="localbody_name" id="exampleSelect" style={{appearance:"auto"}}  value={localbodyname}
+                        <Input type="select" name="localbody_name" id="exampleSelect" style={{appearance:"auto"}}  value={localbodyname}
                             onChange={handelChangeLocalbody}
                             
                             onClick={()=>{
@@ -367,7 +367,7 @@ setWardname(item.ward_name)
                              
                             
         <option value="">Localbody </option>
-        
+ 
         {
         localbodyOptions.map(options=>(
           
@@ -377,7 +377,8 @@ setWardname(item.ward_name)
          )
        }
         </Input>
-       
+
+                       
       </FormGroup>
                         </div>
                       </Col>

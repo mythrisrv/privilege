@@ -2,11 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
+import {CSVLink} from "react-csv"
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal, } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
+import LoopIcon from '@mui/icons-material/Loop';
+import Stack from "@mui/material/Stack";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -17,6 +24,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
 
 //Dialogue box table content's
 import Table from "@mui/material/Table";
@@ -26,6 +34,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import moment from "moment"
+
 import {
   getUsers,
   addUser,
@@ -35,7 +45,12 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
-  getTariff
+  getTariff,
+  getDistrictOptions,
+  getLocalbodies,
+  getGroups,
+  getTariffOptions,
+  updateTariffStatus,
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -62,7 +77,17 @@ const ViewTariff = (props) => {
   const [tariffForTable, setTariffForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
   const [form, setForm] = React.useState(false);
+  const[filterString,setFilterString]=useState(null);
+const[filteredData,setFilteredData]=useState(null)
+//const[tariffData,setTariffData]=useState([])
 const[tableData,setTableData]=useState([])
+const[district,setDistrict]=useState({})
+const[localbody,setLocalbody]=useState({})
+const[selectedLocalbody,setselectedLocalbody]=useState("");
+const[selectedgroup,setSelectedGroup]=useState("");
+const[selectedPackage,setSelectedPackage]=useState({})
+const[datevalue,setDateValue]=useState(null);
+const[status,setStatus]=useState({})
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -82,7 +107,7 @@ const[tableData,setTableData]=useState([])
   //   (state) => state.districts.districtsOptions
   // );
 
-  const privilagesOptions = useSelector(
+ /* const privilagesOptions = useSelector(
     (state) => state.privilages.privilagesOptions
   );
   const companiesOptions = useSelector(
@@ -90,21 +115,39 @@ const[tableData,setTableData]=useState([])
   );
   const branchesOptions = useSelector(
     (state) => state.branches.branchesOptions
-  );
+  );*/
 
-  const{tariff}=useSelector((state)=>state.tariff)
+  const{ districtOptions}=useSelector((state)=>state.districts)
+  const{tariff,packages,updateTariffResponse}=useSelector((state)=>state.tariff)
+  
+   const{localbodies}=useSelector((state)=>state.localbodies)
+   const{groups}=useSelector((state)=>state.groups)
+   const statusOptions=[
+    { value:0,label:"Active"},
+    {value:1,label:"Inactive"},
+    {value:2,label:"Hold"},
 
+   ]
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    dispatch(getTariff())
-    //  dispatch(getDistrictsOptions());
+   // dispatch(getUsers());
+   // dispatch(getPrivilagesOptions());
+  //  dispatch(getCompaniesOptions());
+  dispatch( getDistrictOptions());
+   
+  
+  
+   dispatch(getTariffOptions())
+   dispatch(getGroups());
+   dispatch(getTariff());
+   dispatch(getLocalbodies());
+   
+   
   }, []);
 
   useEffect(() => {
+  
     if (selectedCompany !== null) {
       dispatch(getBranchesOptions(selectedCompany.value));
     }
@@ -132,15 +175,14 @@ const[tableData,setTableData]=useState([])
   }, [deleteUserResponse]);
 
   useEffect(() => {
-    if (updateUserResponse.type === "success") {
-      setShowModal(false);
-      setUserIdToBeUpdated(null);
-      setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
+    if (updateTariffResponse.type === "success") {
+      dispatch(getTariff())
+      
+      toastr.success(updateTariffResponse.message);
+    } else if (updateTariffResponse.type === "failure") {
+      toastr.error(error.data.message, updateTariffResponse.message);
     }
-  }, [updateUserResponse]);
+  }, [updateTariffResponse]);
   const handleClickOpenForm = (item) => {
   let itemData=[];
 
@@ -185,11 +227,35 @@ const[tableData,setTableData]=useState([])
   //     setUserIdToBeUpdated(item._id);
   //     setShowModal(true);
   //   };
+  /*const filterData=value=>{
+     
+    const lowerCaseValue=value.toLowerCase().trim()
+    const filteredData=tariff ?.filter(item=>{
+      return Object.keys(item).some(key=>{
+        return item[key].toString().toLowerCase().includes(lowerCaseValue)
+      })
+
+    })
+    setNewData(filteredData) 
+
+  }
+*/
+/*const filterCriteria = (tariff,value) => {
+
+
+console.log(value)
+  return tariff.localbodyName.includes("vadakara")
+
+ 
+  
+ 
+}*/
 
   useEffect(() => {
     let tariffData = [];
+  
 
-    tariff ?.map((item, index) => {
+    tariff?.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "center" ,}}>
           <RemoveRedEye onClick={()=>{handleClickOpenForm(item)}}
@@ -197,6 +263,38 @@ const[tableData,setTableData]=useState([])
          
         </div>
       );
+      if(item.status==0){
+      item.activestatus = (
+        
+        <div style={{ display: "flex", justifyContent: "center" ,}}>
+        <Button color="success" size="sm" onClick={()=>{
+          dispatch(updateTariffStatus(item))
+        }}>Active </Button>
+         
+        </div>
+      );}
+      if(item.status==1){
+        item.activestatus = (
+        
+          <div style={{ display: "flex", justifyContent: "center" ,}}>
+          <Button color="danger" size="sm" onClick={()=>{
+            dispatch(updateTariffStatus(item))
+          }}>Inactive</Button>
+           
+          </div>
+        );}
+        if(item.status==2){
+          item.activestatus = (
+          
+            <div style={{ display: "flex", justifyContent: "center" ,}}>
+            <Button color="primary" size="sm" onClick={()=>{
+              dispatch(updateTariffStatus(item))
+            }}>Hold</Button>
+             
+            </div>
+          )}
+
+      
       //   item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
@@ -267,7 +365,7 @@ const[tableData,setTableData]=useState([])
       },
       {
         label: "Status",
-        field: "status",
+        field: "activestatus",
         sort: "asc",
         width: 200,
       },
@@ -278,7 +376,135 @@ const[tableData,setTableData]=useState([])
         width: 200,
       },
     ],
-    rows: tariffForTable,
+    rows: tariffForTable
+  };
+ 
+  useEffect(() => {
+    let newtariffData = [];
+  
+
+    filteredData?.map((item, index) => {
+      item.action = (
+        <div style={{ display: "flex", justifyContent: "center" ,}}>
+          <RemoveRedEye onClick={()=>{handleClickOpenForm(item)}}
+              style={{ cursor: "pointer" }}/>
+         
+        </div>
+      );
+      if(item.status==0){
+        item.activestatus = (
+          
+          <div style={{ display: "flex", justifyContent: "center" ,}}>
+          <Button color="success" size="sm" onClick={()=>{
+            dispatch(updateTariffStatus(item))
+          }}>Active </Button>
+           
+          </div>
+        );}
+        if(item.status==1){
+          item.activestatus = (
+          
+            <div style={{ display: "flex", justifyContent: "center" ,}}>
+            <Button color="danger" size="sm" onClick={()=>{
+              dispatch(updateTariffStatus(item))
+            }}>Inactive</Button>
+             
+            </div>
+          );}
+          if(item.status==2){
+            item.activestatus = (
+            
+              <div style={{ display: "flex", justifyContent: "center" ,}}>
+              <Button color="primary" size="sm" onClick={()=>{
+                dispatch(updateTariffStatus(item))
+              }}>Hold</Button>
+               
+              </div>
+            )}
+  
+        
+      //   item.id = index + 1;
+      //   item.name1 = `${item.firstName} ${item.lastName}`;
+
+      //   item.privilage1 = item.privilage && item.privilage.name;
+      //   item.company1 = item.company && item.company.name;
+     
+        newtariffData.push(item);
+    });
+     setTariffForTable(newtariffData);
+  }, [filteredData]);
+
+  const fdata = {
+    columns: [
+      {
+        label: "#",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Date",
+        field: "date",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Time",
+        field: "time",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Customer ID",
+        field: "customerId",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Name",
+        field: "cust_name",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Package",
+        field: "package",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Validity",
+        field: "validity",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Staff",
+        field: "staff",
+        sort: "asc",
+        width: 200,
+      },
+
+      {
+        label: "Basic fee		",
+        field: "basicfee",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Status",
+        field: "activestatus",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "	Action	",
+        field: "action",
+        sort: "asc",
+        width: 200,
+      },
+    ],
+    rows: tariffForTable
   };
 
   //   let privilagesOptionsData =
@@ -388,6 +614,56 @@ const[tableData,setTableData]=useState([])
   //   let closeModal = () => {
   //     setShowModal(false);
   //     setUserIdToBeUpdated(null);
+ 
+    
+   
+  function handleChangeDistrict(values){
+   
+   setDistrict(values);
+}
+ 
+function handelChangeLocalbody(value){
+   setLocalbody(value);
+let filterData=tariff?.filter(item=>item.localbodyName===value.label)
+  setFilteredData(filterData)
+}
+function handleChangestatus(values){
+  setStatus(values);
+  
+let filterData=tariff?.filter(item=>item.status===values.value)
+ setFilteredData(filterData)
+}
+  
+function handleChangepackage(value){
+   setSelectedPackage(value);
+     let filterData=tariff?.filter(item=>item.package===value.label)
+      setFilteredData(filterData)
+     }
+ 
+  
+  function handleChangeDate(value){
+   console.log(value)
+    setDateValue(value)
+    const format2 = "DD-MM-YYYY"
+   
+   
+ let ndate = moment(value).format(format2);
+
+    console.log(ndate)
+    let filterData=tariff?.filter(item=>item.date===ndate)
+    setFilteredData(filterData)
+ 
+
+  }
+  function handleClick(){
+    setDistrict({});
+    setLocalbody({});
+    setFilteredData(tariff);
+    setSelectedPackage({})
+    setDateValue(null)
+    setStatus({})
+  }
+
   //   };
 
   return (
@@ -402,15 +678,19 @@ const[tableData,setTableData]=useState([])
                 <Row>
                   <Col md="3">
                     <div className="mb-3">
-                      <Label htmlFor="validationCustom05">Date</Label>
-                      <div className="col-md-10">
-                        <input
-                          className="form-control"
-                          type="date"
-                          defaultValue="2019-08-19"
-                          id="example-date-input"
-                        />
-                      </div>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                              <Stack spacing={10} >
+                                <DesktopDatePicker
+                                  label="Date"
+                                  inputFormat="dd/MM/yyyy"
+                                 value={datevalue}
+                                 onChange={handleChangeDate}
+                                 renderInput={(params) => (
+                                  <TextField  {...params} />
+                                )}
+                                />
+                              </Stack>
+                            </LocalizationProvider>
                     </div>
                   </Col>
                   <Col md="3">
@@ -418,13 +698,22 @@ const[tableData,setTableData]=useState([])
                       <Label>District</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={district}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
-                      />
+                       
+                        onChange={handleChangeDistrict}
+                        options = {districtOptions ?.map((items)=>{
+                          return{
+                            label:items.district_name,
+                            value:items._id
+                            
+                          }
+                        })}
+                       />
                     </div>
                   </Col>
                   <Col md="3">
@@ -432,12 +721,20 @@ const[tableData,setTableData]=useState([])
                       <Label>Localbody</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={localbody}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        onChange={handelChangeLocalbody}
+                       options={localbodies?.filter(item=>item.dist_id.district_name===district.label)
+                       .map((itm)=>{
+                         return{
+                           label:itm.localbody_name,
+                           value:itm._id,
+                         }
+                       })} 
                       />
                     </div>
                   </Col>
@@ -452,6 +749,13 @@ const[tableData,setTableData]=useState([])
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={groups ?.filter(item=>item.group_localbody_name_id.localbody_name===localbody.label)
+                          .map((itm)=>{
+                            return{
+                              label:itm.group_name,
+                              value:itm._id,
+                            }
+                          })} 
                       />
                     </div>
                   </Col>
@@ -460,12 +764,19 @@ const[tableData,setTableData]=useState([])
                       <Label>Package</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={selectedPackage}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        onChange={handleChangepackage}
+                        options={packages?.map((item)=>{
+                          return{
+                            label:item.package_name,
+                            value:item._id
+                          }
+                        })}
                       />
                     </div>
                   </Col>
@@ -474,24 +785,53 @@ const[tableData,setTableData]=useState([])
                       <Label>Status</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={status}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
+                        onChange={handleChangestatus}
                         classNamePrefix="select2-selection"
+                        options={statusOptions}
                       />
                     </div>
+                   
+                  </Col>
+                  <Col md="3">
+                    <div className="mb-3">
+                     <LoopIcon onClick={handleClick} ></LoopIcon>
+                    </div></Col>
+                    <Col md="3">
+                    <div className="mb-3">
+                   
+                    {filteredData ?
+                    <Button color="success">
+                    <CSVLink
+       // headers={fileHeaders}
+        data={tariffForTable}
+        fileName="results.csv"
+        target="_blank"
+      >
+        Export
+      </CSVLink></Button>:null}
+      </div>
                   </Col>
                 </Row>
-                <MDBDataTable
-                  responsive
-                  bordered
-                  data={data}
-                  searching={true}
-                  paging={false}
-                  info={false}
-                />
+           {filteredData?  <MDBDataTable
+                responsive
+                bordered
+                data={fdata}
+                searching={true}
+                paging={false}
+                info={false}
+              /> :<MDBDataTable
+              responsive
+              bordered
+              data={data}
+              searching={true}
+              paging={false}
+              info={false}
+            />}
               </CardBody>
             </Card>
           </Col>
@@ -621,7 +961,7 @@ const[tableData,setTableData]=useState([])
                        <TableCell component="th" scope="row">
                        Staff
                        </TableCell>
-                       <TableCell align="left"></TableCell>
+                       <TableCell align="left">{row.staff}</TableCell>
                        
                       
 

@@ -77,7 +77,7 @@ getDistrictList = (req) => {
 //   });
 // };
 
-getDistrictListOptions = (req) => {
+getDistrictsListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       let districts = await models.District.find({
@@ -164,7 +164,7 @@ module.exports = {
   createDistrict,
   // getDistrictsList,
   getDistrictList,
-  getDistrictListOptions,
+  getDistrictsListOptions,
   getDistrictData,
   updateDistrict,
   deleteDistrict,

@@ -24,6 +24,7 @@ export const ADD_DISTRICT = "/district";
 export const GET_DISTRICT = "/district";
 export const UPDATE_DISTRICT = "/district";
 export const DELETE_DISTRICT = "/district";
+export const GET_DISTRICT_OPTIONS = "/district/list/options";
 
 //WARDS
 export const GET_WARDS = "/ward/list";
@@ -82,4 +83,6 @@ export const DELETE_CUST_CATEGORY = "/custCategory";
 export const GET_QRCODE="/qrcode/list";
 export const ADD_QRCODE = "/qrcode";
 
-export const GET_TARIFF="/tariff/list"
+export const GET_TARIFF="/tariff/list";
+export const GET_TARIFF_OPTIONS="/tariff/list/options";
+export const UPDATE_TARIFF_STATUS = "/tariff";

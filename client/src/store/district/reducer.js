@@ -11,11 +11,15 @@ import {
   UPDATE_DISTRICT,
   UPDATE_DISTRICT_SUCCESS,
   UPDATE_DISTRICT_FAIL,
+  GET_DISTRICT_OPTIONS,
+  GET_DISTRICT_OPTIONS_FAIL,
+  GET_DISTRICT_OPTIONS_SUCCESS,
   
 } from "./actionTypes";
 
 const INIT_STATE = {
   districts: [],
+  districtOptions:[],
   addingDistrict: false,
   deletingDistrict: false,
   addDistrictResponse: {},
@@ -28,6 +32,23 @@ const INIT_STATE = {
 
 const District = (state = INIT_STATE, action) => {
   switch (action.type) {
+    case GET_DISTRICT_OPTIONS:
+      return {
+        ...state,
+        params: action.payload,
+      };
+
+    case GET_DISTRICT_OPTIONS_SUCCESS:
+      return {
+        ...state,
+        districtOptions: action.payload.data,
+      };
+
+    case GET_DISTRICT_OPTIONS_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case GET_DISTRICTS:
       return {
         ...state,

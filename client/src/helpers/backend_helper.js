@@ -49,7 +49,7 @@ export const addDistrict = (district) => post(url.ADD_DISTRICT, district);
 export const getDistrict = (userId) => get(url.GET_DISTRICT, userId);
 export const updateDistrict = (district) => put(`${url.UPDATE_DISTRICT}/${district._id}`, district);
 export const deleteDistrict = (userId) => del(url.DELETE_DISTRICT, userId);
-
+export const getDistrictOptions=()=>get(url.GET_DISTRICT_OPTIONS)
 // get wards
 export const getWards  = () => get(url.GET_WARDS);
 
@@ -65,7 +65,7 @@ export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
 
 // add localbodies
 export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
-export const getLocalbody = (localbodyname) => get(`${url.GET_LOCALBODY}/${localbodyname}`, {localbodyname:localbodyname});
+export const getLocalbody = (localbodyname) => get(url.GET_LOCALBODY, localbodyname);
 export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
 export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
 
@@ -125,3 +125,5 @@ export const getQrcode  = () => get(url.GET_QRCODE);
 export const addQrcode = (data) => post(url.ADD_QRCODE, data);
 
 export const getTariff=()=>get(url.GET_TARIFF);
+export const getTariffOptions=()=>get(url.GET_TARIFF_OPTIONS);
+export const updateTariffStatus = (tariff) => put(`${url.UPDATE_TARIFF_STATUS}/${tariff._id}`,tariff)

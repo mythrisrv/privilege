@@ -14,8 +14,24 @@ import {
   DELETE_DISTRICT,
   DELETE_DISTRICT_FAIL,
   DELETE_DISTRICT_SUCCESS,
+  GET_DISTRICT_OPTIONS_SUCCESS,
+  GET_DISTRICT_OPTIONS,
+  GET_DISTRICT_OPTIONS_FAIL,
   
 } from "./actionTypes";
+export const getDistrictOptions = () => ({
+  type: GET_DISTRICT_OPTIONS,
+});
+
+export const getDistrictOptionsSuccess = (users) => ({
+  type: GET_DISTRICT_OPTIONS_SUCCESS,
+  payload: users,
+});
+
+export const getDistrictOptionsFail = (error) => ({
+  type: GET_DISTRICT_OPTIONS_FAIL,
+  payload: error,
+});
 
 export const getDistricts = () => ({
   type: GET_DISTRICTS,

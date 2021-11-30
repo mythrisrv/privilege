@@ -130,8 +130,8 @@ const DatatableTables = () => {
         cid: "MK0001",
         cname: "SRV Infotech",
         code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
+        pname: "Vijith",
+        mobile: "9099865790",
         city: "Kannur",
         addedby: "admin",
         action: (
@@ -144,11 +144,11 @@ const DatatableTables = () => {
         ),
       },
       {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
+        cid: "MK0002",
+        cname: "HAZEL GREEN",
+        code: "SGH",
+        pname: "Vijith",
+        mobile: "8904567834",
         city: "Kannur",
         addedby: "admin",
         action: (
@@ -160,13 +160,14 @@ const DatatableTables = () => {
           </>
         ),
       },
+    
       {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
+        cid: "MK0003",
+        cname: "MyKIT",
+        code: "MGH",
+        pname: "Satyanand",
+        mobile: "9873426709",
+        city: "Kozhikode",
         addedby: "admin",
         action: (
           <>
@@ -177,142 +178,7 @@ const DatatableTables = () => {
           </>
         ),
       },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
-      {
-        cid: "MK0001",
-        cname: "SRV Infotech",
-        code: "SRV",
-        pname: "abc",
-        mobile: "9999999999",
-        city: "Kannur",
-        addedby: "admin",
-        action: (
-          <>
-            {" "}
-            <RemoveRedEye />
-            <EditIcon />
-            <DeleteIcon />
-          </>
-        ),
-      },
+      
     ],
   };
 

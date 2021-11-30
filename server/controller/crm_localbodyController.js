@@ -54,7 +54,7 @@ getLocalbodiesList = (req) => {
         localbody_status: 0,
       }).populate("localbody_company","company_name -_id")
      .populate("localbody_addedby","username -_id")
-     .populate("dist_id","district_name -_id")
+     .populate("dist_id","district_name ")
       .sort({createdAt:-1})
       resolve(localbody);
     } catch (err) {

@@ -66,6 +66,7 @@ router.get("/list", [jwtauth], async (req, res) => {
 router.get("/list/options", [jwtauth], async (req, res) => {
   try {
     let item = await getDistrictsListOptions(req);
+    
     res.status(200).json({
       status: 200,
       data: item,

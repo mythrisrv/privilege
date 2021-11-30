@@ -6,6 +6,7 @@ import {
   DELETE_DISTRICT,
   UPDATE_DISTRICT,
   GET_DISTRICTS,
+  GET_DISTRICT_OPTIONS,
   
 } from "./actionTypes";
 
@@ -20,6 +21,8 @@ import {
   updateDistrictSuccess,
   deleteDistrictFail,
   deleteDistrictSuccess,
+  getDistrictOptionsSuccess,
+  getDistrictOptionsFail,
   
 } from "./actions";
 
@@ -30,7 +33,16 @@ import {
   addDistrict,
   updateDistrict,
   deleteDistrict,
+  getDistrictOptions,
 } from "../../helpers/backend_helper";
+function* fetchDistrictOptions() {
+  try {
+    const response = yield call(getDistrictOptions);
+    yield put(getDistrictOptionsSuccess(response));
+  } catch (error) {
+    yield put(getDistrictOptionsFail(error));
+  }
+}
 
 function* fetchDistricts() {
   try {
@@ -94,7 +106,8 @@ function* onDeleteDistrict({ payload: userId }) {
 }
 
 
-function* userSaga() {
+function* districtSaga() {
+  yield takeEvery(GET_DISTRICT_OPTIONS, fetchDistrictOptions);
   yield takeEvery(GET_DISTRICTS, fetchDistricts);
   yield takeEvery(GET_DISTRICT, onGetDistrict);
   yield takeEvery(ADD_DISTRICT, onAddDistrict);
@@ -104,4 +117,4 @@ function* userSaga() {
 
 }
 
-export default userSaga;
+export default districtSaga;
