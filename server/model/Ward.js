@@ -43,14 +43,15 @@ let wardSchema = new Schema(
       },
      localbody_type_id:{
         type: Schema.Types.ObjectId,
-        // ref: "tbl_local_body",
+         ref: "tbl_local_body",
        },
      localbody_name_id:{
         type: Schema.Types.ObjectId,
          ref: "tbl_local_body_name",
       },
     ward_company:{
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"tbl_company"
     },
     createdAt:{
        type:Date,

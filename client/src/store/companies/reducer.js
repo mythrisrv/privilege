@@ -15,7 +15,7 @@ const companies = (state = INIT_STATE, action) => {
     case GET_COMPANIES_OPTIONS_SUCCESS:
       return {
         ...state,
-        companiesOptions: action.payload,
+        companiesOptions: action.payload.data,
       };
 
     case GET_COMPANIES_OPTIONS_FAIL:

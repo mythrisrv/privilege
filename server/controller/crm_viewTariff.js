@@ -141,6 +141,7 @@ updateTariffAssign = (req) => {
 }
 module.exports={
     getTariffDetailes,
-    getPackageOptions
+    getPackageOptions,
+    updateTariffAssign
 
 }

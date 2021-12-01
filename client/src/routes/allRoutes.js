@@ -236,7 +236,7 @@ const userRoutes = [
    { path: "/Localbody", component: Localbody },
    { path: "/Ward", component: Ward },
    {path:"/Group",component:Group},
-   {path:"/Customer-Cat",component:CustomerCategory},
+   {path:"/CustomerCategory",component:CustomerCategory},
 
    //Customers
    {path:"/Customer",component:AddCustomer},

@@ -14,6 +14,12 @@ import {
   DELETE_LOCALBODY,
   DELETE_LOCALBODY_FAIL,
   DELETE_LOCALBODY_SUCCESS,
+  GET_LOCALBODY_TYPES,
+  GET_LOCALBODY_TYPES_SUCCESS,
+  GET_LOCALBODY_TYPES_FAIL,
+  GET_LOCALBODY_OPTIONS,
+  GET_LOCALBODY_OPTIONS_SUCCESS,
+  GET_LOCALBODY_OPTIONS_FAIL,
 } from "./actionTypes";
 
 export const getLocalbodies = () => ({
@@ -45,9 +51,9 @@ export const addLocalbodyFail = (error) => ({
   payload: error,
 });
 
-export const getLocalbody = (localbody) => ({
+export const getLocalbody = (localbodyId) => ({
   type: GET_LOCALBODY,
-  payload: localbody,
+  payload: localbodyId,
 });
 
 export const getLocalbodySuccess = (localbody) => ({
@@ -87,5 +93,31 @@ export const deleteLocalbodySuccess = (localbody) => ({
 
 export const deleteLocalbodyFail = (error) => ({
   type: DELETE_LOCALBODY_FAIL,
+  payload: error,
+});
+export const getLocalbodyTypes = () => ({
+  type: GET_LOCALBODY_TYPES,
+});
+
+export const getLocalbodyTypesSuccess = (localbodyType) => ({
+  type: GET_LOCALBODY_TYPES_SUCCESS,
+  payload: localbodyType,
+});
+
+export const getLocalbodyTypesFail = (error) => ({
+  type: GET_LOCALBODY_TYPES_FAIL,
+  payload: error,
+});
+export const getLocalbodyOptions = () => ({
+  type: GET_LOCALBODY_OPTIONS,
+});
+
+export const getLocalbodyOptionsSuccess = (localbodyOptions) => ({
+  type: GET_LOCALBODY_OPTIONS_SUCCESS,
+  payload: localbodyOptions,
+});
+
+export const getLocalbodyOptionsFail = (error) => ({
+  type: GET_LOCALBODY_OPTIONS_FAIL,
   payload: error,
 });

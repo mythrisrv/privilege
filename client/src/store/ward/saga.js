@@ -79,11 +79,11 @@ function* onUpdateWard({ payload: ward }) {
   delete ward.branch1;
   delete ward.action;
   console.log(ward);
-  if (ward.privilage) {
-    ward.privilage = ward.privilage._id;
+  if (ward.wardno) {
+    ward.ward_no= ward.wardno.name;
   }
-  if (ward.company) {
-    ward.company = ward.company._id;
+  if (ward.localbody) {
+    ward.localbody_name_id = ward.localbody._id;
   }
   if (ward.branch) {
     ward.branch = ward.branch._id;

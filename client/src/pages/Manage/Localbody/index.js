@@ -16,8 +16,9 @@ import {
   getCompaniesOptionsSuccess,
   getDistrictsSuccess,
   getBranchesOptions,
-  getDistricts,
+  getDistrictOptions,
   updateLocalbody,
+  getLocalbodyTypes,
   formreset
 } from "../../../store/actions";
 
@@ -43,12 +44,12 @@ const Localbodies = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [localbodysForTable, setLocalbodiesForTable] = useState([]);
 const[companyOptions,setcompanyOptions]=useState([])
-const[companyname,setCompanyname]=useState("");
-const[districtname,setDistrictname]=useState("");
-const[localbodytype,setlocalbodytype]=useState("");
+const[companyname,setCompanyname]=useState({});
+const[districtname,setDistrictname]=useState({});
+const[localbodytype,setlocalbodytype]=useState({});
 const[localbodyname,setlocalbodyname]=useState("");
 const[shortcode,setshortcode]=useState("");
-const [districtOptions,setdistrictOptions]=useState([])
+//const [districtOptions,setdistrictOptions]=useState([])
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
     password: "",
@@ -62,10 +63,11 @@ const [districtOptions,setdistrictOptions]=useState([])
     deleteLocalbodyResponse,
     updateLocalbodyResponse,
     error,
+    localbodyTypes,
   } = useSelector((state) => state.localbodies);
 
-  const companies=useSelector((state)=>state.companies);
-const district=useSelector((state)=>state.districts);
+  const {companiesOptions}=useSelector((state)=>state.companies);
+const {districtOptions}=useSelector((state)=>state.districts);
   const dispatch = useDispatch();
 
  
@@ -75,7 +77,8 @@ const district=useSelector((state)=>state.districts);
     dispatch(getLocalbodies())
         dispatch(getCompaniesOptions());
         
-        dispatch(getDistricts());
+        dispatch(getDistrictOptions());
+        dispatch(getLocalbodyTypes())
       
     },[])
   
@@ -116,10 +119,29 @@ const district=useSelector((state)=>state.districts);
 
   let preUpdateLocalbody = (item) => {
     console.log(item)
-     setCompanyname(item.company_name)
-      //handleSelectedPrivilage(privilage);
-    setDistrictname(item.district_name);
-    setlocalbodytype(item.localbody_type);
+     if (item.localbody_company) {
+            let company={
+              label:item.localbody_company.company_name,
+              value:item.localbody_company._id
+            }
+            handleChangeCompany(company)
+          }
+          if (item.dist_id) {
+            let district = {
+             label: item.dist_id.district_name,
+             value: item.dist_id._id,
+           };
+         handleChangeDistrictName(district);
+         }
+    
+    if(item.local_body_id){
+      let type={
+        label:item.local_body_id.localbody_type_name,
+        value:item.local_body_id._id,
+      }
+      handleChangeLocalbodyType(type)
+    }
+   
     setlocalbodyname(item.localbody_name)
     setshortcode(item.short_code)
    
@@ -127,12 +149,45 @@ const district=useSelector((state)=>state.districts);
     setLocalbodyIdToBeUpdated(item._id);
     setLocalbodyObject({ ...item, password: null });
   };
-
+console.log(localbodyObject)
   let preUpdateLocalbodyPassword = (item) => {
     setLocalbodyIdToBeUpdated(item._id);
     setShowModal(true);
   };
+  //let preUpdateUser = (item) => {
+    //     if (item.privilage) {
+    //       let privilage = {
+    //         label: item.privilage.name,
+    //         value: item.privilage._id,
+    //       };
+    //       handleSelectedPrivilage(privilage);
+    //     }
+    //     if (item.company) {
+    //       let company = {
+    //         label: item.company.name,
+    //         value: item.company._id,
+    //       };
+    //       handleSelectedCompany(company);
+    //     }
+    //     if (item.branch) {
+    //       let branch = {
+    //         label: item.branch.name,
+    //         value: item.branch._id,
+    //       };
+    //       handleSelectedBranch(branch);
+    //     }
+  
+    //     setUserIdToBeUpdated(item._id);
+    //     setUserObject({ ...item, password: null });
+    //   };
+  
+    //   let preUpdateUserPassword = (item) => {
+    //     setUserIdToBeUpdated(item._id);
+    //     setShowModal(true);
+    //   };
+  
 
+  
   useEffect(() => {
     let localbodyData = [];
 
@@ -167,15 +222,19 @@ const district=useSelector((state)=>state.districts);
       item.id = index + 1;
       if(item.localbody_addedby!=null)
       {
-        item.localbody_addedby=item.localbody_addedby.username;
+        item.localbodyaddedby=item.localbody_addedby.username;
       }
       if(item.localbody_company!=null)
       {
         item.company_name=item.localbody_company.company_name;
       }
-      if(item.dist_id)
+      if(item.dist_id!=null)
       {
         item.district_name=item.dist_id.district_name;
+      }
+      if(item.local_body_id)
+      {
+        item.localbody_type=item.local_body_id.localbody_type_name;
       }
       
       
@@ -237,7 +296,7 @@ const district=useSelector((state)=>state.districts);
       },
       {
         label: "Staff",
-        field: "localbody_addedby",
+        field: "localbodyaddedby",
         sort: "asc",
         width: 400,
       },
@@ -259,24 +318,30 @@ const district=useSelector((state)=>state.districts);
    setLocalbodyObject({ ...localbodyObject, [name]: value });
   }
 
-  function handleChangeCompany(e){
-    let name = e.target.name;
-    let value = e.target.value;
+  function handleChangeCompany(value){
+    let newValue = {
+      name: value.label,
+       _id: value.value,
+     };
    setCompanyname(value)
-   setLocalbodyObject({ ...localbodyObject, [name]: value });
+   setLocalbodyObject({ ...localbodyObject, company: newValue});
   }
-  function handleChangeDistrictName(e){
-    let name = e.target.name;
-    let value = e.target.value;
+  function handleChangeDistrictName(value){
+    let newValue = {
+      name: value.label,
+       _id: value.value,
+     };
    setDistrictname(value)
-   setLocalbodyObject({ ...localbodyObject, [name]: value });
+   setLocalbodyObject({ ...localbodyObject, district: newValue });
   }
 
-  function handleChangeLocalbodyType(e){
-    let name = e.target.name;
-    let value = e.target.value;
+  function handleChangeLocalbodyType(value){
+    let newValue = {
+      name: value.label,
+       _id: value.value,
+     };
    setlocalbodytype(value)
-   setLocalbodyObject({ ...localbodyObject, [name]: value });
+   setLocalbodyObject({ ...localbodyObject, localbodytype: newValue });
   }
   function handleChangeShortcode(e){
     let name = e.target.name;
@@ -284,6 +349,7 @@ const district=useSelector((state)=>state.districts);
    setshortcode(value)
    setLocalbodyObject({ ...localbodyObject, [name]: value });
   }
+  
  /* function handleSelectedPrivilage(value) {
     let newValue = {
       name: value.label,
@@ -320,10 +386,10 @@ const district=useSelector((state)=>state.districts);
     localbodyIdTobeUpdated
       ? dispatch(updateLocalbody(localbodyObject))
       : dispatch(addLocalbody(localbodyObject));
-    setCompanyname("");
-    setDistrictname("");
+    setCompanyname({});
+    setDistrictname({});
     setlocalbodyname("");
-    setlocalbodytype("");
+    setlocalbodytype({});
     setshortcode("")
   };
 
@@ -381,46 +447,44 @@ const district=useSelector((state)=>state.districts);
                       <Col md="3">
                         <div className="mb-3">
                          
-                        <FormGroup>
+                        <Label>Company</Label>
         
-        <Input type="select" name="company_name" id="exampleSelect" style={{appearance:"auto"}}  value={companyname}
-                            onChange={handleChangeCompany} onClick={()=>{
-                              console.log(companies);
-                              setcompanyOptions(companies.companiesOptions.data)
-                            }}>
-       <option>CompanyName</option>
-      {
-        companyOptions.map(options=>(
-           <option>{options.company_name}</option>
-         )
-
-         )
-       }
+        <Select  name="company_name"
+         id="exampleSelect"
+          style={{appearance:"auto"}} 
+           value={companyname}
+         onChange={handleChangeCompany} 
+         options={companiesOptions?.map((item)=>{
+           return{
+             label:item.company_name,
+             value:item._id,
+             key:item._id,
+           }
+         })}
      
-        </Input>
-      </FormGroup>
+      />
+     
                         </div>
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                         
-                        <FormGroup>
+                        <Label>District</Label>
         
-        <Input type="select" name="district_name" id="exampleSelect" style={{appearance:"auto"}}  value={districtname}
-                            onChange={handleChangeDistrictName} onClick={()=>{
-                              setdistrictOptions(district.districts)
-                            }}>
-        <option>District</option>
-        
-        {
-        districtOptions.map(options=>(
-           <option>{options.district_name}</option>
-         )
-
-         )
-       }
-        </Input>
-      </FormGroup>
+        <Select  name="district_name"
+         id="exampleSelect"
+          style={{appearance:"auto"}} 
+           value={districtname}
+         onChange={handleChangeDistrictName} 
+         options={districtOptions?.map((item)=>{
+           return{
+             label:item.district_name,
+             value:item._id,
+             key:item._id,
+           }
+         })}
+     
+      />
+                        
                         </div>
                       </Col>
                      
@@ -428,22 +492,27 @@ const district=useSelector((state)=>state.districts);
                       <Col md="3">
                         <div className="mb-3">
                          
-                        <FormGroup>
+                        <Label>Localbody Type</Label>
         
-        <Input type="select" name="localbody_type" id="exampleSelect" style={{appearance:"auto"}}  value={localbodytype}
-                            onChange={handleChangeLocalbodyType}>
-        <option>Local Body Type</option>
-        <option>Municipality</option>
-        <option>Gramapanchayath</option>
-        <option>corporation</option>
-         
-        </Input>
-      </FormGroup>
+        <Select  name="localbody_type"
+         id="exampleSelect"
+          style={{appearance:"auto"}} 
+           value={localbodytype}
+         onChange={handleChangeLocalbodyType} 
+         options={localbodyTypes?.map((item)=>{
+           return{
+             label:item.localbody_type_name,
+             value:item._id,
+             key:item._id,
+           }
+         })}
+     
+      />
                         </div>
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                         
+                        <Label htmlFor="validationCustom05">Localbody Name</Label>
                           <AvField
                             name="localbody_name"
                             placeholder="Localbody Name"

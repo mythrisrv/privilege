@@ -22,7 +22,9 @@ import {
   getGroup,
   addGroup,deleteGroup,updateGroup,
   getWardOptions,
-  getWards
+  getWards,
+  getLocalbodyOptions,
+  getLocalbody
 
   //getPrivilagesOptions,
 } from "../../../store/actions";
@@ -53,6 +55,7 @@ const Group = (props) => {
   const [selectedLocalbody, setselectedLocalbody] = useState({});
   const [selectedWard, setSelectedWard] = useState(null);
   const [groupname, setGroupname] = useState("");
+  const [groupcode, setGroupcode] = useState("");
   
   const[groupObject,setgroupObject]=useState({})
  
@@ -77,7 +80,7 @@ const Group = (props) => {
     deleteGroupResponse,
     updateGroupResponse
   } =useSelector((state)=>state.groups)
-  const localbodiesOPtions=useSelector((state)=>state.localbodies.localbodies)
+  const {localbodyOptions,localbody}=useSelector((state)=>state.localbodies)
  
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
@@ -102,7 +105,7 @@ const Group = (props) => {
   useEffect(() => {
   // dispatch(getUsers())
      dispatch(getGroups());
-     dispatch(getLocalbodies());
+     dispatch(getLocalbodyOptions());
     // dispatch(getWardOptions(selectedLocalbody))
      
     }, []);
@@ -353,6 +356,12 @@ let groupsData=[];
   //     let value = e.target.value;
   //     setUserObject({ ...userObject, [name]: value });
   //   }
+  function code(){
+    let code;
+    if(localbody.short_code!=null)
+    code= `${localbody.short_code}/${groupname}`;
+    return code;
+  }
 
     function handleSelectedLocalbody(value) {
      
@@ -361,8 +370,10 @@ let groupsData=[];
       name: value.label,
        _id: value.value,
      };
+     dispatch(getLocalbody(value.value))
     dispatch(getWardOptions(value.value))
     setgroupObject({ ...groupObject, localbody: newValue })
+   
     
      }
     
@@ -502,7 +513,7 @@ let groupsData=[];
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
-                              options={localbodiesOPtions.map((localbodies)=>{
+                              options={localbodyOptions?.map((localbodies)=>{
                                 return{
                                 label:localbodies.localbody_name,
                                 value:localbodies._id,
@@ -520,6 +531,30 @@ let groupsData=[];
                           />
                         </div>
                       </Col>
+                      <Col md="3">
+                        <div className="mb-3" style={{paddingTop:"30px"}} >
+                        <div className="col-md-10">
+                          <AvField
+                            name="ward_name"
+                            placeholder=" group name"
+                            type="text"
+                            errorMessage="Enter ward Name"
+                            className="form-control"
+                            //validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={code()}
+                            //onChange={handleChangeWardname}
+                            
+                          />
+                          </div>
+                              </div>
+
+                      </Col>
+                     
+
+                     
+                     
+                     
                     
                       <Col md="3">
                         <div className="mb-3">
@@ -559,7 +594,7 @@ let groupsData=[];
                     
                       
                       <Col>
-                     <div className="mb-3">
+                     <div className="mb-3" style={{paddingTop:"30px"}}>
                      {groupIdTobeUpdated ? (
                       <Button
                         color="primary"

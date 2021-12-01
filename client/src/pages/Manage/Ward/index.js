@@ -19,7 +19,9 @@ import {
   updateWard,
   getLocalbody,
   getDistrict,
-  getLocalbodySuccess
+  getLocalbodySuccess,
+  getLocalbodyOptions,
+  
 } from "../../../store/actions";
 
 // Redux
@@ -42,11 +44,11 @@ const Wards = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [wardsForTable, setWardsForTable] = useState([]);
-  const [localbodyOptions,setlocalbodyOptions]=useState([])
+  //const [localbodyOptions,setlocalbodyOptions]=useState([])
   const [wardname,setWardname]=useState("")
-  const[localbodyname,setLocalbodyname]=useState("")
+  const[localbodyname,setLocalbodyname]=useState({})
   const[wardshortcode,setwardShortcode]=useState("")
-  const[wardno,setwardno]=useState("")
+  const[wardno,setwardno]=useState({})
   const [values, setValues] = useState({})
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -63,14 +65,23 @@ const Wards = (props) => {
     error,
   } = useSelector((state) => state.wards);
 
-  const localbody=useSelector((state)=>state.localbodies)
+  const {localbodyOptions,localbody}=useSelector((state)=>state.localbodies)
+  const wardnumbers=()=>{
+    
+    const options=[]
+   
+    for(let i=1;i<=100;i++){
+     options.push({label:i,value:i})
+    }
+  return options
+  }
   
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getWards());
-    dispatch(getLocalbodies())
+    dispatch(getLocalbodyOptions())
     
   }, []);
 
@@ -113,9 +124,27 @@ const Wards = (props) => {
   let preUpdateWard = (item) => {
    
      console.log(item)
-     setLocalbodyname(item.localbody_name)
-setwardno(item.ward_no);
-setWardname(item.ward_name)
+     if(item.localbody_name_id){
+       let localbody={
+         label:item.localbody_name_id.localbody_name,
+         value:item.localbody_name_id._id
+       }
+       handelChangeLocalbody(localbody)
+
+     }
+     if(item.ward_no){
+       let wardno={
+         label:item.ward_no,
+         value:item.ward_no
+       }
+       handleChangeWardno(wardno)
+     }
+     if(item.ward_name){
+       let ward=item.ward_name.split("/")
+       setWardname(ward[1])
+     }
+
+setwardShortcode(item.ward_name)
     
      // handleSelectedlocalbodyname(localbodyname);
     setWardIdToBeUpdated(item._id);
@@ -157,8 +186,10 @@ setWardname(item.ward_name)
         </div>
       );
       item.id = index + 1;
+      if(item.localbody_name_id!=null)
       item.localbody_name=item.localbody_name_id.localbody_name;
-      item.ward_addedby=item.ward_addedby.username;
+      if(item.ward_addedby)
+      item.wardaddedby=item.ward_addedby.username;
       wardData.push(item);
     });
     setWardsForTable(wardData);
@@ -204,7 +235,7 @@ setWardname(item.ward_name)
       },
       {
         label: "Staff",
-        field: "ward_addedby",
+        field: "wardaddedby",
         sort: "asc",
         width: 150,
       },
@@ -217,39 +248,55 @@ setWardname(item.ward_name)
     rows: wardsForTable,
   };
 
-
+function createwardname(){
+  setwardShortcode("hai")
+  return wardshortcode
+}
 
   function handleChangeWard(e) {
     let name = e.target.name;
     let value = e.target.value;
     setWardname(value)
- 
-   
-    setWardObject({ ...wardObject, [name]: value });
+  
+ let shortname=`${localbody.short_code}${wardno.value}/${value}`
+
+   setwardShortcode(shortname)
+  
+    setWardObject({ ...wardObject, ward_name:shortname});
+    
    
     
   }
-  function handleChangeWardno(e) {
-    let name = e.target.name;
-    let value = e.target.value;
+  
+  function handleChangeWardname(e){
+    console.log(e.target.value)
+
+  }
+  function handleChangeWardno(value) {
+    let newValue = {
+      name: value.label,
+       _id: value.value,
+     };
     setwardno(value)
  
    
-    setWardObject({ ...wardObject, [name]: value });
-    setValues({ ...values, [name]: value })
-    console.log(values)
+    setWardObject({ ...wardObject, wardno: newValue });
+   // setValues({ ...values, [name]: value })
+   // console.log(values)
   }
-  function handelChangeLocalbody(e){
+  function handelChangeLocalbody(values){
+   dispatch(getLocalbody(values.value))
    
-   
-    let name=e.target.name;
-    let value=e.target.value;
-    dispatch(getLocalbody(value))
-    setLocalbodyname(value)
+    let newValue = {
+      name: values.label,
+       _id: values.value,
+     };
+    
+    setLocalbodyname(values)
 
     
-  console.log(localbody.localbody)
-    setWardObject({ ...wardObject, [name]: value });
+ // console.log(localbody.localbody)
+    setWardObject({ ...wardObject, localbody: newValue });
    
     }
     
@@ -291,9 +338,10 @@ setWardname(item.ward_name)
     wardIdTobeUpdated
       ? dispatch(updateWard(wardObject))
       : dispatch(addWard(wardObject));
-      setLocalbodyname("");
-      setwardno("");
-      setWardname("")
+      setLocalbodyname({});
+      setwardno({});
+      setWardname("");
+      setwardShortcode("")
       
   };
 
@@ -352,66 +400,53 @@ setWardname(item.ward_name)
 
                       <Col md="3">
                         <div className="mb-3">
-                         
-                        <FormGroup>
-                        <Input type="select" name="localbody_name" id="exampleSelect" style={{appearance:"auto"}}  value={localbodyname}
+                        <Label>Localbody</Label>
+                          <Select
+                            name="localbody_name"
+                           value={localbodyname}
+                            options={localbodyOptions?.map((localbodies)=>{
+                                return{
+                                label:localbodies.localbody_name,
+                                value:localbodies._id,
+                                key:localbodies._id,
+                                }
+                              })
+                              }
+                            classNamePrefix="select2-selection"
                             onChange={handelChangeLocalbody}
-                            
-                            onClick={()=>{
-                             console.log(localbody)
-                              setlocalbodyOptions(localbody.localbodies)
-                              console.log(localbodyOptions)
-                            }}>
-                           
                               
-                             
                             
-        <option value="">Localbody </option>
- 
-        {
-        localbodyOptions.map(options=>(
-          
-           <option key={options._id}>{options.localbody_name}</option>
-         )
-
-         )
-       }
-        </Input>
-
-                       
-      </FormGroup>
+                          />
                         </div>
                       </Col>
+                    
+                       
+                       
                       <Col md="3">
                         <div className="mb-3">
                          
-                        <FormGroup>
-        
-        <Input type="select" name="ward_no" id="exampleSelect" style={{appearance:"auto"}}  value={wardno}
-                            onChange={handleChangeWardno}>
-        <option>Ward Number </option>
-    <option>1</option>
-    <option>2</option>
-    <option>3</option>
-    <option>4</option>
-    <option>5</option>
-    <option>6</option>
-    <option>7</option>
-    <option>8</option>
-    <option>9</option>
-    <option>10</option>
-    <option>11</option>
-        </Input>
-      </FormGroup>
+                        <Label>Ward Number</Label>
+                          <Select
+                            name="localbody_name"
+                           value={wardno}
+                            options={wardnumbers()}
+                            classNamePrefix="select2-selection"
+                            onChange={
+                              handleChangeWardno
+                              
+                            }
+                              
+                            
+                          />
                         </div>
                       </Col>
                      
 
                       <Col md="3">
                         <div className="mb-3">
-                         
+                         <Label>Ward Name</Label>
                           <AvField
-                            name="ward_name"
+                            name="wardname"
                             placeholder=" Ward name"
                             type="text"
                             errorMessage="Enter ward Name"
@@ -420,8 +455,27 @@ setWardname(item.ward_name)
                             id="validationCustom01"
                             value={wardname}
                             onChange={handleChangeWard}
+                                                     
+                          />
+                              </div>
+
+                      </Col>
+                      <Col md="3">
+                        <div className="mb-3" style={{paddingTop:"30px"}} >
+                        <div className="col-md-10">
+                          <AvField
+                            name="ward_name"
+                            placeholder=" Ward name"
+                            type="text"
+                            errorMessage="Enter ward Name"
+                            className="form-control"
+                            //validate={{ required: { value: true } }}
+                            id="validationCustom01"
+                            value={wardshortcode}
+                            onChange={handleChangeWardname}
                             
                           />
+                          </div>
                               </div>
 
                       </Col>

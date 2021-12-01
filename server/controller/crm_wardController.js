@@ -2,8 +2,9 @@ let models = require("../model");
 let moment = require("moment");
 
 createWard = (req) => {
+  console.log(req.body)
     var ip = req.ip;
-    const format2 = "YYYY-MM-DD"
+    const format2 = "DD-MM-YYYY"
     var date2 = new Date();
     date = moment(date2).format(format2);
     time = moment(date2).format("HH:mm A");
@@ -21,7 +22,8 @@ createWard = (req) => {
           ward_date:date,
           ward_time:time,
           ward_name:req.body.ward_name,
-          ward_no:req.body.ward_no,
+          ward_no:req.body.wardno.name,
+          localbody_name_id:req.body.localbody._id,
          // localbody_name:req.body.localbody_name,
           state_id:19,
           //dist_id:101,
@@ -31,11 +33,12 @@ createWard = (req) => {
         }
        );
        let localbody=await models.LocalbodyName.findOne({
-        $and :[ {localbody_name:req.body.localbody_name},{localbody_status:"0"}]
+        $and :[ {_id:req.body.localbody._id},{localbody_status:"0"}]
        })
-       ward.localbody_name_id=localbody._id;
+      
        ward.dist_id=localbody.dist_id;
        ward.ward_company=localbody.localbody_company;
+       ward.localbody_type_id=localbody.local_body_id;
 
       let numberOfWards = await models.Ward.countDocuments();
       ward.ward_id = numberOfWards + 1;
@@ -58,8 +61,8 @@ getWardsList = (req) => {
     try {
       let ward = await models.Ward.find({
         ward_status: 0,
-      }).populate("localbody_name_id","localbody_name -_id")
-      .populate("ward_addedby","username -_id")
+      }).populate("localbody_name_id","localbody_name")
+      .populate("ward_addedby","username ")
       .sort({createdAt:-1})
       
       resolve(ward);
@@ -115,25 +118,26 @@ getWardData = (req) => {
 };
 
 updateWard = (req) => {
+  console.log(req.body)
   return new Promise(async (resolve, reject) => {
+    
       //console.log(req.body)
     try {
-        let localbody=await models.LocalbodyName.findOne({
-            localbody_name:req.body.localbody_name
-        })
-
-  let data={
-      ward_name:req.body.ward_name,
-      ward_no:req.body.ward_no,
-      localbody_name_id:localbody._id,
-      ward_updatedby:req.user._id,
-      updatedAt:Date.now(),
-
-  }
-       
+      let localbody=await models.LocalbodyName.findOne(
+        {
+         $and:[ {_id:req.body.localbody_name_id},{localbody_status:"0"}]
+        }
+      )
+      if(localbody!=null){
+      req.body.dist_id=localbody.dist_id;
+      req.body.ward_company=localbody.localbody_company;
+      req.body.localbody_type_id=localbody.local_body_id;
+      }
+       req.body.updatedAt=Date.now();
+       req.body.ward_updatedby=req.user._id;
       let ward = await models.Ward.findByIdAndUpdate(
         req.params.ward_Id,
-        data,
+        req.body,
         {
           new: true,
         }

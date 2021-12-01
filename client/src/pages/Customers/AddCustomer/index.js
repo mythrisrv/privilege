@@ -1,13 +1,30 @@
+
+
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
+import { Paper, Box, Divider } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import Stack from "@mui/material/Stack";
+import SendIcon from "@mui/icons-material/Send";
 import SweetAlert from "react-bootstrap-sweetalert";
+import Resete from "@mui/icons-material/ResetTvRounded";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Filter from "@mui/icons-material/FilterAlt";
+import InputLabel from "@mui/material/InputLabel";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import FormControl from "@mui/material/FormControl";
 import Select from "react-select";
 import {
-
   //getCustomerTypesOptions,
   //getDesignationsOptions,
   //getDistrictOptions,
@@ -34,19 +51,52 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-//import "./user.scss";
+import "./AddCustomer.scss";
+
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+
+import TextField from "@mui/material/TextField";
+
+import Table from "@mui/material/Table";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import { styled } from "@mui/material/styles";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Customers = (props) => {
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  const [modal, setModal] = React.useState("1");
+
+  const handleModalChange = (event, newValue) => {
+    setModal(newValue);
+  };
+
   //edited
 
-  //const [selectedCustomerType,setSelectedCustomerType]=useState(null); 
+  //const [selectedCustomerType,setSelectedCustomerType]=useState(null);
   //const[selectedDesignation,setSelectedDesignation]=useState(null);
   //const[selectedDistrict,setSelectedDistrict]=useState(null);
   //const[selectedLocalbody,setSelectedLocalbody]=useState(null);
   //const[selectedWard,setSelectedWard]=useState(null);
   //const[selectedPackage,setSelectedPackage]=useState(null);
   //const[selectedBillingtype,setSelectedBillingtype]=useState(null);
-  
+
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedBranch, setSelectedBranch] = useState(null);
@@ -71,12 +121,10 @@ const Customers = (props) => {
     updateUserResponse,
     error,
   } = useSelector((state) => state.users);
-  
-const {
-  customers
-}=useSelector((state)=>state.customers);
+
+  const { customers } = useSelector((state) => state.customers);
   //edited
-  
+
   // const customertypeOptions = useSelector(
   //   (state)=> state.customertypes.customertypeOptions
   // );
@@ -105,8 +153,6 @@ const {
   //   (state)=> state.billingtypes.billingtypeOptions
   // );
 
-
-
   const privilagesOptions = useSelector(
     (state) => state.privilages.privilagesOptions
   );
@@ -120,12 +166,12 @@ const {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCustomers())
+    dispatch(getCustomers());
     //dispatch(getUsers());
     //dispatch(getPrivilagesOptions());
-   // dispatch(getCompaniesOptions());
+    // dispatch(getCompaniesOptions());
     //edited
-   //dispatch(getCustomerTypesOptions());
+    //dispatch(getCustomerTypesOptions());
     //dispatch(getDesignationOptions());
     //dispatch(getDistrictOptions());
     //dispatch(getLocalbodyOptions());
@@ -154,8 +200,6 @@ const {
       //selectedWard(null);
       //selectedPackage(null);
       //selectedBillingtype(null);
-
-
     } else if (addUserResponse.type === "failure") {
       toastr.error(error.data.message, addUserResponse.message);
     }
@@ -182,7 +226,7 @@ const {
   }, [updateUserResponse]);
 
   let preUpdateUser = (item) => {
-    //edited 
+    //edited
 
     // if (item.customertype) {
     //   let customertype = {
@@ -224,7 +268,6 @@ const {
     //   handleSelectedWard(Ward);
     // }
 
-    
     // if (item.package) {
     //   let package = {
     //     label:item.package.name,
@@ -233,15 +276,13 @@ const {
     //   handleSelectedPackage(package);
     // }
 
-
-     // if (item.billingtype) {
+    // if (item.billingtype) {
     //   let Billingtype = {
     //     label:item.billingtype.name,
     //     value: item.billingtype._id,
     //   };
     //   handleSelectedBillingtype(package);
     // }
-
 
     if (item.privilage) {
       let privilage = {
@@ -279,13 +320,16 @@ const {
 
     customers.map((item, index) => {
       item.action = (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <i
-            className="uil-key-skeleton"
+            className="uil-eye"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateUserPassword(item);
-            }}
+            onClick={handleClickOpen}
           ></i>
           <i
             className="uil-edit-alt"
@@ -314,22 +358,26 @@ const {
       item.privilage1 = item.privilage && item.privilage.name;
       item.company1 = item.company && item.company.name;
       item.branch1 = item.branch && item.branch.name;
-    // item.type=item.cust_type.customer_type_name;
-   // item.district=item.district.district_name
-      item.localbody=item.localbody_name.localbody_name;
-    if(item.ward!=null){item.ward=item.ward.ward_name}
-    else{item.ward=""}
-    if(item.district!=null){item.district=item.district.district_name}
-    else{item.district=""}
-     
-      if (item.cust_type!=null){
-        item.cust_type=item.cust_type.customer_type_name
+      // item.type=item.cust_type.customer_type_name;
+      // item.district=item.district.district_name
+      item.localbody = item.localbody_name.localbody_name;
+      if (item.ward != null) {
+        item.ward = item.ward.ward_name;
+      } else {
+        item.ward = "";
       }
-      else item.cust_type=""
-      if(item.cust_added_by!=null){
-        item.addedby=item.cust_added_by.username
+      if (item.district != null) {
+        item.district = item.district.district_name;
+      } else {
+        item.district = "";
       }
-      else item.addedby=""
+
+      if (item.cust_type != null) {
+        item.cust_type = item.cust_type.customer_type_name;
+      } else item.cust_type = "";
+      if (item.cust_added_by != null) {
+        item.addedby = item.cust_added_by.username;
+      } else item.addedby = "";
       customerData.push(item);
     });
     setUsersForTable(customerData);
@@ -337,78 +385,78 @@ const {
 
   const data = {
     columns: [
-              {
-                label: "#",
-                field: "id",
-                sort: "asc",
-                width: 150,
-              },
-              {
-                label: "Reg No",
-                field: "cust_reg_no",
-                sort: "asc",
-                width: 400,
-              },
-              {
-                label: "Type",
-                field: "cust_type",
-                sort: "asc",
-                width: 200,
-              },
-              {
-                label: "Name",
-                field: "cust_name",
-                sort: "asc",
-                width: 200,
-              },
-              {
-                label: "Phone",
-                field: "cust_phone",
-                sort: "asc",
-                width: 200,
-              },
-             
-              {
-                label: "District",
-                field: "district",
-                sort: "asc",
-                width: 150,
-              },
-              {
-                label: "Localbody",
-                field: "localbody",
-                sort: "asc",
-                width: 150,
-              },
-              {
-                label: "Ward",
-                field: "ward",
-                sort: "asc",
-                width: 100,
-              },
-              {
-                label: "Staff",
-                field: "addedby",
-                sort: "asc",
-                width: 100,
-              },
-              {
-                label: "Verification Status",
-                field: "cust_verification_status",
-                sort: "asc",
-                width: 100,
-              },
-              {
-                label: "Action",
-                field: "action",
-                width: 300,
-              },
-            ],
+      {
+        label: "#",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Reg No",
+        field: "cust_reg_no",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Type",
+        field: "cust_type",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Name",
+        field: "cust_name",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Phone",
+        field: "cust_phone",
+        sort: "asc",
+        width: 200,
+      },
+
+      {
+        label: "District",
+        field: "district",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Localbody",
+        field: "localbody",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Ward",
+        field: "ward",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        label: "Staff",
+        field: "addedby",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        label: "Verification Status",
+        field: "cust_verification_status",
+        sort: "asc",
+        width: 100,
+      },
+      {
+        label: "Action",
+        field: "action",
+        width: 300,
+      },
+    ],
     rows: usersForTable,
   };
 
-  //edited 
-  
+  //edited
+
   //  let customerTypeOptionsData =
   //     customertypeOptions &&
   //     customertypeOptions.data &&
@@ -479,7 +527,6 @@ const {
   //       };
   //     });
 
-
   let privilagesOptionsData =
     privilagesOptions &&
     privilagesOptions.data &&
@@ -510,50 +557,49 @@ const {
       };
     });
 
-    //edited
+  //edited
 
-    // const customertypeOptionsGroup = [
-    //   {
-    //     options:customerTypeOptionsData,
-    //   },
-    // ];
+  // const customertypeOptionsGroup = [
+  //   {
+  //     options:customerTypeOptionsData,
+  //   },
+  // ];
 
+  // const designationOptionsGroup = [
+  //   {
+  //     options:designationOptionsData,
+  //   },
+  // ];
 
-    // const designationOptionsGroup = [
-    //   {
-    //     options:designationOptionsData,
-    //   },
-    // ];
+  // const districtOptionsGroup = [
+  //   {
+  //     options:districtOptionsData,
+  //   },
+  // ];
 
-   // const districtOptionsGroup = [
-    //   {
-    //     options:districtOptionsData,
-    //   },
-    // ];
+  // const localbodyOptionsGroup = [
+  //   {
+  //     options:localbodyOptionsData,
+  //   },
+  // ];
 
-    // const localbodyOptionsGroup = [
-    //   {
-    //     options:localbodyOptionsData,
-    //   },
-    // ];
+  // const wardOptionsGroup = [
+  //   {
+  //     options:wardOptionsData,
+  //   },
+  // ];
 
-    // const wardOptionsGroup = [
-    //   {
-    //     options:wardOptionsData,
-    //   },
-    // ];
+  // const packageOptionsGroup = [
+  //   {
+  //     options:packageOptionsData,
+  //   },
+  // ];
 
-    // const packageOptionsGroup = [
-    //   {
-    //     options:packageOptionsData,
-    //   },
-    // ];
-
-    // const billingtypeOptionsGroup = [
-    //   {
-    //     options:billingtypeOptionsData,
-    //   },
-    // ];
+  // const billingtypeOptionsGroup = [
+  //   {
+  //     options:billingtypeOptionsData,
+  //   },
+  // ];
 
   const privilagesOptionsGroup = [
     {
@@ -617,35 +663,34 @@ const {
   //   setUserObject({ ...userObject, localbody: newValue });
   // }
 
-   // function  handleSelectedWard(value) {
-    //   let newValue = {
-    //     name: value.label,
-    //     _id: value.value,
-    //   };
-    //   setSelectedWard(value);
-    //   setUserObject({ ...userObject, ward: newValue });
-    // }
+  // function  handleSelectedWard(value) {
+  //   let newValue = {
+  //     name: value.label,
+  //     _id: value.value,
+  //   };
+  //   setSelectedWard(value);
+  //   setUserObject({ ...userObject, ward: newValue });
+  // }
 
-    // function  handleSelectedPackage(value) {
-    //   let newValue = {
-    //     name: value.label,
-    //     _id: value.value,
-    //   };
-    //   setSelectedPackage(value);
-    //   setUserObject({ ...userObject, package: newValue });
-    // }
-  
-    // function  handleSelectedBillingtype(value) {
-    //   let newValue = {
-    //     name: value.label,
-    //     _id: value.value,
-    //   };
-    //   setSelectedBillingtype(value);
-    //   setUserObject({ ...userObject, billingtype: newValue });
-    // }
-  
-  
-    function handleSelectedPrivilage(value) {
+  // function  handleSelectedPackage(value) {
+  //   let newValue = {
+  //     name: value.label,
+  //     _id: value.value,
+  //   };
+  //   setSelectedPackage(value);
+  //   setUserObject({ ...userObject, package: newValue });
+  // }
+
+  // function  handleSelectedBillingtype(value) {
+  //   let newValue = {
+  //     name: value.label,
+  //     _id: value.value,
+  //   };
+  //   setSelectedBillingtype(value);
+  //   setUserObject({ ...userObject, billingtype: newValue });
+  // }
+
+  function handleSelectedPrivilage(value) {
     let newValue = {
       name: value.label,
       _id: value.value,
@@ -700,6 +745,107 @@ const {
     setUserIdToBeUpdated(null);
   };
 
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  const rows = [
+    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+    createData("Eclair", 262, 16.0, 24, 6.0),
+  ];
+
+  // const [value, setValue] = React.useState('1');
+
+  // const handleModalChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [tab, setTab] = React.useState("1");
+
+  const handleTablChange = (event, newValue) => {
+    setTab(newValue);
+  };
+
+  const [tab1, setTab1] = React.useState("1");
+
+  const handleTablChange1 = (event, newValue) => {
+    setTab1(newValue);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
+  function createData(si, date, time, staff) {
+    return { si, date, time, staff };
+  }
+
+  const rows1 = [createData(1, 159, 6.0, 24), createData(2, 237, 9.0, 37)];
+
+  // Receipt table
+  const StyledTableCell1 = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow1 = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
+  function createData1(si, date, receiptno, amount, dueamount, staff) {
+    return { si, date, receiptno, amount, dueamount, staff };
+  }
+
+  const rows2 = [
+    createData1(1, "24 - 11 - 2021", "RE2111000004", "50/-", "50/-", "Prabija"),
+    createData1(
+      2,
+      "24 - 11 - 2021",
+      "RE2111000005",
+      "400/-",
+      "-350/-",
+      "Prabija"
+    ),
+  ];
+
   return (
     <React.Fragment>
       {confirmDeleteAlert ? (
@@ -719,83 +865,591 @@ const {
         </SweetAlert>
       ) : null}
 
-      <Modal
-        isOpen={showModal}
-        toggle={() => {
-          closeModal();
-        }}
-        centered={true}
-      >
-        <div className="modal-header">
-          <h5 className="modal-title mt-0">Confirmation</h5>
-          <button
-            type="button"
-            onClick={() => {
-              closeModal();
-            }}
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <AvForm
-          className="needs-validation"
-          onValidSubmit={(e, v) => {
-            handleValidSubmitPassword(e, v);
-          }}
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <div className="modal-body">
-            {/* <Row>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Password</Label>
-                  <AvField
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    errorMessage=" Please provide a valid password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.password}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-              <Col md="12">
-                <div className="mb-3">
-                  <Label htmlFor="validationCustom05">Confirm Password</Label>
-                  <AvField
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    type="password"
-                    errorMessage=" Please confirm the password"
-                    className="form-control"
-                    validate={{ required: { value: true } }}
-                    id="validationCustom05"
-                    value={passwordObject.confirmPassword}
-                    onChange={handleChangePassword}
-                  />
-                </div>
-              </Col>
-            </Row> */}
+          <div className="modal-content">
+            <DialogTitle id="alert-dialog-title">
+              <Button
+                style={{ float: "right" }}
+                color="red"
+                onClick={handleClose}
+                autoFocus
+              >
+                X
+              </Button>
+            </DialogTitle>
+            <Divider />
+
+            <DialogContent style={{ width: "fit-content" }}>
+              <DialogContentText id="alert-dialog-description">
+                <Box sx={{ width: "100%", typography: "body1" }}>
+                  <TabContext value={tab}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        onChange={handleTablChange}
+                        aria-label="lab API tabs example"
+                      >
+                        <Tab label="Customer Details" value="1" />
+                        <Tab label="Visit Log" value="2" />
+                        <Tab label="Invoice" value="3" />
+                        <Tab label="Receipt" value="4" />
+                        <Tab label="Statement" value="5" />
+                      </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                      <div className="row">
+                        <div className="col-xl-4">
+                          <div
+                            className="card"
+                            style={{
+                              width: "fit-content",
+                              height: "max-content",
+                            }}
+                          >
+                            <div className="card-body">
+                              <div className="float-end dropdown">
+                                <a
+                                  aria-haspopup="true"
+                                  className="text-body font-size-16 ddropdown-toggle"
+                                  aria-expanded="false"
+                                >
+                                  <i className="uil uil-ellipsis-h"></i>
+                                </a>
+                                <div
+                                  tabindex="-1"
+                                  role="menu"
+                                  aria-hidden="true"
+                                  className="dropdown-menu-end dropdown-menu"
+                                >
+                                  <a
+                                    to="/"
+                                    tabindex="0"
+                                    role="menuitem"
+                                    className="dropdown-item"
+                                  >
+                                    Edit
+                                  </a>
+                                  <a
+                                    to="/"
+                                    tabindex="1"
+                                    role="menuitem"
+                                    className="dropdown-item"
+                                  >
+                                    Action
+                                  </a>
+                                  <a
+                                    to="/"
+                                    tabindex="2"
+                                    role="menuitem"
+                                    className="dropdown-item"
+                                  >
+                                    Remove
+                                  </a>
+                                </div>
+                                {/* <div className="clearfix"></div> */}
+                                {/* <div>
+                                <img
+                                  alt
+                                  className="avatar-lg rounded-circle img-thumbnail"
+                                  src="/static/media/avatar-4.b23e41d9.jpg"
+                                />
+                              </div> */}
+                              </div>
+                              {/* Customer Details Tab start */}
+
+                              <Stack
+                                direction="row"
+                                spacing={2}
+                                style={{ justifyContent: "center" }}
+                              >
+                                <Avatar
+                                  alt="Remy Sharp"
+                                  src="/static/media/avatar-4.b23e41d9.jpg"
+                                  sx={{ width: 56, height: 56 }}
+                                  style={{
+                                    width: "35%",
+                                    height: "35%",
+                                    marginTop: "20%",
+                                    marginBottom: "10%",
+                                  }}
+                                />
+                              </Stack>
+                              <h5
+                                className="mt-3 mb-1"
+                                style={{ textAlign: "center" }}
+                              >
+                                Admin
+                              </h5>
+                              <p
+                                className="text-muted"
+                                style={{
+                                  textAlign: "center",
+                                  color: "#004A9C",
+                                }}
+                              >
+                                UI/UX Designer
+                              </p>
+
+                              <div
+                                className="mt-4 mb-4"
+                                style={{ textAlign: "center" }}
+                              >
+                                <button
+                                  type="button"
+                                  className="btn btn-light btn-sm"
+                                >
+                                  <i className="uil uil-envelope-alt me-2"></i>
+                                  Message
+                                </button>
+                              </div>
+                              <Divider />
+                              <br />
+                              <h5 className="font-size-16">About</h5>
+                              <p>
+                                Hi I'm Marcus,has been the industry's standard
+                                dummy text To an English person, it will seem
+                                like simplified English, as a skeptical
+                                Cambridge.
+                              </p>
+                              <div>
+                                <p className="mb-1">Name:</p>
+                                <h5 className="font-size-16">Admin</h5>
+                              </div>
+                              <div className="mt-4">
+                                <p className="mb-1">Mobile:</p>
+                                <h5 className="font-size-16">012-234-5678</h5>
+                              </div>
+                              <div className="mt-4">
+                                <p className="mb-1">Email:</p>
+                                <h5 className="font-size-16">
+                                  admin@gmail.com
+                                </h5>
+                              </div>
+                              <div className="mt-4">
+                                <p className="mb-1">Location:</p>
+                                <h5 className="font-size-16">Kerala(Kannur)</h5>
+                              </div>
+
+                              {/* second paper */}
+
+                              {/* Customer Details Tab end */}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-xl-8">
+                          <div className="mb-0 card">
+                            <TabContext value={tab1}>
+                              <TabList
+                                onChange={handleTablChange1}
+                                className="nav-tabs-custom nav-justified nav nav-tabs"
+                              >
+                                <Tab label="Item One" value="1" />
+                                <Tab label="Item Two" value="2" />
+                                <Tab label="Item Three" value="3" />
+                              </TabList>
+                            </TabContext>
+
+                            <div className="tab-content p-4">
+                              <div className="tab-pane active">
+                                <div>
+                                  <div>
+                                    <h5 className="font-size-16 mb-4">
+                                      Experience
+                                    </h5>
+                                    <ul className="activity-feed mb-0 ps-2">
+                                      <li>
+                                        <div className="feed-item-list">
+                                          <p className="text-muted mb-1">
+                                            2019 - 2020
+                                          </p>
+                                          <h5 className="font-size-16">
+                                            UI/
+                                            <span className="ir_external_link ir_score">
+                                              UX Designer
+                                            </span>
+                                          </h5>
+                                          <p>Abc Company</p>
+                                          <p className="text-muted">
+                                            To achieve this, it would be
+                                            necessary to have uniform grammar,
+                                            pronunciation and more common words.
+                                            If several languages coalesce, the
+                                            grammar of the resulting language is
+                                            more simple and regular than that of
+                                            the individual
+                                          </p>
+                                        </div>
+                                      </li>
+                                      <li className="feed-item">
+                                        <div className="feed-item-list">
+                                          <p className="text-muted mb-1">
+                                            2017 - 2019
+                                          </p>
+                                          <h5 className="font-size-16">
+                                            Graphic Designer
+                                          </h5>
+                                          <p className="text-muted">
+                                            It will be as simple as occidental
+                                            in fact, it will be Occidental. To
+                                            an English person, it will seem like
+                                            simplified English, as a skeptical
+                                            Cambridge friend of mine told me
+                                            what Occidental
+                                          </p>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  <div>
+                                    <h5 className="font-size-16 mb-4">
+                                      Projects
+                                    </h5>
+                                    <div className="table-responsive">
+                                      <div className="react-bootstrap-table">
+                                        <table className="table table table-nowrap table-hover mb-0">
+                                          <thead>
+                                            <tr>
+                                              <th
+                                                tabindex="0"
+                                                aria-label="# sortable"
+                                                className="sortable"
+                                              >
+                                                #
+                                                <span className="order-4"></span>
+                                              </th>
+
+                                              <th
+                                                tabindex="0"
+                                                aria-label="Name sortable"
+                                                className="sortable"
+                                              >
+                                                Name
+                                                <span className="order-4"></span>
+                                              </th>
+
+                                              <th
+                                                tabindex="0"
+                                                aria-label="Date sortable"
+                                                className="sortable"
+                                              >
+                                                Date
+                                                <span className="order-4"></span>
+                                              </th>
+                                              <th
+                                                tabindex="0"
+                                                aria-label="Status sortable"
+                                                className="sortable"
+                                              >
+                                                Status
+                                                <span className="order-4"></span>
+                                              </th>
+                                              <th
+                                                tabindex="0"
+                                                // aria-label="# sortable"
+                                                // className="sortable"
+                                              >
+                                                Action
+                                                {/* #<span className="order-4"></span> */}
+                                              </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td>1</td>
+                                              <td>Brand Logo Design</td>
+                                              <td>18 Jun, 2020</td>
+                                              <td>
+                                                <span className="badge font-size-12 bg-soft-primary">
+                                                  Open
+                                                </span>
+                                              </td>
+                                              <div className="dropdown">
+                                                <a
+                                                  aria-haspopup="true"
+                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
+                                                  aria-expanded="false"
+                                                >
+                                                  <i className="uil uil-ellipsis-v"></i>
+                                                </a>
+                                              </div>
+                                            </tr>
+                                            <tr>
+                                              <td>2</td>
+                                              <td>Minible Admin</td>
+                                              <td>18 Jun, 2020</td>
+                                              <td>
+                                                <span className="badge font-size-12 bg-soft-primary">
+                                                  Open
+                                                </span>
+                                              </td>
+                                              <div className="dropdown">
+                                                <a
+                                                  aria-haspopup="true"
+                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
+                                                  aria-expanded="false"
+                                                >
+                                                  <i className="uil uil-ellipsis-v"></i>
+                                                </a>
+                                              </div>
+                                              {/* <div
+                                                tabindex="-1"
+                                                role="menu"
+                                                aria-hidden="false"
+                                                className="dropdown-menu-end dropdown-menu show"
+                                                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-86px, -55px, 0px);"
+                                                x-placement="top-start"
+                                              >
+                                                <a
+                                                  href="#"
+                                                  tabindex="0"
+                                                  role="menuitem"
+                                                  className="dropdown-item"
+                                                >
+                                                  Action
+                                                </a>
+                                                <a
+                                                  href="#"
+                                                  tabindex="0"
+                                                  role="menuitem"
+                                                  className="dropdown-item"
+                                                >
+                                                  Another action
+                                                </a>
+                                                <a
+                                                  href="#"
+                                                  tabindex="0"
+                                                  role="menuitem"
+                                                  className="dropdown-item"
+                                                >
+                                                  Something else here
+                                                </a>
+                                              </div> */}
+                                            </tr>
+                                            <tr>
+                                              <td>3</td>
+                                              <td>Brand Logo Design</td>
+                                              <td>06 Jun, 2020</td>
+                                              <td>
+                                                <span className="badge font-size-12 bg-soft-success">
+                                                  Completed
+                                                </span>
+                                              </td>
+                                              <div className="dropdown">
+                                                <a
+                                                  aria-haspopup="true"
+                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
+                                                  aria-expanded="false"
+                                                >
+                                                  <i className="uil uil-ellipsis-v"></i>
+                                                </a>
+                                              </div>
+                                            </tr>
+                                            <tr>
+                                              <td>4</td>
+                                              <td>Chat app Design</td>
+                                              <td>28 May, 2020</td>
+                                              <td>
+                                                <span className="badge font-size-12 bg-soft-success">
+                                                  Completed
+                                                </span>
+                                              </td>
+                                              <div className="dropdown">
+                                                <a
+                                                  aria-haspopup="true"
+                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
+                                                  aria-expanded="false"
+                                                >
+                                                  <i className="uil uil-ellipsis-v"></i>
+                                                </a>
+                                              </div>
+                                            </tr>
+                                            <tr>
+                                              <td>5</td>
+                                              <td> Authentication Pages</td>
+                                              <td>06 May, 2020 </td>
+                                              <td>
+                                                <span className="badge font-size-12 bg-soft-success">
+                                                  Completed
+                                                </span>
+                                              </td>
+                                              <div className="dropdown">
+                                                <a
+                                                  aria-haspopup="true"
+                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
+                                                  aria-expanded="false"
+                                                >
+                                                  <i className="uil uil-ellipsis-v"></i>
+                                                </a>
+                                              </div>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div></div>
+                              <div></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </TabPanel>
+
+                    <TabPanel value="2">
+                      <TableContainer component={Paper}>
+                        <Table
+                          sx={{ minWidth: 700 }}
+                          aria-label="customized table"
+                        >
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell>SI</StyledTableCell>
+                              <StyledTableCell align="right">
+                                Date
+                              </StyledTableCell>
+                              <StyledTableCell align="right">
+                                Time
+                              </StyledTableCell>
+                              <StyledTableCell align="right">
+                                Staff
+                              </StyledTableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows1.map((row) => (
+                              <StyledTableRow key={row.si}>
+                                <StyledTableCell component="th" scope="row">
+                                  {row.si}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  {row.date}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  {row.time}
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  {row.staff}
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </TabPanel>
+                    <TabPanel value="3">Item Three</TabPanel>
+                    <TabPanel value="4">
+                      <TableContainer component={Paper}>
+                        <Table
+                          sx={{ minWidth: 700 }}
+                          aria-label="customized table"
+                        >
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell1>SI</StyledTableCell1>
+                              <StyledTableCell1 align="right">
+                                Date
+                              </StyledTableCell1>
+                              <StyledTableCell1 align="right">
+                                Receipt No
+                              </StyledTableCell1>
+                              <StyledTableCell1 align="right">
+                                Amount
+                              </StyledTableCell1>
+                              <StyledTableCell1 align="right">
+                                Due Amount
+                              </StyledTableCell1>
+                              <StyledTableCell1 align="right">
+                                Staff
+                              </StyledTableCell1>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows2.map((row1) => (
+                              <StyledTableRow1 key={row1.name}>
+                                <StyledTableCell1 component="th" scope="row">
+                                  {row1.si}
+                                </StyledTableCell1>
+                                <StyledTableCell1 align="right">
+                                  {row1.date}
+                                </StyledTableCell1>
+                                <StyledTableCell1 align="right">
+                                  {row1.receiptno}
+                                </StyledTableCell1>
+                                <StyledTableCell1 align="right">
+                                  {row1.amount}
+                                </StyledTableCell1>
+                                <StyledTableCell1 align="right">
+                                  {row1.dueamount}
+                                </StyledTableCell1>
+                                <StyledTableCell1 align="right">
+                                  {row1.staff}
+                                </StyledTableCell1>
+                              </StyledTableRow1>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </TabPanel>
+                    <TabPanel value="5">
+                      <Stack component="form" noValidate spacing={3}>
+                        <Label>Filter</Label>
+                        <Row>
+                          <Col lg={12} style={{ width: "max-content" }}>
+                            <TextField
+                              id="date"
+                              label="Birthday"
+                              type="date"
+                              size="small"
+                              defaultValue="2017-05-24"
+                              sx={{ width: 220 }}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                            &nbsp;
+                            <TextField
+                              id="date"
+                              label="Birthday"
+                              type="date"
+                              size="small"
+                              defaultValue="2017-05-24"
+                              sx={{ width: 220 }}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
+                            &nbsp;
+                            <Button color="danger" type="submit">
+                              <Resete></Resete>
+                              {"  "}
+                              Resete
+                            </Button>
+                          </Col>
+                        </Row>
+                        
+                      </Stack>
+                    </TabPanel>
+                  </TabContext>
+                </Box>
+              </DialogContentText>
+            </DialogContent>
+
+            <DialogActions>
+              {/* <Button color="primary" onClick={handleClose} autoFocus>
+                Close
+              </Button> */}
+            </DialogActions>
           </div>
-          <div className="modal-footer">
-            <button
-              className="btn btn-dark"
-              style={{ marginRight: "1rem" }}
-              onClick={closeModal}
-            >
-              Close
-            </button>
-            <button className="btn btn-primary" type="submit">
-              Confirm
-            </button>
-          </div>
-        </AvForm>
-      </Modal>
+        </Dialog>
+      </div>
 
       <div className="page-content">
         <div className="container-fluid">
@@ -811,18 +1465,18 @@ const {
                     }}
                   >
                     <Row>
-                        <Col md="3">
+                      <Col md="3">
                         <div className="mb-3">
                           <Label>Customer Type</Label>
-                           <Select
+                          <Select
                             name="customer type"
-                             //edited 
-                             //value={selectedCustomerType}
+                            //edited
+                            //value={selectedCustomerType}
                             value={selectedPrivilage}
                             onChange={(value) => {
-                             //edited 
-                             //handleSelectedCustomerType(value);
-                             handleSelectedPrivilage(value);
+                              //edited
+                              //handleSelectedCustomerType(value);
+                              handleSelectedPrivilage(value);
                             }}
                             //edited
                             //options={customertypeOptionsGroup}
@@ -866,7 +1520,9 @@ const {
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom03">Land line number</Label>
+                          <Label htmlFor="validationCustom03">
+                            Land line number
+                          </Label>
                           <AvField
                             name="landnum"
                             placeholder="Land line number"
@@ -882,7 +1538,9 @@ const {
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">Watsapp Number</Label>
+                          <Label htmlFor="validationCustom01">
+                            Watsapp Number
+                          </Label>
                           <AvField
                             name="watsapp number"
                             placeholder="Watsapp number"
@@ -962,7 +1620,9 @@ const {
                       </Col>
                       <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom01">Number of Members</Label>
+                          <Label htmlFor="validationCustom01">
+                            Number of Members
+                          </Label>
                           <AvField
                             name="Number of Members"
                             placeholder="Number of Members"
@@ -1025,7 +1685,7 @@ const {
                             //value={selectedLocalbody}
                             value={selectedPrivilage}
                             onChange={(value) => {
-                               //edited
+                              //edited
                               //handleSelectedLocalbody(value)
                               handleSelectedPrivilage(value);
                             }}
@@ -1065,7 +1725,7 @@ const {
                             //value={selectedPackage}
                             value={selectedCompany}
                             onChange={(value) => {
-                               //edited
+                              //edited
                               //handleSelectedPackage(value)
                               handleSelectedCompany(value);
                             }}
@@ -1124,9 +1784,11 @@ const {
                           />
                         </div>
                       </Col>
-                       <Col md="3">
+                      <Col md="3">
                         <div className="mb-3">
-                          <Label htmlFor="validationCustom02">Building Image</Label>
+                          <Label htmlFor="validationCustom02">
+                            Building Image
+                          </Label>
                           <AvField
                             name="mobile_icon_svg"
                             id="mobile_icon_svg"
@@ -1146,7 +1808,7 @@ const {
                             //value={selectedBillingtype}
                             value={selectedCompany}
                             onChange={(value) => {
-                               //edited
+                              //edited
                               //handleSelectedBillingtype(value)
                               handleSelectedCompany(value);
                             }}
@@ -1157,8 +1819,7 @@ const {
                           />
                         </div>
                       </Col>
-                     
-                     
+
                       {/* {userIdTobeUpdated ? null : (
                           <Col md="3">
                           <div className="mb-3">
@@ -1232,21 +1893,3 @@ Customers.propTypes = {
   error: PropTypes.any,
   users: PropTypes.array,
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

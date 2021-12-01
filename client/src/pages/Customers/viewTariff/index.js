@@ -749,7 +749,7 @@ function handleChangepackage(value){
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
-                        options={groups ?.filter(item=>item.group_localbody_name_id.localbody_name===localbody.label)
+                        options={groups .group_localbody_name_id ?.filter(item=>item.group_localbody_name_id.localbody_name===localbody.label)
                           .map((itm)=>{
                             return{
                               label:itm.group_name,

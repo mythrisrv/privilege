@@ -28,14 +28,12 @@ let localbodynameSchema = new Schema(
         type: String,
         required: true,
       },
-      localbody_type:{
-        type:String,
-      },
+     
       localbody_addedby: {
         type: Schema.Types.ObjectId,
         ref:"users",
       },
-      localbody_updateddby: {
+      localbody_updatedby: {
         type: Schema.Types.ObjectId,
         ref:"users",
       },
@@ -56,8 +54,9 @@ let localbodynameSchema = new Schema(
         ref:"districts",
       },
       local_body_id: {
-        type: String,
-       // required: true,
+        type:Schema.Types.ObjectId,
+        ref:"tbl_local_body"
+        
       },
       localbody_company:{
         type:Schema.Types.ObjectId,

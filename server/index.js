@@ -35,10 +35,10 @@ const userapi = require("./routes/UserApi");
 const wasteItems=require("./routes/crm_wasteItems");
 const menuRouter = require("./routes/menu");
 const menu=require("./routes/menu");
-const customerCategory=require("./routes/crm_custCategory");
 const qrcode=require("./routes/crm_qrCode");
 const tariff=require("./routes/crm_viewTariff");
-
+const invoice=require("./routes/crm_viewInvoice")
+const customerCategory=require("./routes/crm_custCategory")
 
 app.use(logger("dev"));
 
@@ -85,10 +85,11 @@ app.use("/customer",customer);
 app.use("/wasteIteam",wasteItem);
 app.use("/staff",userapi);
 app.use("/wasteItems",wasteItems);
-app.use("/menu",menu)
-app.use("/custCategory",customerCategory)
+app.use("/menu",menu);
+app.use("/customerCategory",customerCategory);
 app.use("/qrcode",qrcode)
 app.use("/tariff",tariff)
+app.use("/invoice",invoice)
 
 app.listen(port, function () {
   console.log("Runnning on " + port);

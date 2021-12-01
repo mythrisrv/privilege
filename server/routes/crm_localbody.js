@@ -10,6 +10,7 @@ const {
     getLocalbodyData,
     updateLocalbody,
     deleteLocalbody,
+    getLocalbodyTypes
 } = require('../controller/crm_localbodyController');
 
 
@@ -35,6 +36,7 @@ router.get("/list", [jwtauth], async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getLocalbodiesList(req)
+    
     res.status(200).json({
       status: 200,
       data: item,
@@ -68,7 +70,7 @@ router.get("/list/options", [jwtauth], async (req, res) => {
 
 
 // Get localbody data
-router.get("/:localbodyname", [jwtauth], async (req, res) => {
+router.get("/list/:localbodyId", [jwtauth], async (req, res) => {
   console.log(req.params)
   try {
     let item = await getLocalbodyData(req);
@@ -110,6 +112,22 @@ router.delete("/:localbody_Id", [jwtauth], async (req, res) => {
     res.status(200).json({
       status: 200,
       message: "Item deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+router.get("/list/types", [jwtauth], async (req, res) => {
+  try {
+    // let item = await getDistrictsList(req);
+    let item = await getLocalbodyTypes(req)
+    res.status(200).json({
+      status: 200,
+      data: item,
     });
   } catch (err) {
     console.log(err);

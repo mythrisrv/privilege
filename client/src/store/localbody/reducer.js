@@ -13,7 +13,13 @@ import {
   UPDATE_LOCALBODY_FAIL,
   GET_LOCALBODY,
   GET_LOCALBODY_SUCCESS,
-  GET_LOCALBODY_FAIL
+  GET_LOCALBODY_FAIL,
+  GET_LOCALBODY_TYPES,
+  GET_LOCALBODY_TYPES_FAIL,
+  GET_LOCALBODY_TYPES_SUCCESS,
+  GET_LOCALBODY_OPTIONS,
+  GET_LOCALBODY_OPTIONS_SUCCESS,
+  GET_LOCALBODY_OPTIONS_FAIL
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -26,6 +32,8 @@ const INIT_STATE = {
   localbodyIdToBeDeleted: "",
   localbody: {},
   error: {},
+  localbodyTypes:[],
+  localbodyOptions:[],
 };
 
 const Localbody = (state = INIT_STATE, action) => {
@@ -162,6 +170,40 @@ const Localbody = (state = INIT_STATE, action) => {
         },
         error: action.payload,
       };
+      case GET_LOCALBODY_TYPES:
+      return {
+        ...state,
+        params: action.payload,
+      };
+
+    case GET_LOCALBODY_TYPES_SUCCESS:
+      return {
+        ...state,
+        localbodyTypes: action.payload.data,
+      };
+
+    case GET_LOCALBODY_TYPES_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+      case GET_LOCALBODY_OPTIONS:
+        return {
+          ...state,
+          params: action.payload,
+        };
+  
+      case GET_LOCALBODY_OPTIONS_SUCCESS:
+        return {
+          ...state,
+          localbodyOptions: action.payload.data,
+        };
+  
+      case GET_LOCALBODY_OPTIONS_FAIL:
+        return {
+          ...state,
+          error: action.payload,
+        };
 
     default:
       return state;

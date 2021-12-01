@@ -9,7 +9,7 @@ const {
   /*****************************
        Waste item list
   *****************************/
-  router.post("/List",[validationMiddleware.getWasteitems],async (req, res) => {
+  router.get("/List",/*[validationMiddleware.getWasteitems],*/async (req, res) => {
     try {
       
       let item = await WasteItemsList(req);

@@ -35,12 +35,14 @@ export const DELETE_WARD = "/ward";
 
 
 //LOCALBODY
+export const GET_LOCALBODY_TYPES="/localbody/list/types"
 export const GET_LOCALBODIES = "/localbody/list";
 export const ADD_LOCALBODY = "/localbody";
-export const GET_LOCALBODY = "/localbody";
+export const GET_LOCALBODY = "/localbody/list";
 export const UPDATE_LOCALBODY = "/localbody";
 export const DELETE_LOCALBODY = "/localbody";
-export const GET_WARD_OPTIONS="/ward/list/options"
+export const GET_WARD_OPTIONS="/ward/list/options";
+export const GET_LOCALBODY_OPTIONS="/localbody/list/options"
 
 // Privilages options
 export const GET_PRIVILAGES_OPTIONS = "/privilage/list/options";
@@ -74,11 +76,11 @@ export const UPDATE_WASTE_ITEM = "/wasteItems";
 export const DELETE_WASTE_ITEM = "/wasteItems";
 
 //get custome categories
-export const GET_CUST_CATEGORIES="/custCategory/list";
-export const ADD_CUST_CATEGORY = "/custCategory";
-export const GET_CUST_CATEGORY = "/custCategory";
-export const UPDATE_CUST_CATEGORY = "/custCategory";
-export const DELETE_CUST_CATEGORY = "/custCategory";
+export const GET_CUST_CATEGORIES="/customerCategory/list";
+export const ADD_CUST_CATEGORY = "/customerCategory";
+export const GET_CUST_CATEGORY = "/customerCategory";
+export const UPDATE_CUST_CATEGORY = "/customerCategory";
+export const DELETE_CUST_CATEGORY = "/customerCategory";
 
 export const GET_QRCODE="/qrcode/list";
 export const ADD_QRCODE = "/qrcode";
