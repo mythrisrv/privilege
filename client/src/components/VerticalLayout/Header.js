@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useState,useEffect } from "react";
+
 import { connect } from "react-redux";
 import { Form, Input, Button, Row, Col } from "reactstrap";
 import accessToken from "../../helpers/jwt-token-access/accessToken";
@@ -37,6 +38,8 @@ import {
   showRightSidebarAction,
   toggleLeftmenu,
   changeSidebarType,
+  
+  
 } from "../../store/actions";
 
 const Header = (props) => {
@@ -44,14 +47,15 @@ const Header = (props) => {
   const [search, setsearch] = useState(false);
   const [socialDrp, setsocialDrp] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
-  const [selectedMasterCompany, setselectedMasterCompany] = useState(null);
+  const [selectedMasterCompany, setselectedMasterCompany] = useState( null);
   const [selectedMasterLocalbody, setselectedMasterLocalbody] = useState(null);
   const [masterLocalbodyOptionsGroup,setMasterLocalbodyOptionsGroup] = useState(null);
   const [masterComanyOptionsGroup,setMasterCompaniesOptionsGroup] = useState(null);
 
   const API_URL = process.env.REACT_APP_APIURL || "http://localhost:3099/";
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
+ 
+  
 
 useEffect(()=>{
       if (localStorage.getItem('authUser')) {
@@ -62,9 +66,7 @@ useEffect(()=>{
        fetchMasterLocalbodies(user_obj._id);
       }
       
-      
-    
-  },[])
+    },[])
   function fetchMasterCompanies(user_id)
   {
     axios
@@ -196,8 +198,7 @@ function fetchMasterLocalbodies(user_id,id=null)
   function handleSelectedMasterCompany(value) {
     setselectedMasterCompany(value);
     fetchMasterLocalbodies(userId,value.value);
-
-  }
+   }
   function handleSelectedMasterLocalbody(value) {
     let newValue = {
       name: value.label,

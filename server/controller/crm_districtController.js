@@ -7,7 +7,7 @@ createDistrict = (req) => {
    var date2 = new Date();
    
 date = moment(date2).format(format2);
-time = moment(date2).format("hh:mm A");
+time = moment(date2).format("HH:mm");
 ;
   return new Promise(async (resolve, reject) => {
     try {
@@ -48,7 +48,7 @@ getDistrictList = (req) => {
       let district = await models.District.find({
         district_status: 0,
       }).populate("district_addedby","username -_id")
-      .sort({createdAt:-1})
+      //.sort({createdAt:-1})
         
 
        resolve(district);

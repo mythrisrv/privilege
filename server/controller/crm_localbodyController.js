@@ -8,7 +8,7 @@ createLocalbody = (req) => {
     const format2 = "DD-MM-YYYY"
     var date2 = new Date();
     date = moment(date2).format(format2);
-    time = moment(date2).format("HH:mm A");
+    time = moment(date2).format("HH:mm");
 
   return new Promise(async (resolve, reject) => {
     try {
@@ -47,14 +47,19 @@ createLocalbody = (req) => {
 getLocalbodiesList = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
+     
+    
       let localbody = await models.LocalbodyName.find({
-        localbody_status: 0,
-      }).populate("localbody_company","company_name ")
-     .populate("localbody_addedby","username ")
-     .populate("dist_id","district_name ")
-     .populate("local_body_id","localbody_type_name ")
-      .sort({createdAt:-1})
-      resolve(localbody);
+         localbody_status: 0,
+       }).populate("localbody_company","company_name ")
+      .populate("localbody_addedby","username ")
+      .populate("dist_id","district_name ")
+      .populate("local_body_id","localbody_type_name ")
+       .sort({createdAt:-1})
+       resolve(localbody);
+
+    
+      
     } catch (err) {
       console.log(err);
       reject({
@@ -76,11 +81,21 @@ getLocalbodiesList = (req) => {
 getLocalbodiesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if(req.query.id!=undefined)
+      {
+      let localbodies = await models.LocalbodyName.find({
+       $and:[ {localbody_status:0},{dist_id:req.query.id}]
+      }).select("localbody_name");
+      console.log(localbodies);
+      resolve(localbodies);
+    }else
+    {
       let localbodies = await models.LocalbodyName.find({
         localbody_status:0,
       }).select("localbody_name");
       console.log(localbodies);
       resolve(localbodies);
+    }
     } catch (err) {
       console.log(err);
       reject({

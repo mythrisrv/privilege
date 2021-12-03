@@ -3,10 +3,10 @@ let moment = require("moment");
 
 createGroup = (req) => {
     var ip = req.ip;
-    const format2 = "YYYY-MM-DD"
+    const format2 = "DD-MM-YYYY"
     var date2 = new Date();
     date = moment(date2).format(format2);
-    time = moment(date2).format("hh:mm A");
+    time = moment(date2).format("HH:mm ");
  var groupward=req.body.wards.join(',')
  console.log(groupward)
   return new Promise(async (resolve, reject) => {
@@ -19,11 +19,18 @@ createGroup = (req) => {
           group_time:time,
          group_ward:groupward,
          group_localbody_name_id:req.body.localbody._id,
-         group_name:req.body.group_name,
+        
          group_incentive:req.body.incentive,
+         dist_id:req.body.district._id,
            group_addedby:req.user._id,
          }
        );
+
+       let localbody=await models.LocalbodyName.findOne({
+         _id:req.body.localbody._id
+       }).select("loca_body_id short_code")
+     group.group_name=`${localbody.short_code}/${req.body.group_name}`;
+     group.group_localbody_type_id=localbody.local_body_id;
       let numberOfGroups = await models.group.countDocuments();
       group.group_id = numberOfGroups + 1;
       group = await group.save();
@@ -44,8 +51,8 @@ getGroupsList = (req) => {
         let group = await models.group.find({
           group_status: 0,
         })
-        .populate("group_localbody_name_id","localbody_name -_id")
-         .populate("group_addedby","username -_id")
+        .populate("group_localbody_name_id","localbody_name ")
+         .populate("group_addedby","username ")
          .sort({created_At :-1})
         resolve(group);
       } catch (err) {

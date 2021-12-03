@@ -35,7 +35,7 @@ export const DELETE_WARD = "/ward";
 
 
 //LOCALBODY
-export const GET_LOCALBODY_TYPES="/localbody/list/types"
+export const GET_LOCALBODY_TYPES="/localbody/list/options/types"
 export const GET_LOCALBODIES = "/localbody/list";
 export const ADD_LOCALBODY = "/localbody";
 export const GET_LOCALBODY = "/localbody/list";

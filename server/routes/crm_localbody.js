@@ -33,7 +33,10 @@ router.post('/',[validationMiddleware.createLocalbody,jwtauth], async (req, res)
 
 //Get localbody list
 router.get("/list", [jwtauth], async (req, res) => {
+ 
   try {
+    console.log(req.params)
+    console.log(req.query)
     // let item = await getDistrictsList(req);
     let item = await getLocalbodiesList(req)
     
@@ -121,7 +124,7 @@ router.delete("/:localbody_Id", [jwtauth], async (req, res) => {
   }
 });
 
-router.get("/list/types", [jwtauth], async (req, res) => {
+router.get("/list/options/types", [jwtauth], async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getLocalbodyTypes(req)

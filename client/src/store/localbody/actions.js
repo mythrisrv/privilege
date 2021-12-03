@@ -22,8 +22,9 @@ import {
   GET_LOCALBODY_OPTIONS_FAIL,
 } from "./actionTypes";
 
-export const getLocalbodies = () => ({
+export const getLocalbodies = (companyId) => ({
   type: GET_LOCALBODIES,
+  payload:companyId,
 });
 
 export const getLocalbodiesSuccess = (localbody) => ({
@@ -56,9 +57,9 @@ export const getLocalbody = (localbodyId) => ({
   payload: localbodyId,
 });
 
-export const getLocalbodySuccess = (localbody) => ({
+export const getLocalbodySuccess = (localbodyId) => ({
   type: GET_LOCALBODY_SUCCESS,
-  payload: localbody,
+  payload: localbodyId,
 });
 
 export const getLocalbodyFail = (error) => ({
@@ -108,8 +109,9 @@ export const getLocalbodyTypesFail = (error) => ({
   type: GET_LOCALBODY_TYPES_FAIL,
   payload: error,
 });
-export const getLocalbodyOptions = () => ({
+export const getLocalbodyOptions = (distId) => ({
   type: GET_LOCALBODY_OPTIONS,
+  distId:distId,
 });
 
 export const getLocalbodyOptionsSuccess = (localbodyOptions) => ({

@@ -38,8 +38,8 @@ let wardSchema = new Schema(
         // ref: "state",
       },
      dist_id:{
-        //type: Schema.Types.ObjectId,
-        // ref: "districts",
+        type: Schema.Types.ObjectId,
+         ref: "districts",
       },
      localbody_type_id:{
         type: Schema.Types.ObjectId,

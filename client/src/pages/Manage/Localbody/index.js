@@ -44,7 +44,7 @@ const Localbodies = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [localbodysForTable, setLocalbodiesForTable] = useState([]);
 const[companyOptions,setcompanyOptions]=useState([])
-const[companyname,setCompanyname]=useState({});
+const[companyName,setCompanyname]=useState({});
 const[districtname,setDistrictname]=useState({});
 const[localbodytype,setlocalbodytype]=useState({});
 const[localbodyname,setlocalbodyname]=useState("");
@@ -66,19 +66,29 @@ const[shortcode,setshortcode]=useState("");
     localbodyTypes,
   } = useSelector((state) => state.localbodies);
 
-  const {companiesOptions}=useSelector((state)=>state.companies);
+  const {companiesOptions,companyname}=useSelector((state)=>state.companies);
 const {districtOptions}=useSelector((state)=>state.districts);
   const dispatch = useDispatch();
-
+  
  
 
   
     useEffect(()=>{
-    dispatch(getLocalbodies())
+    /* 
+      if (localStorage.getItem('Company')) {
+        var companydata = localStorage.getItem('Company');
+        var company = JSON.parse(companydata)
+        console.log(company)
+        setSelectedCompany(company)
+      }*/
+     dispatch(getLocalbodies())
+
         dispatch(getCompaniesOptions());
         
         dispatch(getDistrictOptions());
         dispatch(getLocalbodyTypes())
+        
+       
       
     },[])
   
@@ -149,7 +159,7 @@ const {districtOptions}=useSelector((state)=>state.districts);
     setLocalbodyIdToBeUpdated(item._id);
     setLocalbodyObject({ ...item, password: null });
   };
-console.log(localbodyObject)
+
   let preUpdateLocalbodyPassword = (item) => {
     setLocalbodyIdToBeUpdated(item._id);
     setShowModal(true);
@@ -289,7 +299,7 @@ console.log(localbodyObject)
         width: 400,
       },
       {
-        label: "Short code",
+        label: "Shortcode",
         field: "short_code",
         sort: "asc",
         width: 400,
@@ -452,7 +462,7 @@ console.log(localbodyObject)
         <Select  name="company_name"
          id="exampleSelect"
           style={{appearance:"auto"}} 
-           value={companyname}
+           value={companyName}
          onChange={handleChangeCompany} 
          options={companiesOptions?.map((item)=>{
            return{

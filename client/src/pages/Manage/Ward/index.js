@@ -145,10 +145,11 @@ const Wards = (props) => {
      }
 
 setwardShortcode(item.ward_name)
+
     
      // handleSelectedlocalbodyname(localbodyname);
     setWardIdToBeUpdated(item._id);
-    setWardObject({ ...item, password: null });
+    setWardObject({ ...item, password: null, });
   };
 
   let preUpdateWardPassword = (item) => {
@@ -222,13 +223,13 @@ setwardShortcode(item.ward_name)
         width: 400,
       },
       {
-        label: "ward Number",
+        label: "Ward Number",
         field: "ward_no",
         sort: "asc",
         width: 400,
       },
       {
-        label: "ward Name",
+        label: "Ward Name",
         field: "ward_name",
         sort: "asc",
         width: 400,
@@ -248,10 +249,15 @@ setwardShortcode(item.ward_name)
     rows: wardsForTable,
   };
 
-function createwardname(){
-  setwardShortcode("hai")
-  return wardshortcode
-}
+ /* function code(){
+    let code;
+    if(localbody==={} || wardno==={} ||wardname==="")
+    code=""
+    else
+    code= `${localbody.short_code}${wardno.value}/${wardname}`;
+   // setWardObject({ ...wardObject, ward_name:code})
+    return code;
+  }*/
 
   function handleChangeWard(e) {
     let name = e.target.name;
@@ -268,8 +274,8 @@ function createwardname(){
     
   }
   
-  function handleChangeWardname(e){
-    console.log(e.target.value)
+  function handleChangeWardname(value){
+    console.log(value)
 
   }
   function handleChangeWardno(value) {
@@ -382,7 +388,7 @@ function createwardname(){
       ) : null}
 
       
-      <div className="page-content">
+      <div className="page-content ">
         <div className="container-fluid">
           <Breadcrumbs title="Home" breadcrumbItem="Manage Ward" />
           <Row>
@@ -428,7 +434,7 @@ function createwardname(){
                         <Label>Ward Number</Label>
                           <Select
                             name="localbody_name"
-                           value={wardno}
+                           value={ wardno}
                             options={wardnumbers()}
                             classNamePrefix="select2-selection"
                             onChange={
@@ -464,6 +470,7 @@ function createwardname(){
                         <div className="mb-3" style={{paddingTop:"30px"}} >
                         <div className="col-md-10">
                           <AvField
+                          readOnly
                             name="ward_name"
                             placeholder=" Ward name"
                             type="text"
@@ -516,7 +523,7 @@ function createwardname(){
           <Row>
             <Col className="col-12">
               <Card>
-                <CardBody>
+                <CardBody >
                   <MDBDataTable
                     responsive
                     bordered

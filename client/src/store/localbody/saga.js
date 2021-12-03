@@ -39,17 +39,17 @@ import {
   
 } from "../../helpers/backend_helper";
 
-function* fetchLocalbodies() {
+function* fetchLocalbodies({payload:companyId}) {
   try {
-    const response = yield call(getLocalbodies);
+    const response = yield call(getLocalbodies,companyId);
     yield put(getLocalbodiesSuccess(response));
   } catch (error) {
     yield put(getLocalbodiesFail(error));
   }
 }
-function* fetchLocalbodyOptions() {
+function* fetchLocalbodyOptions({distId:distId}) {
   try {
-    const response = yield call(getLocalbodyOptions);
+    const response = yield call(getLocalbodyOptions,distId)
     yield put(getLocalbodyOptionsSuccess(response));
   } catch (error) {
     yield put(getLocalbodyOptionsFail(error));

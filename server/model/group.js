@@ -37,8 +37,8 @@ let groupSchema = new Schema(
         type: String,
       },
       group_state_id: {
-        type: Schema.Types.ObjectId,
-        ref: "states",
+        //type: Schema.Types.ObjectId,
+       // ref: "states",
       },
      
       group_district: {

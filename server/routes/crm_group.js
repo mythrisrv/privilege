@@ -17,6 +17,7 @@ const {
 //create localbody
 router.post('/',[validationMiddleware.createGroup,jwtauth], async (req, res) => {
   try {
+    console.log(req.body)
     let item = await createGroup(req);
      res.status(200).json({
       status: 200,

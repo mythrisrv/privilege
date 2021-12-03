@@ -4,7 +4,10 @@ import {
   GET_COMPANIES_OPTIONS_FAIL,
   GET_COMPANIES_MASTER_OPTIONS,
   GET_COMPANIES_MASTER_OPTIONS_SUCCESS,
-  GET_COMPANIES_MASTER_OPTIONS_FAIL
+  GET_COMPANIES_MASTER_OPTIONS_FAIL,
+  SAVE_SELECTED_COMPANY,
+  SAVE_SELECTED_COMPANY_SUCCESS,
+  SAVE_SELECTED_COMPANY_FAIL
 } from "./actionTypes";
 
 export const getCompaniesOptions = () => ({
@@ -35,3 +38,25 @@ export const getCompaniesMasterOptionsFail = (error) => ({
   type: GET_COMPANIES_MASTER_OPTIONS_FAIL,
   payload: error,
 });
+
+export const saveCompanyName=(data)=> ({
+  
+    type: SAVE_SELECTED_COMPANY,
+    payload:data,
+  
+});
+
+export const saveCompanyNameSuccess=(company)=>( {
+ 
+    type: SAVE_SELECTED_COMPANY_SUCCESS,
+    payload:company
+
+  
+});
+
+export const saveCompanyNameFail=(error)=> ({
+  
+    type: SAVE_SELECTED_COMPANY_FAIL,
+    payload:error
+ 
+})

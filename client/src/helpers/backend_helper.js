@@ -9,6 +9,11 @@ const getLoggedInUser = () => {
   return null;
 };
 
+export const saveCompanyName=(data)=>{
+  let company=data;
+  return company;
+};
+
 //is user is logged in
 const isUserAuthenticated = () => {
   return getLoggedInUser() !== null;
@@ -61,17 +66,17 @@ export const deleteWard = (wardId) => del(url.DELETE_WARD, wardId);
 
 
 // get localbodies
-export const getLocalbodies  = () => get(url.GET_LOCALBODIES);
+export const getLocalbodies  = (companyId) =>get(`${url.GET_LOCALBODIES}?id=${companyId}`);
 
 // add localbodies
 export const addLocalbody = (localbody) => post(url.ADD_LOCALBODY, localbody);
 export const getLocalbody = (localbodyId) => get(`${url.GET_LOCALBODY}/${localbodyId}`,{localbodyId:localbodyId});
 export const updateLocalbody = (localbody) => put(`${url.UPDATE_LOCALBODY}/${localbody._id}`, localbody);
 export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbodyId);
-export const getLocalbodyTypes=()=>get(url.GET_LOCALBODY_TYPES)
-export const getLocalbodyOptions=()=>get(url.GET_LOCALBODY_OPTIONS)
 
+export const getLocalbodyOptions=(distId)=>get(`${url.GET_LOCALBODY_OPTIONS}?id=${distId}`);
 
+export const getLocalbodyTypes = ()=>get(url.GET_LOCALBODY_TYPES)
 
 
 

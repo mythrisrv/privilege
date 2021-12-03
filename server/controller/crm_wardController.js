@@ -7,7 +7,7 @@ createWard = (req) => {
     const format2 = "DD-MM-YYYY"
     var date2 = new Date();
     date = moment(date2).format(format2);
-    time = moment(date2).format("HH:mm A");
+    time = moment(date2).format("HH:mm");
  console.log(req.user);
   return new Promise(async (resolve, reject) => {
     
@@ -132,6 +132,7 @@ updateWard = (req) => {
       req.body.dist_id=localbody.dist_id;
       req.body.ward_company=localbody.localbody_company;
       req.body.localbody_type_id=localbody.local_body_id;
+     // req.body.ward_name=`${localbody.short_code}${req.body.ward_no}/`
       }
        req.body.updatedAt=Date.now();
        req.body.ward_updatedby=req.user._id;

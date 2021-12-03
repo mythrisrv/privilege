@@ -728,7 +728,7 @@ function handleChangepackage(value){
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
                         onChange={handelChangeLocalbody}
-                       options={localbodies?.filter(item=>item.dist_id.district_name===district.label)
+                       options={localbodies.dist_id?.filter(item=>item.dist_id.district_name===district.label)
                        .map((itm)=>{
                          return{
                            label:itm.localbody_name,

@@ -24,7 +24,8 @@ import {
   getWardOptions,
   getWards,
   getLocalbodyOptions,
-  getLocalbody
+  getLocalbody,
+  getDistrictOptions,
 
   //getPrivilagesOptions,
 } from "../../../store/actions";
@@ -54,6 +55,7 @@ const Group = (props) => {
   const [accountType, setAccountType] = useState("");
   const [selectedLocalbody, setselectedLocalbody] = useState({});
   const [selectedWard, setSelectedWard] = useState(null);
+  const [selectedDistrict, setselectedDistrict] = useState({});
   const [groupname, setGroupname] = useState("");
   const [groupcode, setGroupcode] = useState("");
   
@@ -80,7 +82,9 @@ const Group = (props) => {
     deleteGroupResponse,
     updateGroupResponse
   } =useSelector((state)=>state.groups)
+
   const {localbodyOptions,localbody}=useSelector((state)=>state.localbodies)
+  const {districtOptions}=useSelector((state)=>state.districts)
  
   // const districtsOptions = useSelector(
   //   (state) => state.districts.districtsOptions
@@ -105,7 +109,7 @@ const Group = (props) => {
   useEffect(() => {
   // dispatch(getUsers())
      dispatch(getGroups());
-     dispatch(getLocalbodyOptions());
+     dispatch(getDistrictOptions());
     // dispatch(getWardOptions(selectedLocalbody))
      
     }, []);
@@ -163,7 +167,7 @@ let preUpdateLocalbodyPassword = (item) => {
   
 
   
-
+console.log(localbodyOptions)
   //   let preUpdateUser = (item) => {
   //     if (item.privilage) {
   //       let privilage = {
@@ -199,7 +203,7 @@ let preUpdateLocalbodyPassword = (item) => {
   useEffect(() => {
    
 let groupsData=[];
-    groups.map((item, index) => {
+    groups?.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -358,7 +362,9 @@ let groupsData=[];
   //   }
   function code(){
     let code;
-    if(localbody.short_code!=null)
+    if(localbody==={} || groupname===""){
+     code="";
+    }else
     code= `${localbody.short_code}/${groupname}`;
     return code;
   }
@@ -372,13 +378,30 @@ let groupsData=[];
      };
      dispatch(getLocalbody(value.value))
     dispatch(getWardOptions(value.value))
+  
+ 
     setgroupObject({ ...groupObject, localbody: newValue })
    
     
      }
+     function handleChangeDistrict(value) {
+     
+      setselectedDistrict(value);
+      let newValue = {
+       name: value.label,
+        _id: value.value,
+      };
+     dispatch(getLocalbodyOptions(value.value))
+    
+   
+  
+     setgroupObject({ ...groupObject, district: newValue })
+    
+     
+      }
     
      function handleSelectedWard(values) {
-      //console.log(value)
+      console.log(values)
      setSelectedWard(values)
     let ward=[];
       values ?.map((v)=>ward.push(v.label));
@@ -490,6 +513,34 @@ let groupsData=[];
                     <Row>
                     <Col md="3">
                         <div className="mb-3">
+                          <Label>District</Label>
+                          <Select
+                            name="localbody_name"
+                          // value={selectedLocalbody}
+                            //   onChange={(value) => {
+                            //     handleSelectedCommunities(value);
+                            //   }}
+                              options={districtOptions?.map((item)=>{
+                                return{
+                                label:item.district_name,
+                                value:item._id,
+                                key:item._id,
+                                }
+                              })
+                              }
+                            classNamePrefix="select2-selection"
+                            onChange={
+                             handleChangeDistrict
+                              
+                            }
+                              
+                            
+                          />
+                        </div>
+                      </Col>
+                  
+                    <Col md="3">
+                        <div className="mb-3">
                           <Label htmlFor="validationCustom05">Group Name</Label>
                           <AvField
                             name="group_name"
@@ -500,7 +551,7 @@ let groupsData=[];
                             className="form-control"
                            // validate={{ required: { value: true } }}
                             id="validationCustom05"
-                            onChange={handleGroupname}
+                            onChange={ handleGroupname}
                           />
                         </div>
                       </Col>
@@ -513,11 +564,11 @@ let groupsData=[];
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
-                              options={localbodyOptions?.map((localbodies)=>{
+                              options={localbodyOptions?.map((item)=>{
                                 return{
-                                label:localbodies.localbody_name,
-                                value:localbodies._id,
-                                key:localbodies._id,
+                                label:item.localbody_name,
+                                value:item._id,
+                                key:item._id,
                                 }
                               })
                               }
@@ -533,8 +584,9 @@ let groupsData=[];
                       </Col>
                       <Col md="3">
                         <div className="mb-3" style={{paddingTop:"30px"}} >
-                        <div className="col-md-10">
+                       
                           <AvField
+                          readOnly
                             name="ward_name"
                             placeholder=" group name"
                             type="text"
@@ -546,7 +598,7 @@ let groupsData=[];
                             //onChange={handleChangeWardname}
                             
                           />
-                          </div>
+                          
                               </div>
 
                       </Col>

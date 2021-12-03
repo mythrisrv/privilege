@@ -83,10 +83,11 @@ const[districtValue,setdistrictValue]=useState("")
   useEffect(() => {
     if (deleteDistrictResponse.type === "success") {
       dispatch(getDistricts())
-      toastr.success(deleteDistrictResponse.message);
       setDistrictIdToBeDeleted(null);
+      toastr.success(deleteDistrictResponse.message);
+      
     } else if (deleteDistrictResponse.type === "failure") {
-      toastr.error(error.data.message, deleteDistrictResponse.message,{timeOut:2000,preventDuplicates:true});
+      toastr.error(error.data.message, deleteDistrictResponse.message/*{timeOut:2000,preventDuplicates:true}*/);
     }
   }, [deleteDistrictResponse]);
 
@@ -120,7 +121,7 @@ const[districtValue,setdistrictValue]=useState("")
   useEffect(() => {
     let districtData = [];
 
-    districts.map((item, index) => {
+    districts?.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <i
@@ -150,8 +151,18 @@ const[districtValue,setdistrictValue]=useState("")
       item.district_addedby=item.district_addedby.username;
       districtData.push(item);
     });
+    
+    districtData.sort(function(a, b) {
+      var keyA = new Date(a.createdAt),
+        keyB = new Date(b.createdAt);
+      // Compare the 2 dates
+      if (keyB < keyA) return -1;
+      if (keyB > keyA) return 1;
+      return 0;
+    })
+    
     setDistrictsForTable(districtData);
-    console.log(districtsForTable)
+    
   }, [districts]);
 
  
