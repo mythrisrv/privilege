@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
-import { Row, Col, Card, CardBody, Button, Label, Modal, Input } from "reactstrap";
+import { Row, Col, Card, CardBody, Button, Label, Modal, Input,FormGroup } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
-
+import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
 
 import {
   getUsers,
@@ -57,7 +58,7 @@ const Group = (props) => {
   const [selectedWard, setSelectedWard] = useState(null);
   const [selectedDistrict, setselectedDistrict] = useState({});
   const [groupname, setGroupname] = useState("");
-  const [groupcode, setGroupcode] = useState("");
+  const [groupcode, setGroupcode] = useState(null);
   
   const[groupObject,setgroupObject]=useState({})
  
@@ -150,12 +151,36 @@ const Group = (props) => {
   
 let preUpdateGroup=(item)=>{
   console.log(item)
- setGroupname(item.group_name)
+  if(item.group_name){
+    let group=item.group_name.split("/")
+       setGroupname(group[1])
+  }
+ 
  if(item.group_localbody_name_id){
-   setselectedLocalbody(item.localbody)
+   let localbodyname={
+     label:item.group_localbody_name_id.localbody_name,
+     value:item.group_localbody_name_id._id,
+   }
+   handleSelectedLocalbody(localbodyname)
+  }
+  if(item.group_ward){
+    var result = item.group_ward.map(function(itm) {
+      return { label: itm.ward_name,value:itm._id}
+  })
+  
+  handleSelectedWard(result)
+  }
+  if(item.group_district){
+    let district={
+      label:item.group_district.district_name,
+      value:item.group_district._id,
+    }
+    handleChangeDistrict(district)
+  }
+  
    setGroupIdToBeUpdated(item._id);
    setgroupObject({ ...item, password: null });
- }
+ 
 }
  
 let preUpdateLocalbodyPassword = (item) => {
@@ -167,7 +192,7 @@ let preUpdateLocalbodyPassword = (item) => {
   
 
   
-console.log(localbodyOptions)
+
   //   let preUpdateUser = (item) => {
   //     if (item.privilage) {
   //       let privilage = {
@@ -204,6 +229,7 @@ console.log(localbodyOptions)
    
 let groupsData=[];
     groups?.map((item, index) => {
+     
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -235,6 +261,20 @@ let groupsData=[];
           ></i>
         </div>
       );
+      if(item.group_ward!=null){
+     
+     
+     item.ward = (
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        {item.group_ward?.map((data) => {
+         return(
+              <Chip size="small" label={data.ward_name}></Chip>
+       )
+        })
+      }
+   </div>
+          );
+    }
          item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
@@ -273,19 +313,19 @@ let groupsData=[];
         width: 200,
       },
       {
-        label: "Group Name	",
+        label: "GroupName	",
         field: "group_name",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Local Body",
+        label: "LocalBody",
         field: "localbody",
         width: 300,
       },
       {
         label: "Ward",
-        field: "group_ward",
+        field: "ward",
         width: 300,
       },
       {
@@ -362,7 +402,7 @@ let groupsData=[];
   //   }
   function code(){
     let code;
-    if(localbody==={} || groupname===""){
+    if(localbody==={} && groupname===""){
      code="";
     }else
     code= `${localbody.short_code}/${groupname}`;
@@ -378,12 +418,20 @@ let groupsData=[];
      };
      dispatch(getLocalbody(value.value))
     dispatch(getWardOptions(value.value))
-  
+
+    
  
     setgroupObject({ ...groupObject, localbody: newValue })
    
     
      }
+     useEffect(() => {
+       if(localbody.short_code)
+      setGroupcode(`${localbody.short_code}/${groupname}`);
+   }, [localbody,groupname])
+   useEffect(() => {
+    setgroupObject({...groupObject,group_name:groupcode})
+}, [groupcode])
      function handleChangeDistrict(value) {
      
       setselectedDistrict(value);
@@ -392,22 +440,17 @@ let groupsData=[];
         _id: value.value,
       };
      dispatch(getLocalbodyOptions(value.value))
-    
-   
-  
-     setgroupObject({ ...groupObject, district: newValue })
-    
-     
-      }
+    setgroupObject({ ...groupObject, district: newValue })
+    }
     
      function handleSelectedWard(values) {
       console.log(values)
      setSelectedWard(values)
     let ward=[];
-      values ?.map((v)=>ward.push(v.label));
+      values ?.map((v)=>ward.push(v.value));
      // Object.assign({},ward)
      // console.log(ward)
-     setgroupObject({...groupObject, wards:ward})
+     setgroupObject({...groupObject, wards:ward,})
 
       }
      
@@ -419,11 +462,16 @@ let groupsData=[];
      let name=e.target.name;
      let value=e.target.value;
      setGroupname(value)
-     setgroupObject({...groupObject,[name]:value})
+     let code=`${localbody.short_code}/${value}`
+     setgroupObject({...groupObject,[name]:value,group_name:code})
+    
+     
    }
-
+  
+  console.log(groupObject)
    const handleValidSubmit = (event, values) => {
-   console.log(groupObject)
+    
+  console.log(event)
     groupIdTobeUpdated
       ? dispatch(updateGroup(groupObject))
       : dispatch(addGroup(groupObject));
@@ -431,6 +479,8 @@ let groupsData=[];
       setselectedLocalbody({})
       setGroupname("")
       setSelectedWard(null)
+      setselectedDistrict({})
+      setGroupcode(null)
   
   };
   //   function handleSelectedCompany(value) {
@@ -488,6 +538,7 @@ let groupsData=[];
           confirmButtonText="Delete"
           confirmBtnBsStyle="success"
           cancelBtnBsStyle="danger"
+         
           onConfirm={() => {
             dispatch(deleteGroup(groupIdToBeDeleted));
             setConfirmDeleteAlert(false);
@@ -505,6 +556,7 @@ let groupsData=[];
               <Card>
                 <CardBody>
                   <AvForm
+                  
                     className="needs-validation"
                     onValidSubmit={(e, v) => {
                      handleValidSubmit(e, v);
@@ -516,7 +568,7 @@ let groupsData=[];
                           <Label>District</Label>
                           <Select
                             name="localbody_name"
-                          // value={selectedLocalbody}
+                          value={selectedDistrict}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
@@ -535,23 +587,6 @@ let groupsData=[];
                             }
                               
                             
-                          />
-                        </div>
-                      </Col>
-                  
-                    <Col md="3">
-                        <div className="mb-3">
-                          <Label htmlFor="validationCustom05">Group Name</Label>
-                          <AvField
-                            name="group_name"
-                            placeholder=""
-                            type="text"
-                            errorMessage="Enter Start"
-                           value={groupname}
-                            className="form-control"
-                           // validate={{ required: { value: true } }}
-                            id="validationCustom05"
-                            onChange={ handleGroupname}
                           />
                         </div>
                       </Col>
@@ -577,27 +612,46 @@ let groupsData=[];
                               handleSelectedLocalbody
                               
                             }
-                              
-                            
+                              />
+                        </div>
+                      </Col>
+                  
+                    <Col md="3">
+                        <div className="mb-3">
+                          <Label htmlFor="validationCustom05">Group Name</Label>
+                          <AvField
+                            name="groupname"
+                            placeholder=""
+                            type="text"
+                            errorMessage="Enter Group name"
+                           value={groupname}
+                            className="form-control"
+                            validate={{ required: { value: true } }}
+                            id="validationCustom05"
+                            onChange={ handleGroupname}
                           />
                         </div>
                       </Col>
+                     
                       <Col md="3">
                         <div className="mb-3" style={{paddingTop:"30px"}} >
                        
                           <AvField
                           readOnly
-                            name="ward_name"
+                            name="groupcode"
                             placeholder=" group name"
                             type="text"
-                            errorMessage="Enter ward Name"
+                            errorMessage=""
                             className="form-control"
-                            //validate={{ required: { value: true } }}
+                            validate={{ required: { value: true } }}
                             id="validationCustom01"
-                            value={code()}
-                            //onChange={handleChangeWardname}
+                            value={groupcode}
+                            //onChange={handleChangegroupcode}
                             
                           />
+                         
+
+                         
                           
                               </div>
 
@@ -614,6 +668,7 @@ let groupsData=[];
                         <Select  
                         isMulti
                        name="ward_name"
+                       
                       value={selectedWard}
                      options={WardOptions?.map((ward)=>{
                        
@@ -683,7 +738,7 @@ let groupsData=[];
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>

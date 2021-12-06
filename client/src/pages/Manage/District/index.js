@@ -152,14 +152,14 @@ const[districtValue,setdistrictValue]=useState("")
       districtData.push(item);
     });
     
-    districtData.sort(function(a, b) {
-      var keyA = new Date(a.createdAt),
+   /* districtData.sort(function(a, b) {
+      var keyA =new Date(a.createdAt),
         keyB = new Date(b.createdAt);
       // Compare the 2 dates
       if (keyB < keyA) return -1;
       if (keyB > keyA) return 1;
       return 0;
-    })
+    })*/
     
     setDistrictsForTable(districtData);
     

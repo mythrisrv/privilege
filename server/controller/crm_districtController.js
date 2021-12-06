@@ -48,7 +48,7 @@ getDistrictList = (req) => {
       let district = await models.District.find({
         district_status: 0,
       }).populate("district_addedby","username -_id")
-      //.sort({createdAt:-1})
+      .sort({_id:-1})
         
 
        resolve(district);

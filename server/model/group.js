@@ -53,9 +53,10 @@ let groupSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "tbl_local_body_name",
       },
-      group_ward: {
-        type:String,
-      },
+      group_ward:[ {
+        type:Schema.Types.ObjectId,
+        ref:"tbl_ward"
+      }],
       group_incentive: {
         type: String,
       },

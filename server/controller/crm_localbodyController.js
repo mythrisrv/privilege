@@ -55,7 +55,7 @@ getLocalbodiesList = (req) => {
       .populate("localbody_addedby","username ")
       .populate("dist_id","district_name ")
       .populate("local_body_id","localbody_type_name ")
-       .sort({createdAt:-1})
+       .sort({_id:-1})
        resolve(localbody);
 
     
@@ -81,20 +81,22 @@ getLocalbodiesList = (req) => {
 getLocalbodiesListOptions = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if(req.query.id!=undefined)
+      if(req.query.id==="undefined")
       {
-      let localbodies = await models.LocalbodyName.find({
-       $and:[ {localbody_status:0},{dist_id:req.query.id}]
-      }).select("localbody_name");
-      console.log(localbodies);
-      resolve(localbodies);
+        let localbodies = await models.LocalbodyName.find({
+          localbody_status:0,
+        }).select("localbody_name");
+        console.log(localbodies);
+        resolve(localbodies);
+     
     }else
     {
       let localbodies = await models.LocalbodyName.find({
-        localbody_status:0,
-      }).select("localbody_name");
-      console.log(localbodies);
-      resolve(localbodies);
+        $and:[ {localbody_status:0},{dist_id:req.query.id}]
+       }).select("localbody_name");
+       console.log(localbodies);
+       resolve(localbodies);
+     
     }
     } catch (err) {
       console.log(err);

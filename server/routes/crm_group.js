@@ -36,7 +36,7 @@ router.get("/list", [jwtauth], async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getGroupsList(req)
-    //console.log(item)
+    
     res.status(200).json({
       status: 200,
       data: item,

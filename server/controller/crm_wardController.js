@@ -63,7 +63,7 @@ getWardsList = (req) => {
         ward_status: 0,
       }).populate("localbody_name_id","localbody_name")
       .populate("ward_addedby","username ")
-      .sort({createdAt:-1})
+      .sort({_id:-1})
       
       resolve(ward);
     } catch (err) {

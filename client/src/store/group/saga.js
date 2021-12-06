@@ -59,14 +59,15 @@ function* fetchGroups() {
     delete group.branch1;
     delete group.action;
     console.log(group);
-    if (group.privilage) {
-      group.privilage = group.privilage._id;
+    if (group.wards) {
+      group.group_ward = group.wards;
     }
-    if (group.company) {
-      group.company = group.company._id;
+    if (group.localbody) {
+      group.group_localbody_name_id = group.localbody._id;
+      
     }
-    if (group.branch) {
-      group.branch = group.branch._id;
+    if (group.district) {
+      group.group_district = group.district._id;
     }
   
     try {
