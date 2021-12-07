@@ -58,7 +58,7 @@ const Group = (props) => {
   const [selectedWard, setSelectedWard] = useState(null);
   const [selectedDistrict, setselectedDistrict] = useState({});
   const [groupname, setGroupname] = useState("");
-  const [groupcode, setGroupcode] = useState(null);
+  const [groupcode, setGroupcode] = useState("");
   
   const[groupObject,setgroupObject]=useState({})
  
@@ -481,6 +481,7 @@ let groupsData=[];
       setSelectedWard(null)
       setselectedDistrict({})
       setGroupcode(null)
+      
   
   };
   //   function handleSelectedCompany(value) {

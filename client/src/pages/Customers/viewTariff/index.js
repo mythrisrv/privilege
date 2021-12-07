@@ -51,6 +51,8 @@ import {
   getGroups,
   getTariffOptions,
   updateTariffStatus,
+  getLocalbodyOptions,
+  getGroupOptions
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -68,7 +70,7 @@ const ViewTariff = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedGroup, setSelectedGroup] = useState({});
   const [userObject, setUserObject] = useState({});
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
@@ -84,7 +86,7 @@ const[tableData,setTableData]=useState([])
 const[district,setDistrict]=useState({})
 const[localbody,setLocalbody]=useState({})
 const[selectedLocalbody,setselectedLocalbody]=useState("");
-const[selectedgroup,setSelectedGroup]=useState("");
+
 const[selectedPackage,setSelectedPackage]=useState({})
 const[datevalue,setDateValue]=useState(null);
 const[status,setStatus]=useState({})
@@ -103,25 +105,13 @@ const[status,setStatus]=useState({})
     error,
   } = useSelector((state) => state.users);
 
-  // const districtsOptions = useSelector(
-  //   (state) => state.districts.districtsOptions
-  // );
-
- /* const privilagesOptions = useSelector(
-    (state) => state.privilages.privilagesOptions
-  );
-  const companiesOptions = useSelector(
-    (state) => state.companies.companiesOptions
-  );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );*/
+ 
 
   const{ districtOptions}=useSelector((state)=>state.districts)
   const{tariff,packages,updateTariffResponse}=useSelector((state)=>state.tariff)
   
-   const{localbodies}=useSelector((state)=>state.localbodies)
-   const{groups}=useSelector((state)=>state.groups)
+   const{localbodyOptions}=useSelector((state)=>state.localbodies)
+   const{groupOptions}=useSelector((state)=>state.groups)
    const statusOptions=[
     { value:0,label:"Active"},
     {value:1,label:"Inactive"},
@@ -131,50 +121,16 @@ const[status,setStatus]=useState({})
   const dispatch = useDispatch();
 
   useEffect(() => {
-   // dispatch(getUsers());
-   // dispatch(getPrivilagesOptions());
-  //  dispatch(getCompaniesOptions());
-  dispatch( getDistrictOptions());
    
-  
-  
+  dispatch( getDistrictOptions());
    dispatch(getTariffOptions())
    dispatch(getGroups());
    dispatch(getTariff());
    dispatch(getLocalbodies());
+   }, []);
+console.log(tariff)
+  useEffect(() => {
    
-   
-  }, []);
-
-  useEffect(() => {
-  
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
-
-  useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
-      setSelectedPrivilage({});
-      setSelectedCompany(null);
-      setSelectedBranch(null);
-      //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
-    }
-  }, [addUserResponse]);
-
-  useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
-    }
-  }, [deleteUserResponse]);
-
-  useEffect(() => {
     if (updateTariffResponse.type === "success") {
       dispatch(getTariff())
       
@@ -196,66 +152,14 @@ const[status,setStatus]=useState({})
     setForm(false);
   };
 
-  //   let preUpdateUser = (item) => {
-  //     if (item.privilage) {
-  //       let privilage = {
-  //         label: item.privilage.name,
-  //         value: item.privilage._id,
-  //       };
-  //       handleSelectedPrivilage(privilage);
-  //     }
-  //     if (item.company) {
-  //       let company = {
-  //         label: item.company.name,
-  //         value: item.company._id,
-  //       };
-  //       handleSelectedCompany(company);
-  //     }
-  //     if (item.branch) {
-  //       let branch = {
-  //         label: item.branch.name,
-  //         value: item.branch._id,
-  //       };
-  //       handleSelectedBranch(branch);
-  //     }
-
-  //     setUserIdToBeUpdated(item._id);
-  //     setUserObject({ ...item, password: null });
-  //   };
-
-  //   let preUpdateUserPassword = (item) => {
-  //     setUserIdToBeUpdated(item._id);
-  //     setShowModal(true);
-  //   };
-  /*const filterData=value=>{
-     
-    const lowerCaseValue=value.toLowerCase().trim()
-    const filteredData=tariff ?.filter(item=>{
-      return Object.keys(item).some(key=>{
-        return item[key].toString().toLowerCase().includes(lowerCaseValue)
-      })
-
-    })
-    setNewData(filteredData) 
-
-  }
-*/
-/*const filterCriteria = (tariff,value) => {
-
-
-console.log(value)
-  return tariff.localbodyName.includes("vadakara")
-
  
-  
- 
-}*/
 
   useEffect(() => {
     let tariffData = [];
-  
+  console.log(tariff)
 
     tariff?.map((item, index) => {
+      console.log(item)
       item.action = (
         <div style={{ display: "flex", justifyContent: "center" ,}}>
           <RemoveRedEye onClick={()=>{handleClickOpenForm(item)}}
@@ -263,7 +167,7 @@ console.log(value)
          
         </div>
       );
-      if(item.status==0){
+      if(item.tariff_assign_active_status===0){
       item.activestatus = (
         
         <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -273,7 +177,7 @@ console.log(value)
          
         </div>
       );}
-      if(item.status==1){
+      if(item.tariff_assign_active_status===1){
         item.activestatus = (
         
           <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -283,7 +187,7 @@ console.log(value)
            
           </div>
         );}
-        if(item.status==2){
+        if(item.tariff_assign_active_status==2){
           item.activestatus = (
           
             <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -295,18 +199,84 @@ console.log(value)
           )}
 
       
-      //   item.id = index + 1;
+         item.id = index + 1;
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
+      if(item.tariff_assign_customer_id.cust_reg_no!=null)
+      item.customerId=item.tariff_assign_customer_id.cust_reg_no
+      if(item.tariff_assign_customer_id.cust_name!=null)
+      item.cust_name=item.tariff_assign_customer_id.cust_name
+      if(item.tariff_assign_pack_id.package_name!=null)
+      item.package=item.tariff_assign_pack_id.package_name
+      if(item.tariff_assign_pack_id.package_validity!=null)
+      item.validity=item.tariff_assign_pack_id.package_validity
+      if(item.tariff_assign_addedby.username!=null)
+      item.staff=item.tariff_assign_addedby.username
+      if(item.tariff_assign_pack_id.package_basic_fee!=null)
+      item.basicfee=item.tariff_assign_pack_id.package_basic_fee
+      if(item.tariff_assign_customer_id.cust_type!=null)
+      item.cust_type=item.tariff_assign_customer_id.cust_type.customer_type_name
+      if(item.tariff_assign_customer_id.localbody_type!=null)
+      item.localbody_type=item.tariff_assign_customer_id.localbody_type.localbody_type_name
+      if(item.tariff_assign_customer_id.localbody_name!=null)
+      item.localbodyName=item.tariff_assign_customer_id.localbody_name.localbody_name
+     if(item.tariff_assign_pack_id.package_visit_month!=null)
+      item.visitperMonth=item.tariff_assign_pack_id.package_visit_month
+      if(item.tariff_assign_pack_id.package_reg_fee!=null)
+      item.regFee=item.tariff_assign_pack_id.package_reg_fee
+      if(item.tariff_assign_pack_id.package_bags!=null)
+      item.freeBags=item.tariff_assign_pack_id.package_bags
+      if(item.tariff_assign_pack_id.package_billing_id!=null)
+      item.wasteItems=item.tariff_assign_pack_id.package_billing_id
+      if(item.tariff_assign_customer_id.cust_group_id!=null)
+      item.groupName=item.tariff_assign_customer_id.cust_group_id.group_name
+      if(item.tariff_assign_customer_id.cust_phone!=null)
+      item.cust_phone=item.tariff_assign_customer_id.cust_phone
+      if(item.tariff_assign_customer_id.cust_address!=null)
+      item.address=item.tariff_assign_customer_id.cust_address
+      if(item.tariff_assign_customer_id.cust_address1!=null)
+      item.address1=item.tariff_assign_customer_id.cust_address1
+      if(item.tariff_assign_customer_id.cust_house_num!=null)
+      item.houseNo=item.tariff_assign_customer_id.cust_house_num
+      if(item.tariff_assign_customer_id.ward!=null)
+      item.ward=item.tariff_assign_customer_id.ward.ward_name
+      if(item.tariff_assign_active_status==0)
+      item.status="Active"
+      else if(item.tariff_assign_active_status==1)
+      item.status="Inactive"
+      else 
+      item.status="Hold"
+    
+      
+
      
         tariffData.push(item);
     });
      setTariffForTable(tariffData);
   }, [tariff]);
+  const headers = [
+    { label: "Date", key: "tariff_assign_date" },
+    { label: "Customer ID", key: "customerId" },
+    { label: "Name", key: "cust_name" },
+    { label: "Address", key: "address" },
+    { label: "Address", key: "address1" },
+    { label: "Phone", key: "cust_phone" },
+    { label: "House No", key: "houseNo" },
+    { label: "Customer Type", key: "cust_type" },
+    { label: "Ward", key: "ward" },
+    { label: "Group", key: "groupName" },
+    { label: "Package", key: "package" },
+    { label: "Validity", key: "validity" },
+    { label: "Basic Fee", key: "basicfee" },
+    { label: "Status", key: "status" },
+
+  ];
+ 
 
   const data = {
+   
     columns: [
       {
         label: "#",
@@ -316,13 +286,13 @@ console.log(value)
       },
       {
         label: "Date",
-        field: "date",
+        field: "tariff_assign_date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Time",
-        field: "time",
+        field: "tariff_assign_time",
         sort: "asc",
         width: 400,
       },
@@ -358,7 +328,7 @@ console.log(value)
       },
 
       {
-        label: "Basic fee		",
+        label: "BasicFee		",
         field: "basicfee",
         sort: "asc",
         width: 200,
@@ -391,7 +361,7 @@ console.log(value)
          
         </div>
       );
-      if(item.status==0){
+      if(item.tariff_assign_active_status===0){
         item.activestatus = (
           
           <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -401,7 +371,7 @@ console.log(value)
            
           </div>
         );}
-        if(item.status==1){
+        if(item.tariff_assign_active_status===1){
           item.activestatus = (
           
             <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -411,7 +381,7 @@ console.log(value)
              
             </div>
           );}
-          if(item.status==2){
+          if(item.tariff_assign_active_status==2){
             item.activestatus = (
             
               <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -428,6 +398,54 @@ console.log(value)
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
+      if(item.tariff_assign_customer_id.cust_reg_no!=null)
+      item.customerId=item.tariff_assign_customer_id.cust_reg_no
+      if(item.tariff_assign_customer_id.cust_name!=null)
+      item.cust_name=item.tariff_assign_customer_id.cust_name
+      if(item.tariff_assign_pack_id.package_name!=null)
+      item.package=item.tariff_assign_pack_id.package_name
+      if(item.tariff_assign_pack_id.package_validity!=null)
+      item.validity=item.tariff_assign_pack_id.package_validity
+      if(item.tariff_assign_addedby.username!=null)
+      item.staff=item.tariff_assign_addedby.username
+      if(item.tariff_assign_pack_id.package_basic_fee!=null)
+      item.basicfee=item.tariff_assign_pack_id.package_basic_fee
+      if(item.tariff_assign_customer_id.cust_type!=null)
+      item.cust_type=item.tariff_assign_customer_id.cust_type.customer_type_name
+      if(item.tariff_assign_customer_id.localbody_type!=null)
+      item.localbody_type=item.tariff_assign_customer_id.localbody_type.localbody_type_name
+      if(item.tariff_assign_customer_id.localbody_name!=null)
+      item.localbodyName=item.tariff_assign_customer_id.localbody_name.localbody_name
+     if(item.tariff_assign_pack_id.package_visit_month!=null)
+      item.visitperMonth=item.tariff_assign_pack_id.package_visit_month
+      if(item.tariff_assign_pack_id.package_reg_fee!=null)
+      item.regFee=item.tariff_assign_pack_id.package_reg_fee
+      if(item.tariff_assign_pack_id.package_bags!=null)
+      item.freeBags=item.tariff_assign_pack_id.package_bags
+      if(item.tariff_assign_pack_id.package_billing_id!=null)
+      item.wasteItems=item.tariff_assign_pack_id.package_billing_id
+      if(item.tariff_assign_customer_id.cust_group_id!=null)
+      item.groupName=item.tariff_assign_customer_id.cust_group_id.group_name
+      if(item.tariff_assign_customer_id.cust_phone!=null)
+      item.cust_phone=item.tariff_assign_customer_id.cust_phone
+      if(item.tariff_assign_customer_id.cust_address!=null)
+      item.address=item.tariff_assign_customer_id.cust_address
+      if(item.tariff_assign_customer_id.cust_address1!=null)
+      item.address1=item.tariff_assign_customer_id.cust_address1
+      if(item.tariff_assign_customer_id.cust_house_num!=null)
+      item.houseNo=item.tariff_assign_customer_id.cust_house_num
+      if(item.tariff_assign_customer_id.ward!=null)
+      item.ward=item.tariff_assign_customer_id.ward.ward_name
+      if(item.tariff_assign_active_status==0)
+      item.status="Active"
+      else if(item.tariff_assign_active_status==1)
+      item.status="Inactive"
+      else 
+      item.status="Hold"
+
+
+
+      
      
         newtariffData.push(item);
     });
@@ -444,13 +462,13 @@ console.log(value)
       },
       {
         label: "Date",
-        field: "date",
+        field: "tariff_assign_date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Time",
-        field: "time",
+        field: "tariff_assign_time",
         sort: "asc",
         width: 400,
       },
@@ -486,7 +504,7 @@ console.log(value)
       },
 
       {
-        label: "Basic fee		",
+        label: "BasicFee		",
         field: "basicfee",
         sort: "asc",
         width: 200,
@@ -507,130 +525,32 @@ console.log(value)
     rows: tariffForTable
   };
 
-  //   let privilagesOptionsData =
-  //     privilagesOptions &&
-  //     privilagesOptions.data &&
-  //     privilagesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
-
-  //   let companiesOptionsData =
-  //     companiesOptions &&
-  //     companiesOptions.data &&
-  //     companiesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
-
-  //   let branchesOptionsData =
-  //     branchesOptions &&
-  //     branchesOptions.data &&
-  //     branchesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
-
-  //   const privilagesOptionsGroup = [
-  //     {
-  //       options: privilagesOptionsData,
-  //     },
-  //   ];
-
-  //   const companiesOptionsGroup = [
-  //     {
-  //       options: companiesOptionsData,
-  //     },
-  //   ];
-
-  //   const branchesOptionsGroup = [
-  //     {
-  //       options: branchesOptionsData,
-  //     },
-  //   ];
-
-  //   function handleChangeUser(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setUserObject({ ...userObject, [name]: value });
-  //   }
-
-  //   function handleSelectedPrivilage(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedPrivilage(value);
-  //     setUserObject({ ...userObject, privilage: newValue });
-  //   }
-
-  //   function handleSelectedCompany(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedCompany(value);
-  //     setUserObject({ ...userObject, company: newValue });
-  //   }
-  //   function handleSelectedBranch(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedBranch(value);
-  //     setUserObject({ ...userObject, branch: newValue });
-  //   }
-
-  //   function handleChangePassword(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setPasswordObject({ ...passwordObject, [name]: value });
-  //   }
-
-  //   const handleValidSubmit = (event, values) => {
-  //     userIdTobeUpdated
-  //       ? dispatch(updateUser(userObject))
-  //       : dispatch(addUser(userObject));
-  //   };
-
-  //   const handleValidSubmitPassword = (event, values) => {
-  //     if (passwordObject.password == passwordObject.confirmPassword) {
-  //       let item = {
-  //         _id: userIdTobeUpdated,
-  //         password: passwordObject.password,
-  //       };
-  //       dispatch(updateUser(item));
-  //     } else {
-  //       toastr.error("Passwords are not matching");
-  //     }
-  //   };
-
-  //   let closeModal = () => {
-  //     setShowModal(false);
-  //     setUserIdToBeUpdated(null);
  
     
    
   function handleChangeDistrict(values){
    
    setDistrict(values);
+   dispatch(getLocalbodyOptions(values.value))
 }
  
 function handelChangeLocalbody(value){
    setLocalbody(value);
+   dispatch(getGroupOptions(value.value))
 let filterData=tariff?.filter(item=>item.localbodyName===value.label)
   setFilteredData(filterData)
 }
 function handleChangestatus(values){
   setStatus(values);
   
-let filterData=tariff?.filter(item=>item.status===values.value)
+let filterData=tariff?.filter(item=>item.tariff_assign_active_status===values.value)
+ setFilteredData(filterData)
+}
+
+function handleChangeGroup(value){
+  setSelectedGroup(value);
+  
+let filterData=tariff?.filter(item=>item.groupName===value.label)
  setFilteredData(filterData)
 }
   
@@ -650,7 +570,7 @@ function handleChangepackage(value){
  let ndate = moment(value).format(format2);
 
     console.log(ndate)
-    let filterData=tariff?.filter(item=>item.date===ndate)
+    let filterData=tariff?.filter(item=>item.tariff_assign_date===ndate)
     setFilteredData(filterData)
  
 
@@ -662,6 +582,7 @@ function handleChangepackage(value){
     setSelectedPackage({})
     setDateValue(null)
     setStatus({})
+    setSelectedGroup({})
   }
 
   //   };
@@ -677,7 +598,7 @@ function handleChangepackage(value){
               <CardBody>
                 <Row>
                   <Col md="3">
-                    <div className="mb-3">
+                    <div className="mb-3" style={{paddingTop:"30px"}}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                               <Stack spacing={10} >
                                 <DesktopDatePicker
@@ -728,11 +649,11 @@ function handleChangepackage(value){
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
                         onChange={handelChangeLocalbody}
-                       options={localbodies.dist_id?.filter(item=>item.dist_id.district_name===district.label)
-                       .map((itm)=>{
+                       options={localbodyOptions?.map((itm)=>{
                          return{
                            label:itm.localbody_name,
                            value:itm._id,
+                           key:itm._id
                          }
                        })} 
                       />
@@ -748,14 +669,16 @@ function handleChangepackage(value){
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
+                        value={selectedGroup}
                         classNamePrefix="select2-selection"
-                        options={groups .group_localbody_name_id ?.filter(item=>item.group_localbody_name_id.localbody_name===localbody.label)
-                          .map((itm)=>{
+                        options={groupOptions?.map((itm)=>{
                             return{
                               label:itm.group_name,
                               value:itm._id,
+                              key:itm._id
                             }
                           })} 
+                          onChange={handleChangeGroup}
                       />
                     </div>
                   </Col>
@@ -798,7 +721,7 @@ function handleChangepackage(value){
                    
                   </Col>
                   <Col md="3">
-                    <div className="mb-3">
+                    <div className="mb-3" style={{paddingTop:"30px"}}>
                      <LoopIcon onClick={handleClick} ></LoopIcon>
                     </div></Col>
                     <Col md="3">
@@ -809,6 +732,7 @@ function handleChangepackage(value){
                     <CSVLink
        // headers={fileHeaders}
         data={tariffForTable}
+        headers= {headers}
         fileName="results.csv"
         target="_blank"
       >
@@ -859,11 +783,11 @@ function handleChangepackage(value){
                       <TableCell style={{ fontWeight: "" }}>
                          Date:
                       </TableCell>
-                      <TableCell align="left">{row.date}</TableCell>
+                      <TableCell align="left">{row.tariff_assign_date}</TableCell>
                       <TableCell align="left" style={{ fontWeight: "" }}>
                          Time:
                       </TableCell>
-                      <TableCell align="left">{row.time}</TableCell>
+                      <TableCell align="left">{row.tariff_assign_time}</TableCell>
                       {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
 
                     </TableRow>
@@ -892,10 +816,10 @@ function handleChangepackage(value){
                        <TableCell component="th" scope="row">
                        Customer Type
                        </TableCell>
-                       <TableCell align="left">{}</TableCell>
+                       <TableCell align="left">{row.cust_type}</TableCell>
                        <TableCell align="left">Localbody Type</TableCell>
                       
-                       <TableCell align="left">{}</TableCell>
+                       <TableCell align="left">{row.localbody_type}</TableCell>
                       
 
                        
@@ -947,7 +871,7 @@ function handleChangepackage(value){
                        <TableCell align="left">{row.basicfee}</TableCell>
                        <TableCell align="left">Free Bags</TableCell>
                       
-                       <TableCell align="left">{}</TableCell>
+                       <TableCell align="left">{row.freeBags}</TableCell>
                       
 
                        
@@ -979,11 +903,13 @@ function handleChangepackage(value){
           <Table>
           <TableHead>
                   {tableData.map((row) => (
+                   // console.log(row)
                     <TableRow>
                    
                       <TableCell style={{ fontWeight: "bold" }}>
                          Item Name
                       </TableCell>
+                    
                      
                       <TableCell align="left" style={{ fontWeight: "bold" }}>
                          Free Bags
@@ -992,8 +918,25 @@ function handleChangepackage(value){
                       {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
 
                     </TableRow>
+                    ))}
+
+{tableData.map((row) => (
+    <TableRow>
+                     {row.wasteItems?.map((data)=>{
+                      return(
+                      <TableRow>
+                       <TableCell align="left">{data.waste_items_name}</TableCell>
+                       </TableRow>
+                       
+                      )
+
+                    })
+                   }
+                   </TableRow>
+
+                   ))}
                    
-                  ))}
+                  
                   </TableHead>
                   <TableBody>
                    {tableData.map((row) => (
@@ -1034,7 +977,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(ViewTariff));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ //ViewTariff.propTypes = {
+  // error: PropTypes.any,
+  //tariff: PropTypes.array,
+ //};

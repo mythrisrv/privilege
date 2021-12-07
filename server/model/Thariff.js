@@ -44,7 +44,7 @@ let Thariff_Schema = new Schema(
       localbody_type: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref:"tbl_local_body_name"
+        ref:"tbl_local_body"
       },
       package_name: {
         type: String,
@@ -72,10 +72,10 @@ let Thariff_Schema = new Schema(
         type: Number,
         required: true,
       },
-      package_billing_id: {
+      package_billing_id: [{
         type:String,
         ref: "tbl_waste_items",
-      },
+      }],
       package_bags: {
         type: String,
         required: true,

@@ -13,7 +13,10 @@ import{
     UPDATE_GROUP_FAIL,
     DELETE_GROUP,
     DELETE_GROUP_SUCCESS,
-    DELETE_GROUP_FAIL
+    DELETE_GROUP_FAIL,
+    GET_GROUP_OPTIONS,
+    GET_GROUP_OPTIONS_SUCCESS,
+    GET_GROUP_OPTIONS_FAIL
 
 } from "./actionTypes"
 
@@ -89,5 +92,20 @@ export const getGroups = () => ({
   
   export const deleteGroupFail = (error) => ({
     type: DELETE_GROUP_FAIL,
+    payload: error,
+  });
+
+  export const getGroupOptions = (localbodyId) => ({
+    type: GET_GROUP_OPTIONS,
+    localbodyId:localbodyId,
+  });
+  
+  export const getGroupOptionsSuccess = (groupOptions) => ({
+    type: GET_GROUP_OPTIONS_SUCCESS,
+    payload: groupOptions,
+  });
+  
+  export const getGroupOptionsFail = (error) => ({
+    type: GET_GROUP_OPTIONS_FAIL,
     payload: error,
   });

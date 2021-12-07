@@ -30,7 +30,7 @@ let ThariffAssign_Schema = new Schema(
         ref:"users"
       },
       tariff_assign_date: {
-        type:Date,
+        type:String,
         required: true,
       },
       tariff_assign_time: {

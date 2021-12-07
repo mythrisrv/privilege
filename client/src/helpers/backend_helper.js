@@ -102,7 +102,7 @@ export const addGroup = (group) => post(url.ADD_GROUP, group);
 export const getGroup = (groupname) => get(url.GET_GROUP, groupname);
 export const updateGroup = (group) => put(`${url.UPDATE_GROUP}/${group._id}`, group);
 export const deleteGroup= (groupId) => del(url.DELETE_GROUP, groupId);
-
+export const getGroupOptions=(localbodyId)=>get(`${url.GET_GROUP_OPTIONS}?id=${localbodyId}`)
 
 //get customers
 export const getCustomers = () =>get(url.GET_CUSTOMERS);

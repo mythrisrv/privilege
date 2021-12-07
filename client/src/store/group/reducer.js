@@ -14,6 +14,9 @@ import{
     DELETE_GROUP,
     DELETE_GROUP_SUCCESS,
     DELETE_GROUP_FAIL,
+    GET_GROUP_OPTIONS,
+    GET_GROUP_OPTIONS_SUCCESS,
+    GET_GROUP_OPTIONS_FAIL
 } from "./actionTypes";
 
 const INIT_STATE={
@@ -26,6 +29,7 @@ const INIT_STATE={
   groupIdToBeDeleted: "",
   group: {},
   error: {},
+  groupOptions:[],
 }
 
 
@@ -162,6 +166,25 @@ const Group = (state=INIT_STATE, action) => {
           },
           error: action.payload,
         };
+
+        case GET_GROUP_OPTIONS:
+          return {
+            ...state,
+            params: action.payload,
+          };
+    
+        case GET_GROUP_OPTIONS_SUCCESS:
+          return {
+            ...state,
+            groupOptions: action.payload.data,
+          };
+    
+        case GET_GROUP_OPTIONS_FAIL:
+          return {
+            ...state,
+            error: action.payload,
+          };
+  
         default:
            return state
     }

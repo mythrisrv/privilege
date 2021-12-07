@@ -28,9 +28,9 @@ export const getTariff = () => ({
     type: GET_TARIFF_OPTIONS,
   });
   
-  export const getTariffOptionsSuccess = (tariff) => ({
+  export const getTariffOptionsSuccess = (tariffOptions) => ({
     type: GET_TARIFF_OPTIONS_SUCCESS,
-    payload: tariff,
+    payload: tariffOptions,
   });
   export const getTariffOptionsFail = (error) => ({
     type: GET_TARIFF_OPTIONS_FAIL,

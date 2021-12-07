@@ -5,7 +5,8 @@ import{
     GET_GROUP,
     ADD_GROUP,
     UPDATE_GROUP,
-    DELETE_GROUP
+    DELETE_GROUP,
+    GET_GROUP_OPTIONS
 } from "./actionTypes"
 
 import{
@@ -19,11 +20,13 @@ import{
     deleteGroupSuccess,
     deleteGroupFail,
     updateGroupSuccess,
-    updateGroupFail
+    updateGroupFail,
+    getGroupOptionsSuccess,
+    getGroupOptionsFail
 } from "./actions"
 
 import{ getGroups,getGroup,
-addGroup,updateGroup,deleteGroup} from "../../helpers/backend_helper";
+addGroup,updateGroup,deleteGroup,getGroupOptions} from "../../helpers/backend_helper";
 
 function* fetchGroups() {
     try {
@@ -86,6 +89,15 @@ function* fetchGroups() {
       yield put(deleteGroupFail(error.response));
     }
   }
+
+  function* fetchGroupOptions({localbodyId:localbodyId}) {
+    try {
+      const response = yield call(getGroupOptions,localbodyId)
+      yield put(getGroupOptionsSuccess(response));
+    } catch (error) {
+      yield put(getGroupOptionsFail(error));
+    }
+  }
   
 
   function* groupSaga() {
@@ -94,6 +106,8 @@ function* fetchGroups() {
     yield takeEvery(ADD_GROUP, onAddGroup);
     yield takeEvery(UPDATE_GROUP, onUpdateGroup);
     yield takeEvery(DELETE_GROUP, onDeleteGroup);
+    yield takeEvery(GET_GROUP_OPTIONS, fetchGroupOptions);
+
   }
 
 export default groupSaga;

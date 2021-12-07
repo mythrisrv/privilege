@@ -71,11 +71,23 @@ getGroupsList = (req) => {
   getGroupsListOptions = (req) => {
     return new Promise(async (resolve, reject) => {
       try {
+        if(req.query.id==="undefined")
+        {
+          let groups = await models.group.find({
+            group_status:0,
+          }).select("group_name");
+          
+          resolve(groups);
+       
+      }else
+      {
         let groups = await models.group.find({
-          group_status:0,
-        }).select("group_name");
-        console.log(localbodies);
-        resolve(groups);
+          $and:[ {group_status:0},{group_localbody_name_id:req.query.id}]
+         }).select("group_name");
+         
+         resolve(groups);
+       
+      }
       } catch (err) {
         console.log(err);
         reject({

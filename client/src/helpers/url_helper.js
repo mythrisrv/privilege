@@ -63,7 +63,7 @@ export const ADD_GROUP = "/group";
 export const GET_GROUP = "/group";
 export const UPDATE_GROUP = "/group";
 export const DELETE_GROUP = "/group";
-
+export const GET_GROUP_OPTIONS="/group/list/options"
 //get customers
 export const GET_CUSTOMERS = "/customer/list_crm";
 
