@@ -16,7 +16,10 @@ import{
     DELETE_GROUP_FAIL,
     GET_GROUP_OPTIONS,
     GET_GROUP_OPTIONS_SUCCESS,
-    GET_GROUP_OPTIONS_FAIL
+    GET_GROUP_OPTIONS_FAIL,
+    GET_WARDS_GROUP_OPTIONS,
+    GET_WARDS_GROUP_OPTIONS_SUCCESS,
+    GET_WARDS_GROUP_OPTIONS_FAIL
 
 } from "./actionTypes"
 
@@ -107,5 +110,19 @@ export const getGroups = () => ({
   
   export const getGroupOptionsFail = (error) => ({
     type: GET_GROUP_OPTIONS_FAIL,
+    payload: error,
+  });
+  export const getWardsGroupOptions = (wardId) => ({
+    type: GET_WARDS_GROUP_OPTIONS,
+    wardId:wardId,
+  });
+  
+  export const getWardsGroupOptionsSuccess = (groupOptions) => ({
+    type: GET_WARDS_GROUP_OPTIONS_SUCCESS,
+    payload: groupOptions,
+  });
+  
+  export const getWardsGroupOptionsFail = (error) => ({
+    type: GET_WARDS_GROUP_OPTIONS_FAIL,
     payload: error,
   });

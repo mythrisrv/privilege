@@ -6,6 +6,8 @@ import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import LoopIcon from "@mui/icons-material/Loop";
+import { CSVLink } from "react-csv";
 import {
   getUsers,
   addUser,
@@ -15,6 +17,11 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getInvoice,
+  getDistrictOptions,
+  getLocalbodyOptions,
+  getWardOptions,
+  getWardsGroupOptions,
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -38,8 +45,14 @@ const ViewInvoice = (props) => {
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [invoiceForTable, setInvoiceForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState({});
+  const [selectedLocalbody, setSelectedLocalbody] = useState({});
+  const [selectedWard, setSelectedWard] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState({});
+
+  const [filteredData, setFilteredData] = useState(null);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -56,9 +69,7 @@ const ViewInvoice = (props) => {
     error,
   } = useSelector((state) => state.users);
 
-  // const districtsOptions = useSelector(
-  //   (state) => state.districts.districtsOptions
-  // );
+ 
 
   const privilagesOptions = useSelector(
     (state) => state.privilages.privilagesOptions
@@ -66,17 +77,18 @@ const ViewInvoice = (props) => {
   const companiesOptions = useSelector(
     (state) => state.companies.companiesOptions
   );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
-  );
+  const { districtOptions } = useSelector((state) => state.districts);
+  const { localbodyOptions } = useSelector((state) => state.localbodies);
+  const { wardOptions } = useSelector((state) => state.wards);
+  const { wardsGroupOptions } = useSelector((state) => state.groups);
+
+  const { invoice } = useSelector((state) => state.invoice);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
+    dispatch(getInvoice());
+    dispatch(getDistrictOptions());
   }, []);
 
   useEffect(() => {
@@ -117,85 +129,27 @@ const ViewInvoice = (props) => {
     }
   }, [updateUserResponse]);
 
-  //   let preUpdateUser = (item) => {
-  //     if (item.privilage) {
-  //       let privilage = {
-  //         label: item.privilage.name,
-  //         value: item.privilage._id,
-  //       };
-  //       handleSelectedPrivilage(privilage);
-  //     }
-  //     if (item.company) {
-  //       let company = {
-  //         label: item.company.name,
-  //         value: item.company._id,
-  //       };
-  //       handleSelectedCompany(company);
-  //     }
-  //     if (item.branch) {
-  //       let branch = {
-  //         label: item.branch.name,
-  //         value: item.branch._id,
-  //       };
-  //       handleSelectedBranch(branch);
-  //     }
-
-  //     setUserIdToBeUpdated(item._id);
-  //     setUserObject({ ...item, password: null });
-  //   };
-
-  //   let preUpdateUserPassword = (item) => {
-  //     setUserIdToBeUpdated(item._id);
-  //     setShowModal(true);
-  //   };
-
   useEffect(() => {
-    let userData = [];
+    let invoiceData = [];
 
-    users.map((item, index) => {
-      item.action = (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {/* <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateUserPassword(item);
-            }}
-          ></i> */}
-          <i
-            className="uil-edit-alt"
-            style={{
-              fontSize: "1.3em",
-              cursor: "pointer",
-              marginLeft: "1rem",
-              marginRight: "1rem",
-            }}
-            onClick={() => {
-              //   preUpdateUser(item);
-            }}
-          ></i>
-          <i
-            className="uil-trash-alt"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              //   setUserIdToBeDeleted(item._id);
-              //   setConfirmDeleteAlert(true);
-            }}
-          ></i>
-        </div>
-      );
-      //   item.id = index + 1;
-      //   item.name1 = `${item.firstName} ${item.lastName}`;
-
-      //   item.privilage1 = item.privilage && item.privilage.name;
-      //   item.company1 = item.company && item.company.name;
-      //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+    invoice?.map((item, index) => {
+      invoiceData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+    setInvoiceForTable(invoiceData);
+  }, [invoice]);
 
- 	
+  const headers = [
+    { label: "Customer ID", key: "customerId" },
+    { label: "Name", key: "custName" },
+    { label: "District", key: "district" },
+    { label: "Group", key: "customergroup" },
+    { label: "Ward", key: "customerward" },
+    { label: "Localbody", key: "localbody" },
+    { label: "Total Invoice Amount", key: "totalAmt" },
+    { label: "Paid Amount", key: "paidAmount" },
+    { label: "Total Due", key: "Due" },
+  ];
+
   const data = {
     columns: [
       {
@@ -205,165 +159,166 @@ const ViewInvoice = (props) => {
         width: 150,
       },
       {
-        label: " Customer ID",
-        field: "district",
+        label: " CustomerID",
+        field: "customerId",
         sort: "asc",
         width: 400,
       },
       {
         label: "Name",
-        field: "localbodytype",
+        field: "custName",
         sort: "asc",
         width: 200,
       },
       {
-        label: "State",
-        field: "localbodytype",
+        label: "District",
+        field: "district",
         sort: "asc",
         width: 200,
       },
       {
         label: "	Group	",
-        field: "localbodytype",
+        field: "customergroup",
         sort: "asc",
         width: 200,
       },
       {
         label: "Ward	",
-        field: "localbodytype",
+        field: "customerward",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Total Invoice Amount",
-        field: "localbodytype",
+        label: "TotalInvoiceAmount",
+        field: "totalAmt",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Paid Amount",
-        field: "localbodytype",
+        label: "PaidAmount",
+        field: "paidAmount",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Total Due",
-        field: "localbodytype",
+        label: "TotalDue",
+        field: "Due",
         sort: "asc",
         width: 200,
       },
     ],
-    rows: usersForTable,
+    rows: invoiceForTable,
   };
 
-  //   let privilagesOptionsData =
-  //     privilagesOptions &&
-  //     privilagesOptions.data &&
-  //     privilagesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
+  useEffect(() => {
+    let newInvoiceData = [];
 
-  //   let companiesOptionsData =
-  //     companiesOptions &&
-  //     companiesOptions.data &&
-  //     companiesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
+    filteredData?.map((item, index) => {
+      newInvoiceData.push(item);
+    });
+    setInvoiceForTable(newInvoiceData);
+  }, [filteredData]);
 
-  //   let branchesOptionsData =
-  //     branchesOptions &&
-  //     branchesOptions.data &&
-  //     branchesOptions.data.map((item) => {
-  //       return {
-  //         label: item.name,
-  //         value: item._id,
-  //       };
-  //     });
+  const fdata = {
+    columns: [
+      {
+        label: "#",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: " CustomerID",
+        field: "customerId",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Name",
+        field: "custName",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "District",
+        field: "district",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "	Group	",
+        field: "customergroup",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Ward	",
+        field: "customerward",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "TotalInvoiceAmount",
+        field: "totalAmt",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "PaidAmount",
+        field: "paidAmount",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "TotalDue",
+        field: "Due",
+        sort: "asc",
+        width: 200,
+      },
+    ],
+    rows: invoiceForTable,
+  };
 
-  //   const privilagesOptionsGroup = [
-  //     {
-  //       options: privilagesOptionsData,
-  //     },
-  //   ];
+  function handleChangeDistrict(value) {
+    setSelectedDistrict(value);
+    dispatch(getLocalbodyOptions(value.value));
+    let filterData = invoice?.filter((item) => item.district === value.label);
+    setFilteredData(filterData);
+  }
 
-  //   const companiesOptionsGroup = [
-  //     {
-  //       options: companiesOptionsData,
-  //     },
-  //   ];
+  function handleChangeLocalbody(value) {
+    setSelectedLocalbody(value);
+    dispatch(getWardOptions(value.value));
+    let filterData = invoice?.filter((item) => item.localbody === value.label);
+    setFilteredData(filterData);
+  }
+  function handleChangeWard(value) {
+    setSelectedWard(value);
+    dispatch(getWardsGroupOptions(value.value));
 
-  //   const branchesOptionsGroup = [
-  //     {
-  //       options: branchesOptionsData,
-  //     },
-  //   ];
+    let filterData = invoice?.filter(
+      (item) => item.customerward === value.label
+    );
+    setFilteredData(filterData);
+  }
 
-  //   function handleChangeUser(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setUserObject({ ...userObject, [name]: value });
-  //   }
+  function handleChangeGroup(value) {
+    setSelectedGroup(value);
 
-  //   function handleSelectedPrivilage(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedPrivilage(value);
-  //     setUserObject({ ...userObject, privilage: newValue });
-  //   }
+    let filterData = invoice?.filter(
+      (item) => item.customergroup === value.label
+    );
+    setFilteredData(filterData);
+  }
 
-  //   function handleSelectedCompany(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedCompany(value);
-  //     setUserObject({ ...userObject, company: newValue });
-  //   }
-  //   function handleSelectedBranch(value) {
-  //     let newValue = {
-  //       name: value.label,
-  //       _id: value.value,
-  //     };
-  //     setSelectedBranch(value);
-  //     setUserObject({ ...userObject, branch: newValue });
-  //   }
+  function handleClick() {
+    setSelectedDistrict({});
+    setSelectedLocalbody({});
+    setFilteredData(invoice);
 
-  //   function handleChangePassword(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setPasswordObject({ ...passwordObject, [name]: value });
-  //   }
-
-  //   const handleValidSubmit = (event, values) => {
-  //     userIdTobeUpdated
-  //       ? dispatch(updateUser(userObject))
-  //       : dispatch(addUser(userObject));
-  //   };
-
-  //   const handleValidSubmitPassword = (event, values) => {
-  //     if (passwordObject.password == passwordObject.confirmPassword) {
-  //       let item = {
-  //         _id: userIdTobeUpdated,
-  //         password: passwordObject.password,
-  //       };
-  //       dispatch(updateUser(item));
-  //     } else {
-  //       toastr.error("Passwords are not matching");
-  //     }
-  //   };
-
-  //   let closeModal = () => {
-  //     setShowModal(false);
-  //     setUserIdToBeUpdated(null);
-  //   };
+    setSelectedWard({});
+    setSelectedGroup({});
+  }
 
   return (
     <React.Fragment>
@@ -386,12 +341,20 @@ const ViewInvoice = (props) => {
                           <Label>District</Label>
                           <Select
                             name="customer_community_id"
-                            //   value={selectCommunity}
+                            value={selectedDistrict}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
                             classNamePrefix="select2-selection"
+                            options={districtOptions?.map((item) => {
+                              return {
+                                label: item.district_name,
+                                value: item._id,
+                                key: item._id,
+                              };
+                            })}
+                            onChange={handleChangeDistrict}
                           />
                         </div>
                       </Col>
@@ -400,12 +363,20 @@ const ViewInvoice = (props) => {
                           <Label>Localbody</Label>
                           <Select
                             name="customer_community_id"
-                            //   value={selectCommunity}
+                            value={selectedLocalbody}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
                             classNamePrefix="select2-selection"
+                            options={localbodyOptions?.map((item) => {
+                              return {
+                                label: item.localbody_name,
+                                value: item._id,
+                                key: item._id,
+                              };
+                            })}
+                            onChange={handleChangeLocalbody}
                           />
                         </div>
                       </Col>
@@ -414,47 +385,88 @@ const ViewInvoice = (props) => {
                           <Label>Ward</Label>
                           <Select
                             name="customer_community_id"
-                            //   value={selectCommunity}
+                            value={selectedWard}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
                             classNamePrefix="select2-selection"
+                            options={wardOptions?.map((item) => {
+                              return {
+                                label: item.ward_name,
+                                value: item._id,
+                                key: item._id,
+                              };
+                            })}
+                            onChange={handleChangeWard}
                           />
                         </div>
                       </Col>
-                     
+
                       <Col md="3">
                         <div className="mb-3">
                           <Label>Group</Label>
                           <Select
                             name="customer_community_id"
-                            //   value={selectCommunity}
+                            value={selectedGroup}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
                             //   }}
                             //   options={communitiesOptionsGroup}
                             classNamePrefix="select2-selection"
+                            options={wardsGroupOptions?.map((item) => {
+                              return {
+                                label: item.group_name,
+                                value: item._id,
+                                key: item._id,
+                              };
+                            })}
+                            onChange={handleChangeGroup}
                           />
                         </div>
                       </Col>
+                      <Col md="3">
+                        <div className="mb-3" style={{ paddingTop: "30px" }}>
+                          <LoopIcon onClick={handleClick}></LoopIcon>
+                        </div>
+                      </Col>
+
                       <Col md="1">
                         <div className="mt-4">
-                          <Button color="success" type="submit">
-                            Export
+                          <Button color="success">
+                            <CSVLink
+                              // headers={fileHeaders}
+                              data={invoiceForTable}
+                              headers={headers}
+                              fileName="invoice.csv"
+                              target="_blank"
+                            >
+                              Export
+                            </CSVLink>
                           </Button>
                         </div>
                       </Col>
                     </Row>
                   </AvForm>
-                  <MDBDataTable
-                    responsive
-                    bordered
-                    data={data}
-                    searching={true}
-                    paging={false}
-                    info={false}
-                  />
+                  {filteredData ? (
+                    <MDBDataTable
+                      responsive
+                      bordered
+                      data={fdata}
+                      searching={true}
+                      paging={true}
+                      info={false}
+                    />
+                  ) : (
+                    <MDBDataTable
+                      responsive
+                      bordered
+                      data={data}
+                      searching={true}
+                      paging={true}
+                      info={false}
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>
@@ -478,7 +490,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(ViewInvoice));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ViewInvoice.propTypes = {
+  error: PropTypes.any,
+  invoice: PropTypes.array,
+};

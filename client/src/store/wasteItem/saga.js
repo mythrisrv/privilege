@@ -61,6 +61,7 @@ function* fetchWasteItems() {
  
 
   function* onAddWasteItem({ payload: wasteItem }) {
+    
     try {
       const response = yield call(addWasteItem, wasteItem);
       yield put(addWasteItemSuccess(response));

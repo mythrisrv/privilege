@@ -49,7 +49,7 @@ router.get("/list", [jwtauth], async (req, res) => {
   }
 });
 
-router.get("/list/options", [jwtauth], async (req, res) => {
+router.get("/list/options",/* [jwtauth],*/ async (req, res) => {
   try {
     let item = await getGroupsListOptions(req);
     console.log(item)

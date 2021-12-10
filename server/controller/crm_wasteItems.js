@@ -120,9 +120,10 @@ deleteWasteItem= (req) => {
 };
 
 updateWasteItem = (req) => {
-  let datas=JSON.parse(req.body.body)
+  console.log(req.body.body)
+ // let datas=JSON.parse(req.body)
  
-  console.log(datas)
+ // console.log(datas)
   return new Promise(async (resolve, reject) => {
       console.log(req.body)
       console.log(req.file)

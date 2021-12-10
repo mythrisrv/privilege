@@ -87,7 +87,7 @@ const[districtValue,setdistrictValue]=useState("")
       toastr.success(deleteDistrictResponse.message);
       
     } else if (deleteDistrictResponse.type === "failure") {
-      toastr.error(error.data.message, deleteDistrictResponse.message/*{timeOut:2000,preventDuplicates:true}*/);
+      toastr.error(error.data.message, deleteDistrictResponse.message,{timeOut:2000,preventDuplicates:true});
     }
   }, [deleteDistrictResponse]);
 
@@ -148,6 +148,7 @@ const[districtValue,setdistrictValue]=useState("")
       );
       item.id = index + 1;
       item.state_name="Kerala";
+      if(item.district_addedby!=null)
       item.district_addedby=item.district_addedby.username;
       districtData.push(item);
     });

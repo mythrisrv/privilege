@@ -64,6 +64,7 @@ export const GET_GROUP = "/group";
 export const UPDATE_GROUP = "/group";
 export const DELETE_GROUP = "/group";
 export const GET_GROUP_OPTIONS="/group/list/options"
+export const GET_WARDS_GROUP_OPTIONS="/group/list/options"
 //get customers
 export const GET_CUSTOMERS = "/customer/list_crm";
 
@@ -88,3 +89,5 @@ export const ADD_QRCODE = "/qrcode";
 export const GET_TARIFF="/tariff/list";
 export const GET_TARIFF_OPTIONS="/tariff/list/options";
 export const UPDATE_TARIFF_STATUS = "/tariff";
+
+export const GET_INVOICE="/invoice/list";

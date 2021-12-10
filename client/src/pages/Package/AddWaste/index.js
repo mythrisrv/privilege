@@ -325,7 +325,7 @@ const API_URL = process.env.REACT_APP_APIURL;
         width: 150,
       },
       {
-        label: "Waste item	 ",
+        label: "WasteItem	 ",
         field: "waste_items_name",
         sort: "asc",
         width: 400,
@@ -464,7 +464,7 @@ if(wasteObject.bags){
 update.append("Bags",wasteObject.bags)}
 update.append("imageId",wasteObject.waste_items_image._id)*/
 update.append("id",itemsIdTobeUpdated)
-update.append("body",JSON.stringify(wasteObject))
+//update.append("body",JSON.stringify(wasteObject))
 update.append("file",wasteObject.image)
 //console.log(data)
     itemsIdTobeUpdated
@@ -634,7 +634,7 @@ setLoadedImage(URL.createObjectURL(value))
                             value={itemname}
                             errorMessage="Enter Waste Item"
                             className="form-control"
-                           // validate={{ required: { value: true } }}
+                            validate={{ required: { value: true } }}
                             id="validationCustom05"
                            onChange={handleChangeItemname}
                            
@@ -710,7 +710,7 @@ setLoadedImage(URL.createObjectURL(value))
                             value={bags}
                             errorMessage="Enter No. of Pages"
                             className="form-control"
-                            //validate={{ required: { value: true } }}
+                            validate={{ required: { value: true } }}
                             id="validationCustom05"
                             onChange={handleChangeBags}
                           />
@@ -726,7 +726,7 @@ setLoadedImage(URL.createObjectURL(value))
                             type="text"
                             errorMessage="Enter No. of Kg"
                             className="form-control"
-                            //validate={{ required: { value: true } }}
+                            validate={{ required: { value: true } }}
                             id="validationCustom05"
                             onChange={handleChangeWeight}
                           />
@@ -742,7 +742,7 @@ setLoadedImage(URL.createObjectURL(value))
                             type="text"
                             errorMessage="Enter Amount"
                             className="form-control"
-                            //validate={{ required: { value: true } }}
+                            validate={{ required: { value: true } }}
                             id="validationCustom05"
                             onChange={handleChangeAmount}
                           />
@@ -813,10 +813,7 @@ setLoadedImage(URL.createObjectURL(value))
                           )}
                         </div>
                       </Col>
-                    </Row>
-
-                    <Row>
-                    <Col>
+                      <Col>
                      <div className="mb-3" style={{paddingTop:"30px"}}>
                      {itemsIdTobeUpdated ? (
                       <Button
@@ -842,6 +839,8 @@ setLoadedImage(URL.createObjectURL(value))
                     </div>
                      </Col>
                     </Row>
+
+                   
                   </AvForm>
                 </CardBody>
               </Card>
@@ -856,7 +855,7 @@ setLoadedImage(URL.createObjectURL(value))
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>

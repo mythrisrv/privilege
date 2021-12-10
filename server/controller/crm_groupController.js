@@ -71,6 +71,7 @@ getGroupsList = (req) => {
   getGroupsListOptions = (req) => {
     return new Promise(async (resolve, reject) => {
       try {
+        if(req.query.id){
         if(req.query.id==="undefined")
         {
           let groups = await models.group.find({
@@ -79,7 +80,8 @@ getGroupsList = (req) => {
           
           resolve(groups);
        
-      }else
+      }
+      else
       {
         let groups = await models.group.find({
           $and:[ {group_status:0},{group_localbody_name_id:req.query.id}]
@@ -88,6 +90,28 @@ getGroupsList = (req) => {
          resolve(groups);
        
       }
+    }
+
+    if(req.query.wid){
+      if(req.query.wid==="undefined")
+      {
+        let groups = await models.group.find({
+          group_status:0,
+        }).select("group_name");
+        
+        resolve(groups);
+     
+    }
+    else
+    {
+      let groups = await models.group.find({
+        $and:[ {group_status:0},{group_ward:req.query.wid}]
+       }).select("group_name");
+       
+       resolve(groups);
+     
+    }
+  }
       } catch (err) {
         console.log(err);
         reject({

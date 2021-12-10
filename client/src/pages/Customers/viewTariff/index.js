@@ -746,14 +746,14 @@ function handleChangepackage(value){
                 bordered
                 data={fdata}
                 searching={true}
-                paging={false}
+                paging={true}
                 info={false}
               /> :<MDBDataTable
               responsive
               bordered
               data={data}
               searching={true}
-              paging={false}
+              paging={true}
               info={false}
             />}
               </CardBody>

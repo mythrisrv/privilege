@@ -103,6 +103,10 @@ export const getGroup = (groupname) => get(url.GET_GROUP, groupname);
 export const updateGroup = (group) => put(`${url.UPDATE_GROUP}/${group._id}`, group);
 export const deleteGroup= (groupId) => del(url.DELETE_GROUP, groupId);
 export const getGroupOptions=(localbodyId)=>get(`${url.GET_GROUP_OPTIONS}?id=${localbodyId}`)
+ 
+
+export const getWardsGroupOptions=(wardId)=>get(`${url.GET_WARDS_GROUP_OPTIONS}?wid=${wardId}`)
+
 
 //get customers
 export const getCustomers = () =>get(url.GET_CUSTOMERS);
@@ -133,3 +137,5 @@ export const addQrcode = (data) => post(url.ADD_QRCODE, data);
 export const getTariff=()=>get(url.GET_TARIFF);
 export const getTariffOptions=()=>get(url.GET_TARIFF_OPTIONS);
 export const updateTariffStatus = (tariff) => put(`${url.UPDATE_TARIFF_STATUS}/${tariff._id}`,tariff)
+
+export const getInvoice=()=>get(url.GET_INVOICE);

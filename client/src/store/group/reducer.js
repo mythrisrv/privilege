@@ -16,7 +16,10 @@ import{
     DELETE_GROUP_FAIL,
     GET_GROUP_OPTIONS,
     GET_GROUP_OPTIONS_SUCCESS,
-    GET_GROUP_OPTIONS_FAIL
+    GET_GROUP_OPTIONS_FAIL,
+    GET_WARDS_GROUP_OPTIONS_FAIL,
+    GET_WARDS_GROUP_OPTIONS_SUCCESS,
+    GET_WARDS_GROUP_OPTIONS
 } from "./actionTypes";
 
 const INIT_STATE={
@@ -30,6 +33,7 @@ const INIT_STATE={
   group: {},
   error: {},
   groupOptions:[],
+  wardsGroupOptions:[],
 }
 
 
@@ -184,6 +188,23 @@ const Group = (state=INIT_STATE, action) => {
             ...state,
             error: action.payload,
           };
+          case GET_WARDS_GROUP_OPTIONS:
+            return {
+              ...state,
+              params: action.payload,
+            };
+      
+          case GET_WARDS_GROUP_OPTIONS_SUCCESS:
+            return {
+              ...state,
+              wardsGroupOptions: action.payload.data,
+            };
+      
+          case GET_WARDS_GROUP_OPTIONS_FAIL:
+            return {
+              ...state,
+              error: action.payload,
+            };
   
         default:
            return state

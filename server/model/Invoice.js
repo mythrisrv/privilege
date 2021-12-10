@@ -21,7 +21,8 @@ let invoiceSchema = new Schema(
         
       },
       invoice_addedby: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref:"users"
       },
       invoice_updatedby: {
         type: Number,
@@ -62,6 +63,10 @@ let invoiceSchema = new Schema(
       invoice_district: {
         type: Schema.Types.ObjectId,
         ref: "districts",
+      },
+      invoice_ward_id: {
+        type: Schema.Types.ObjectId,
+        ref: "tbl_ward",
       },
       invoice_package_id: {
         type: Schema.Types.ObjectId,

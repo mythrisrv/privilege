@@ -149,7 +149,7 @@ const Ward = (state = INIT_STATE, action) => {
         console.log(action.payload, "ward reducer");
         return {
           ...state,
-          wardOptions: action.payload,
+          wardOptions: action.payload.data,
         };
   
       case GET_WARD_OPTIONS_FAIL:

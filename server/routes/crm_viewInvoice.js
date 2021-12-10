@@ -1,16 +1,18 @@
-const validationMiddleware = require('../middleware/validation-middleware');
+const validationMiddleware = require("../middleware/validation-middleware");
 const express = require("express");
 const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 
-const {getInvoiceList}=require("../controller/crm_viewInvoice")
+const { getInvoiceList } = require("../controller/crm_viewInvoice");
 
-router.get("/list",/* [jwtauth], */async (req, res) => {
+router.get(
+  "/list",
+  /* [jwtauth], */ async (req, res) => {
     try {
       // let item = await getDistrictsList(req);
-      let item = await getInvoiceList(req)
-      
+      let item = await getInvoiceList(req);
+      //console.log(item)
       res.status(200).json({
         status: 200,
         data: item,
@@ -21,6 +23,7 @@ router.get("/list",/* [jwtauth], */async (req, res) => {
         message: err.message,
       });
     }
-  });
+  }
+);
 
-  module.exports=router;
+module.exports = router;

@@ -6,7 +6,8 @@ import{
     ADD_GROUP,
     UPDATE_GROUP,
     DELETE_GROUP,
-    GET_GROUP_OPTIONS
+    GET_GROUP_OPTIONS,
+    GET_WARDS_GROUP_OPTIONS
 } from "./actionTypes"
 
 import{
@@ -22,11 +23,13 @@ import{
     updateGroupSuccess,
     updateGroupFail,
     getGroupOptionsSuccess,
-    getGroupOptionsFail
+    getGroupOptionsFail,
+    getWardsGroupOptionsSuccess,
+    getWardsGroupOptionsFail
 } from "./actions"
 
 import{ getGroups,getGroup,
-addGroup,updateGroup,deleteGroup,getGroupOptions} from "../../helpers/backend_helper";
+addGroup,updateGroup,deleteGroup,getGroupOptions,getWardsGroupOptions} from "../../helpers/backend_helper";
 
 function* fetchGroups() {
     try {
@@ -98,6 +101,14 @@ function* fetchGroups() {
       yield put(getGroupOptionsFail(error));
     }
   }
+  function* fetchwardGroupOptions({wardId:wardId}) {
+    try {
+      const response = yield call(getWardsGroupOptions,wardId)
+      yield put(getWardsGroupOptionsSuccess(response));
+    } catch (error) {
+      yield put(getWardsGroupOptionsFail(error));
+    }
+  }
   
 
   function* groupSaga() {
@@ -107,6 +118,7 @@ function* fetchGroups() {
     yield takeEvery(UPDATE_GROUP, onUpdateGroup);
     yield takeEvery(DELETE_GROUP, onDeleteGroup);
     yield takeEvery(GET_GROUP_OPTIONS, fetchGroupOptions);
+    yield takeEvery(GET_WARDS_GROUP_OPTIONS, fetchwardGroupOptions);
 
   }
 
