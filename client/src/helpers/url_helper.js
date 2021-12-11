@@ -91,3 +91,7 @@ export const GET_TARIFF_OPTIONS="/tariff/list/options";
 export const UPDATE_TARIFF_STATUS = "/tariff";
 
 export const GET_INVOICE="/invoice/list";
+
+export const GET_RECEIPTS="/receipt/list";
+
+

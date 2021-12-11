@@ -21,6 +21,7 @@ export * from "./wasteItem/actions";
 export * from "./customerCategory/actions"
 export * from "./qrCode/actions"
 export * from "./tariff/actions"
-export * from "./invoice/actions"
+export * from "./invoice/actions";
+export * from "./receipt/actions"
 
 

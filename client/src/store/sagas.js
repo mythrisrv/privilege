@@ -29,7 +29,8 @@ import menusSaga from "./menu/saga";
 import customerCategorySaga from "./customerCategory/saga"
 import qrcodeSaga from "./qrCode/saga"
 import tariffSaga from "./tariff/saga"
-import invoiceSaga from "./invoice/saga"
+import invoiceSaga from "./invoice/saga";
+import receiptSaga from "./receipt/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -54,5 +55,6 @@ export default function* rootSaga() {
     fork(qrcodeSaga),
     fork(tariffSaga),
     fork(invoiceSaga),
+    fork(receiptSaga),
   ]);
 }

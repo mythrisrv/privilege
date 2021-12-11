@@ -5,7 +5,10 @@ import { MDBDataTable } from "mdbreact";
 import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
+import LoopIcon from "@mui/icons-material/Loop";
 import Select from "react-select";
+import moment from "moment"
+import { CSVLink } from "react-csv";
 import {
   getUsers,
   addUser,
@@ -15,6 +18,11 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getReceipts,
+  getDistrictOptions,
+  getLocalbodyOptions,
+  getWardOptions,
+  getWardsGroupOptions
   //getPrivilagesOptions,
 } from "../../store/actions";
 
@@ -31,15 +39,21 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 const ViewReceipt = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState({});
+  const [selectedLocalbody, setSelectedLocalbody] = useState({});
+  const [selectedWard, setSelectedWard] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState({});
+  const [selectedStaff, setSelectedStaff] = useState({});
+  const [selectedDate1, setSelectedDate1] = useState("");
+  const [selectedDate2, setSelectedDate2] = useState("");
+  
   const [userObject, setUserObject] = useState({});
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
-  const [accountType, setAccountType] = useState("");
+  const [receiptsForTable, setReceiptsForTable] = useState([]);
+  const [filteredData, setFilteredData] = useState(null);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -56,9 +70,15 @@ const ViewReceipt = (props) => {
     error,
   } = useSelector((state) => state.users);
 
-  // const districtsOptions = useSelector(
-  //   (state) => state.districts.districtsOptions
-  // );
+   const {districtOptions} = useSelector(
+    (state) => state.districts)
+    const {localbodyOptions} = useSelector(
+      (state) => state.localbodies)
+      const {wardOptions} = useSelector(
+        (state) => state.wards)
+
+        const { wardsGroupOptions } = useSelector((state) => state.groups);
+
 
   const privilagesOptions = useSelector(
     (state) => state.privilages.privilagesOptions
@@ -69,53 +89,21 @@ const ViewReceipt = (props) => {
   const branchesOptions = useSelector(
     (state) => state.branches.branchesOptions
   );
+  const {receipts}=useSelector((state)=>state.receipt)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUsers());
-    dispatch(getPrivilagesOptions());
-    dispatch(getCompaniesOptions());
-    //  dispatch(getDistrictsOptions());
+   
+    dispatch(getReceipts())
+     dispatch(getDistrictOptions());
   }, []);
 
-  useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+ 
+ 
 
-  useEffect(() => {
-    if (addUserResponse.type === "success") {
-      toastr.success(addUserResponse.message);
-      setSelectedPrivilage({});
-      setSelectedCompany(null);
-      setSelectedBranch(null);
-      //  setSelectedDistrict(null);
-    } else if (addUserResponse.type === "failure") {
-      toastr.error(error.data.message, addUserResponse.message);
-    }
-  }, [addUserResponse]);
-
-  useEffect(() => {
-    if (deleteUserResponse.type === "success") {
-      toastr.success(deleteUserResponse.message);
-      setUserIdToBeDeleted(null);
-    } else if (deleteUserResponse.type === "failure") {
-      toastr.error(error.data.message, deleteUserResponse.message);
-    }
-  }, [deleteUserResponse]);
-
-  useEffect(() => {
-    if (updateUserResponse.type === "success") {
-      setShowModal(false);
-      setUserIdToBeUpdated(null);
-      setPasswordObject({});
-      toastr.success(updateUserResponse.message);
-    } else if (updateUserResponse.type === "failure") {
-      toastr.error(error.data.message, updateUserResponse.message);
-    }
-  }, [updateUserResponse]);
+ 
 
   //   let preUpdateUser = (item) => {
   //     if (item.privilage) {
@@ -149,43 +137,32 @@ const ViewReceipt = (props) => {
   //     setShowModal(true);
   //   };
 
+ 
+
+
   useEffect(() => {
-    let userData = [];
+    let receiptData = [];
 
-    users.map((item, index) => {
-      item.action = (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {/* <i
-            className="uil-key-skeleton"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              preUpdateUserPassword(item);
-            }}
-          ></i> */}
-          <i
-            className="uil-eye"
-            style={{
-              fontSize: "1.3em",
-              cursor: "pointer",
-              marginLeft: "1rem",
-              marginRight: "1rem",
-            }}
-            onClick={() => {
-              //   preUpdateUser(item);
-            }}
-          ></i>
-        </div>
-      );
-      //   item.id = index + 1;
-      //   item.name1 = `${item.firstName} ${item.lastName}`;
-
-      //   item.privilage1 = item.privilage && item.privilage.name;
-      //   item.company1 = item.company && item.company.name;
-      //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+    receipts?.map((item, index) => {
+     
+         item.id = index + 1;
+       receiptData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+     setReceiptsForTable(receiptData);
+  }, [receipts]);
+
+  const headers = [
+    {label:"ReceiptNo",key:"receiptNo"},
+    { label: "Customer ID", key: "customerId" },
+    { label: "Name", key: "custName" },
+    { label: "District", key: "district" },
+    { label: "Group", key: "customergroup" },
+    { label: "Ward", key: "customerward" },
+   
+    { label: "Total Amount", key: "Amount" },
+     { label: " Due Amount", key: "dueAmount" },
+     { label: "Staff", key: "staff" },
+  ];
 
   const data = {
     columns: [
@@ -197,67 +174,142 @@ const ViewReceipt = (props) => {
       },
       {
         label: "Date",
-        field: "district",
+        field: "date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Receipt No",
-        field: "localbodytype",
+        field: "receiptNo",
         sort: "asc",
         width: 200,
       },
       {
         label: "Customer ID		",
-        field: "localbodytype",
+        field: "customerId",
         sort: "asc",
         width: 200,
       },
       {
         label: "Name	",
-        field: "localbodytype",
+        field: "custName",
         sort: "asc",
         width: 200,
       },
       {
         label: "Group",
-        field: "localbodytype",
+        field: "customergroup",
         sort: "asc",
         width: 200,
       },
       {
         label: "	Ward	",
-        field: "localbodytype",
+        field: "customerward",
         sort: "asc",
         width: 200,
       },
 
       {
         label: "Amount	",
-        field: "localbodytype",
+        field: "Amount",
         sort: "asc",
         width: 200,
       },
       {
-        label: "	Due Amount",
-        field: "localbodytype",
+        label: "	DueAmount",
+        field: "dueAmount",
         sort: "asc",
         width: 200,
       },
       {
         label: "Staff",
-        field: "localbodytype",
+        field: "staff",
+        sort: "asc",
+        width: 200,
+      },
+     
+    ],
+    rows: receiptsForTable,
+  };
+
+
+  useEffect(() => {
+    let newreceiptData = [];
+
+    filteredData?.map((item, index) => {
+     
+         item.id = index + 1;
+       newreceiptData.push(item);
+    });
+     setReceiptsForTable(newreceiptData);
+  }, [filteredData]);
+
+  const fdata = {
+    columns: [
+      {
+        label: "#",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Date",
+        field: "date",
+        sort: "asc",
+        width: 400,
+      },
+      {
+        label: "Receipt No",
+        field: "receiptNo",
         sort: "asc",
         width: 200,
       },
       {
-        label: "	Action	",
-        field: "localbodytype",
+        label: "Customer ID		",
+        field: "customerId",
         sort: "asc",
         width: 200,
       },
+      {
+        label: "Name	",
+        field: "custName",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Group",
+        field: "customergroup",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "	Ward	",
+        field: "customerward",
+        sort: "asc",
+        width: 200,
+      },
+
+      {
+        label: "Amount	",
+        field: "Amount",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "	DueAmount",
+        field: "dueAmount",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Staff",
+        field: "staff",
+        sort: "asc",
+        width: 200,
+      },
+     
     ],
-    rows: usersForTable,
+    rows: receiptsForTable,
   };
 
   //   let privilagesOptionsData =
@@ -308,11 +360,70 @@ const ViewReceipt = (props) => {
   //     },
   //   ];
 
-  //   function handleChangeUser(e) {
-  //     let name = e.target.name;
-  //     let value = e.target.value;
-  //     setUserObject({ ...userObject, [name]: value });
-  //   }
+    function handleChangeDate1(e) {
+      let values=e.target.value
+
+     let  StartDate = moment(values).format('DD-MM-YYYY');
+      setSelectedDate1(StartDate)
+      let filterData=receipts.filter((item)=>item.date===StartDate)
+    setFilteredData(filterData)
+    }
+
+    function handleChangeDate2(e) {
+      let values=e.target.value
+     let  StartDate = moment(values).format('DD-MM-YYYY');
+     const filter = receipts.filter(element => {
+      
+      return element.date === StartDate || element.date === selectedDate1;
+    });
+    
+   
+     
+    setFilteredData(filter)
+    }
+
+    function handleChangeDistrict(value){
+      setSelectedDistrict(value)
+      dispatch(getLocalbodyOptions(value.value))
+      let filterData=receipts.filter((item)=>item.district===value.label)
+      setFilteredData(filterData)
+    }
+    function handleChangeLocalbody(value){
+      setSelectedLocalbody(value)
+      dispatch(getWardOptions(value.value))
+      let filterData=receipts.filter((item)=>item.localbody===value.label)
+      setFilteredData(filterData)
+    }
+
+    function handleChangeWard(value){
+      setSelectedWard(value)
+      dispatch(getWardsGroupOptions(value.value))
+      let filterData=receipts.filter((item)=>item.customerward===value.label)
+      setFilteredData(filterData)
+    }
+
+    function handleChangeGroup(value){
+      setSelectedGroup(value)
+      let filterData=receipts.filter((item)=>item.customergroup===value.label)
+      setFilteredData(filterData)
+    }
+    function handleChangeStaff(value){
+      setSelectedStaff(value)
+      let filterData=receipts.filter((item)=>item.staff===value.label)
+      setFilteredData(filterData)
+    }
+
+    function handleClick() {
+      setSelectedDistrict({});
+      setSelectedLocalbody({});
+      setFilteredData(receipts);
+  setSelectedDate1("");
+  setSelectedDate2("");
+      setSelectedWard({});
+      setSelectedGroup({});
+      setSelectedStaff({})
+    }
+  
 
   //   function handleSelectedPrivilage(value) {
   //     let newValue = {
@@ -385,8 +496,10 @@ const ViewReceipt = (props) => {
                         <input
                           className="form-control"
                           type="date"
-                          defaultValue="2019-08-19"
+                          //value={selectedDate1}
+                          defaultValue="mm/dd/yyyy"
                           id="example-date-input"
+                          onChange={handleChangeDate1}
                         />
                       </div>
                     </div>
@@ -398,8 +511,11 @@ const ViewReceipt = (props) => {
                         <input
                           className="form-control"
                           type="date"
-                          defaultValue="2019-08-19"
+                         // value={selectedDate2}
+                          defaultValue="mm/dd/yyyy"
                           id="example-date-input"
+                          onChange={handleChangeDate2}
+                        
                         />
                       </div>
                     </div>
@@ -409,12 +525,20 @@ const ViewReceipt = (props) => {
                       <Label>District</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={selectedDistrict}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={districtOptions?.map((item)=>{
+                          return{
+                            label:item.district_name,
+                            value:item._id,
+                            key:item._id
+                          }
+                        })}
+                        onChange={handleChangeDistrict}
                       />
                     </div>
                   </Col>
@@ -423,12 +547,20 @@ const ViewReceipt = (props) => {
                       <Label>Localbody</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                           value={selectedLocalbody}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={localbodyOptions?.map((item)=>{
+                          return{
+                            label:item.localbody_name,
+                            value:item._id,
+                            key:item._id
+                          }
+                        })}
+                        onChange={handleChangeLocalbody}
                       />
                     </div>
                   </Col>
@@ -438,12 +570,20 @@ const ViewReceipt = (props) => {
                       <Label>Ward</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                           value={selectedWard}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={wardOptions?.map((item)=>{
+                          return{
+                            label:item.ward_name,
+                            value:item._id,
+                            key:item._id
+                          }
+                        })}
+                        onChange={handleChangeWard}
                       />
                     </div>
                   </Col>
@@ -452,12 +592,20 @@ const ViewReceipt = (props) => {
                       <Label>Group</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                          value={selectedGroup}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={wardsGroupOptions?.map((item)=>{
+                          return{
+                            label:item.group_name,
+                            value:item._id,
+                            key:item._id,
+                          }
+                        })}
+                        onChange={handleChangeGroup}
                       />
                     </div>
                   </Col>
@@ -466,33 +614,61 @@ const ViewReceipt = (props) => {
                       <Label>Staff</Label>
                       <Select
                         name="customer_community_id"
-                        //   value={selectCommunity}
+                           value={selectedStaff}
                         //   onChange={(value) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        options={users?.map((item)=>{
+                          return{
+                            label:item.username,
+                            value:item._id
+                          }
+                        })}
+                        onChange={handleChangeStaff}
                       />
                     </div>
                   </Col>
+                  <Col md="3">
+                        <div className="mb-3" style={{ paddingTop: "30px" }}>
+                          <LoopIcon onClick={handleClick}></LoopIcon>
+                        </div>
+
+                      </Col>
                   <Row>
                   <Col md="1">
                         <div className="mt-4">
-                          <Button color="success" type="submit">
-                            Export
-                          </Button>
+                        <Button color="success">
+                            <CSVLink
+                              // headers={fileHeaders}
+                              data={receiptsForTable}
+                              headers={headers}
+                              fileName="invoice.csv"
+                              target="_blank"
+                            >
+                              Export
+                            </CSVLink></Button>
                         </div>
                       </Col>
                     </Row>
                 </Row>
-                <MDBDataTable
+             {filteredData ?   <MDBDataTable
                   responsive
                   bordered
-                  data={data}
+                  data={fdata}
                   searching={true}
-                  paging={false}
+                  paging={true}
                   info={false}
-                />
+                />:
+                <MDBDataTable
+                responsive
+                bordered
+                data={data}
+                searching={true}
+                paging={true}
+                info={false}
+              />}
               </CardBody>
             </Card>
           </Col>
@@ -506,7 +682,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(ViewReceipt));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+ ViewReceipt.propTypes = {
+  error: PropTypes.any,
+   receipts: PropTypes.array,
+ };

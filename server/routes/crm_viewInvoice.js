@@ -6,11 +6,9 @@ const { jwtauth } = require("../lib/jwtlib");
 
 const { getInvoiceList } = require("../controller/crm_viewInvoice");
 
-router.get(
-  "/list",
-  /* [jwtauth], */ async (req, res) => {
+router.get( "/list", [jwtauth],  async (req, res) => {
     try {
-      // let item = await getDistrictsList(req);
+     
       let item = await getInvoiceList(req);
       //console.log(item)
       res.status(200).json({
