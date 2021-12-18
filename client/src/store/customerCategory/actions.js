@@ -13,7 +13,10 @@ import{
     UPDATE_CUST_CATEGORY_FAIL,
     DELETE_CUST_CATEGORY,
     DELETE_CUST_CATEGORY_FAIL,
-    DELETE_CUST_CATEGORY_SUCCESS
+    DELETE_CUST_CATEGORY_SUCCESS,
+    GET_CUST_CATEGORIES_OPTIONS,
+    GET_CUST_CATEGORIES_OPTIONS_SUCCESS,
+    GET_CUST_CATEGORIES_OPTIONS_FAIL
 
 } from "./actionTypes"
 
@@ -85,6 +88,20 @@ export const getCustomerCategories = () => ({
   
   export const deleteCategoryFail = (error) => ({
     type: DELETE_CUST_CATEGORY_FAIL,
+    payload: error,
+  });
+
+  export const getCustomerCategoryOptions = () => ({
+    type: GET_CUST_CATEGORIES_OPTIONS,
+  });
+  
+  export const getCustomerCategoriesOptionsSuccess = (category) => ({
+    type: GET_CUST_CATEGORIES_OPTIONS_SUCCESS,
+    payload: category,
+  });
+  
+  export const getCustomerCategoriesOptionsFail = (error) => ({
+    type: GET_CUST_CATEGORIES_OPTIONS_FAIL,
     payload: error,
   });
   

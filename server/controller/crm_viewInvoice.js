@@ -98,6 +98,39 @@ getInvoiceList = (req) => {
   });
 };
 
+getInvoice=(req)=>{
+  return new Promise (async(resolve,reject)=>{
+    try{
+      let invoice=await models.Invoice.aggregate([
+        {
+          $match: { invoice_status: "0" },
+        },
+        {
+          $lookup: {
+            from: "tbl_receipts",
+            localField: "invoice_customer_id",
+            foreignField: "receipt_cust_id",
+            pipeline: [
+              { $match: {
+                $expr: { $eq: ["$schemaBId", "$$schemaBId"] },
+                
+              }}
+            ],
+            as: "receipts",
+          },
+        },
+
+      ])
+      resolve(invoice)
+
+    }catch(err){
+     
+    }
+
+  })
+}
+
 module.exports = {
   getInvoiceList,
+  getInvoice
 };

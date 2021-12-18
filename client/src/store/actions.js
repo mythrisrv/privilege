@@ -23,5 +23,6 @@ export * from "./qrCode/actions"
 export * from "./tariff/actions"
 export * from "./invoice/actions";
 export * from "./receipt/actions"
+export * from "./package/actions"
 
 

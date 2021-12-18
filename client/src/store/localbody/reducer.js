@@ -19,7 +19,12 @@ import {
   GET_LOCALBODY_TYPES_SUCCESS,
   GET_LOCALBODY_OPTIONS,
   GET_LOCALBODY_OPTIONS_SUCCESS,
-  GET_LOCALBODY_OPTIONS_FAIL
+  GET_LOCALBODY_OPTIONS_FAIL,
+ 
+  GET_TYPES_LOCALBODY_OPTIONS_SUCCESS,
+  GET_TYPES_LOCALBODY_OPTIONS,
+  GET_TYPES_LOCALBODY_OPTIONS_FAIL
+
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -200,6 +205,23 @@ const Localbody = (state = INIT_STATE, action) => {
         };
   
       case GET_LOCALBODY_OPTIONS_FAIL:
+        return {
+          ...state,
+          error: action.payload,
+        };
+        case GET_TYPES_LOCALBODY_OPTIONS:
+        return {
+          ...state,
+          params: action.payload,
+        };
+  
+      case GET_TYPES_LOCALBODY_OPTIONS_SUCCESS:
+        return {
+          ...state,
+          localbodyOptions: action.payload.data,
+        };
+  
+      case GET_TYPES_LOCALBODY_OPTIONS_FAIL:
         return {
           ...state,
           error: action.payload,

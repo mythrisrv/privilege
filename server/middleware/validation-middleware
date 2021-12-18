@@ -185,6 +185,27 @@ const createCustCategory = (req, res, next) => {
             next();
         }
     });
+};
+
+const addTariff = (req, res, next) => {
+    const validationRule = {
+        "wasteItems": "required",
+        "package_name":"required",
+        
+
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(412)
+                .send({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
 }
 /*const createWasteItemvalidator = (req, res, next) => {
     const validationRule = {
@@ -213,5 +234,6 @@ module.exports = {
     getWasteitems,
     createGroup,
     createCustCategory,
+    addTariff,
    
 }

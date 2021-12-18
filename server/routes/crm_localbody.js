@@ -10,7 +10,8 @@ const {
     getLocalbodyData,
     updateLocalbody,
     deleteLocalbody,
-    getLocalbodyTypes
+    getLocalbodyTypes,
+    getTypesLocalbodies
 } = require('../controller/crm_localbodyController');
 
 
@@ -139,6 +140,28 @@ router.get("/list/options/types", [jwtauth], async (req, res) => {
     });
   }
 });
+
+
+router.get("/list/options/typesLocalbody", [jwtauth], async (req, res) => {
+ 
+  try {
+    console.log(req.params)
+    console.log(req.query)
+    // let item = await getDistrictsList(req);
+    let item = await getTypesLocalbodies(req)
+    
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
 
 
 

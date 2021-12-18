@@ -8,6 +8,7 @@ import {
   GET_LOCALBODIES,
   GET_LOCALBODY_TYPES,
   GET_LOCALBODY_OPTIONS,
+  GET_TYPES_LOCALBODY_OPTIONS,
 } from "./actionTypes";
 
 import {
@@ -25,6 +26,8 @@ import {
   getLocalbodyTypesFail,
   getLocalbodyOptionsSuccess,
   getLocalbodyOptionsFail,
+  getTypesLocalbodiesSuccess,
+  getTypesLocalbodiesFail
 } from "./actions";
 
 //Include Both Helper File with needed methods
@@ -36,6 +39,7 @@ import {
   deleteLocalbody,
   getLocalbodyTypes,
   getLocalbodyOptions,
+  getTypesLocalbodies
   
 } from "../../helpers/backend_helper";
 
@@ -116,6 +120,16 @@ function* onDeleteLocalbody({ payload: localbodyId }) {
   }
 }
 
+
+function* fetchTypesLocalbodyOptions({typeId:typeId}) {
+  try {
+    const response = yield call(getTypesLocalbodies,typeId)
+    yield put(getTypesLocalbodiesSuccess(response));
+  } catch (error) {
+    yield put(getTypesLocalbodiesFail(error));
+  }
+}
+
 function* localbodySaga() {
   yield takeEvery(GET_LOCALBODIES, fetchLocalbodies);
   yield takeEvery(GET_LOCALBODY, onGetLocalbody);
@@ -124,6 +138,7 @@ function* localbodySaga() {
   yield takeEvery(DELETE_LOCALBODY, onDeleteLocalbody);
   yield takeEvery(GET_LOCALBODY_TYPES, fetchLocalbodyTypes);
   yield takeEvery(GET_LOCALBODY_OPTIONS, fetchLocalbodyOptions);
+  yield takeEvery(GET_TYPES_LOCALBODY_OPTIONS,fetchTypesLocalbodyOptions)
 }
 
 export default localbodySaga;

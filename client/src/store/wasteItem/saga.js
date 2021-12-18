@@ -6,7 +6,8 @@ GET_WASTE_TYPES,
 GET_WASTE_CATEGORIES,
 ADD_WASTE_ITEM,
 UPDATE_WASTE_ITEM,
-DELETE_WASTE_ITEM
+DELETE_WASTE_ITEM,
+GET_WASTEITEMS_OPTIONS
 } from "./actionTypes"
 
 import{
@@ -21,7 +22,9 @@ addWasteItemSuccess,
 updateWasteItemFail,
 updateWasteItemSuccess,
 deleteWasteItemFail,
-deleteWasteItemSuccess
+deleteWasteItemSuccess,
+getWasteItemsOptionsSuccess,
+getWasteItemsOptionsFail
 
 } from "./actions"
 
@@ -30,7 +33,7 @@ import {getWasteItems,
   getWasteCategories,
   addWasteItem,
   updateWasteItem,
-deleteWasteItem} from "../../helpers/backend_helper"
+deleteWasteItem,getWasteItemsOptions} from "../../helpers/backend_helper"
 
 function* fetchWasteItems() {
     try {
@@ -102,6 +105,15 @@ function* fetchWasteItems() {
       yield put(deleteWasteItemFail(error.response));
     }
   }
+
+  function* fetchWasteItemsOptions() {
+    try {
+      const response = yield call(getWasteItemsOptions);
+      yield put(getWasteItemsOptionsSuccess(response));
+    } catch (error) {
+      yield put(getWasteItemsOptionsFail(error));
+    }
+  }
   function* wasteItemSaga() {
     yield takeEvery(GET_WASTEITEMS, fetchWasteItems);
     yield takeEvery(GET_WASTE_TYPES, fetchWasteTypes);
@@ -109,6 +121,8 @@ function* fetchWasteItems() {
     yield takeEvery(ADD_WASTE_ITEM,onAddWasteItem);
     yield takeEvery(UPDATE_WASTE_ITEM,onUpdateWasteItem);
     yield takeEvery(DELETE_WASTE_ITEM,onDeleteWasteItem);
+    yield takeEvery(GET_WASTEITEMS_OPTIONS, fetchWasteItemsOptions);
+
   }
   
 

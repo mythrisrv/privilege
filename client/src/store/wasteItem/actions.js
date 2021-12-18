@@ -16,7 +16,10 @@ import{
   UPDATE_WASTE_ITEM_FAIL,
   DELETE_WASTE_ITEM,
   DELETE_WASTE_ITEM_SUCCESS,
-  DELETE_WASTE_ITEM_FAIL
+  DELETE_WASTE_ITEM_FAIL,
+  GET_WASTEITEMS_OPTIONS,
+  GET_WASTEITEMS_OPTIONS_SUCCESS,
+  GET_WASTEITEMS_OPTIONS_FAIL 
 
 } from"./actionTypes"
 
@@ -107,5 +110,19 @@ export const deleteWasteItemSuccess = (wasteItem) => ({
 
 export const deleteWasteItemFail = (error) => ({
   type: DELETE_WASTE_ITEM_FAIL,
+  payload: error,
+});
+
+export const getWasteItemsOptions = () => ({
+  type: GET_WASTEITEMS_OPTIONS,
+});
+
+export const getWasteItemsOptionsSuccess = (wasteItemsOptions) => ({
+  type: GET_WASTEITEMS_OPTIONS_SUCCESS,
+  payload: wasteItemsOptions,
+});
+
+export const getWasteItemsOptionsFail = (error) => ({
+  type: GET_WASTEITEMS_OPTIONS_FAIL,
   payload: error,
 });

@@ -4,7 +4,8 @@ import{
 GET_CUST_CATEGORIES,
 ADD_CUST_CATEGORY,
 UPDATE_CUST_CATEGORY,
-DELETE_CUST_CATEGORY
+DELETE_CUST_CATEGORY,
+GET_CUST_CATEGORIES_OPTIONS
 
 } from "./actionTypes";
 
@@ -17,6 +18,8 @@ import{
    updateCategoryFail,
    deleteCategorySuccess,
    deleteCategoryFail,
+   getCustomerCategoriesOptionsSuccess,
+   getCustomerCategoriesOptionsFail
 } from "./actions";
 
 import{
@@ -25,6 +28,7 @@ import{
     addCategory,
     updateCategory,
     deleteCategory,
+    getCustomerCategoryOptions
 } from "../../helpers/backend_helper"
 
 function* fetchCategories() {
@@ -79,11 +83,22 @@ function* fetchCategories() {
     }
   }
 
+  function* fetchCategoriesOptions() {
+    try {
+      const response = yield call(getCustomerCategoryOptions);
+      yield put(getCustomerCategoriesOptionsSuccess(response));
+    } catch (error) {
+      yield put(getCustomerCategoriesOptionsFail(error));
+    }
+  }
+
   function* customerCategorySaga() {
     yield takeEvery(GET_CUST_CATEGORIES, fetchCategories);
     yield takeEvery(ADD_CUST_CATEGORY, onAddCategory);
     yield takeEvery(UPDATE_CUST_CATEGORY, onUpdateCategory);
     yield takeEvery(DELETE_CUST_CATEGORY, onDeleteCategory);
+    yield takeEvery(GET_CUST_CATEGORIES_OPTIONS, fetchCategoriesOptions);
+
   }
 
   export default customerCategorySaga;

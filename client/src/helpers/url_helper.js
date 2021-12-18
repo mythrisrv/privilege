@@ -35,6 +35,7 @@ export const DELETE_WARD = "/ward";
 
 
 //LOCALBODY
+export const GET_TYPES_LOCALBODIES="localbody/list/options/typesLocalbody"
 export const GET_LOCALBODY_TYPES="/localbody/list/options/types"
 export const GET_LOCALBODIES = "/localbody/list";
 export const ADD_LOCALBODY = "/localbody";
@@ -42,7 +43,8 @@ export const GET_LOCALBODY = "/localbody/list";
 export const UPDATE_LOCALBODY = "/localbody";
 export const DELETE_LOCALBODY = "/localbody";
 export const GET_WARD_OPTIONS="/ward/list/options";
-export const GET_LOCALBODY_OPTIONS="/localbody/list/options"
+export const GET_LOCALBODY_OPTIONS="/localbody/list/options";
+
 
 // Privilages options
 export const GET_PRIVILAGES_OPTIONS = "/privilage/list/options";
@@ -69,6 +71,7 @@ export const GET_WARDS_GROUP_OPTIONS="/group/list/options"
 export const GET_CUSTOMERS = "/customer/list_crm";
 
 //get wasteitems
+export const GET_WASTE_ITEMS_OPTIONS="/wasteItems/list/options"
 export const GET_WASTEITEMS= "/wasteItems/list";
 export const GET_WASTE_TYPES= "/wasteItems/list/types";
 export const GET_WASTE_CATEGORIES= "/wasteItems/list/categories";
@@ -77,6 +80,7 @@ export const UPDATE_WASTE_ITEM = "/wasteItems";
 export const DELETE_WASTE_ITEM = "/wasteItems";
 
 //get custome categories
+export const GET_CUST_CATEGORIES_OPTIONS="/customerCategory/list/options"
 export const GET_CUST_CATEGORIES="/customerCategory/list";
 export const ADD_CUST_CATEGORY = "/customerCategory";
 export const GET_CUST_CATEGORY = "/customerCategory";
@@ -93,5 +97,13 @@ export const UPDATE_TARIFF_STATUS = "/tariff";
 export const GET_INVOICE="/invoice/list";
 
 export const GET_RECEIPTS="/receipt/list";
+
+//Add Tariff
+
+export const GET_PACKAGES="/addTariff/list";
+export const ADD_PACKAGE="/addTariff";
+export const UPDATE_PACKAGE="/addTariff";
+export const DELETE_PACKAGE="/addTariff"
+export const UPDATE_PACKAGE_STATUS = "/addtariff/update";
 
 

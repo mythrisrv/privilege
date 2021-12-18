@@ -77,6 +77,7 @@ export const deleteLocalbody= (localbodyId) => del(url.DELETE_LOCALBODY, localbo
 export const getLocalbodyOptions=(distId)=>get(`${url.GET_LOCALBODY_OPTIONS}?id=${distId}`);
 
 export const getLocalbodyTypes = ()=>get(url.GET_LOCALBODY_TYPES)
+export const getTypesLocalbodies = (typeId)=>get(`${url.GET_TYPES_LOCALBODIES}?id=${typeId}`)
 
 
 
@@ -121,8 +122,9 @@ export const getWardOptions = (localbodyId) =>
   export const addWasteItem = (wasteItem) => post(url.ADD_WASTE_ITEM, wasteItem);
   export const updateWasteItem = (wasteItem) => put(`${url.UPDATE_WASTE_ITEM}/${wasteItem.get('id')}`, wasteItem);
  export const deleteWasteItem= (wasteItemId) => del(url.DELETE_WASTE_ITEM, wasteItemId);
-
+export const getWasteItemsOptions=()=>get(url.GET_WASTE_ITEMS_OPTIONS)
  //customer categories
+ export const getCustomerCategoryOptions=()=>get(url.GET_CUST_CATEGORIES_OPTIONS)
  export const getCustomerCategories=()=>get(url.GET_CUST_CATEGORIES)
  export const addCategory= (category) => post(url.ADD_CUST_CATEGORY, category);
 export const getCategory = (catId) => get(url.GET_CUST_CATEGORY, catId);
@@ -141,3 +143,10 @@ export const updateTariffStatus = (tariff) => put(`${url.UPDATE_TARIFF_STATUS}/$
 export const getInvoice=()=>get(url.GET_INVOICE);
 
 export const getReceipts=()=>get(url.GET_RECEIPTS);
+
+//Add Tariff
+export const getPackages=()=>get(url.GET_PACKAGES)
+export const addPackage = (packageData) => post(url.ADD_PACKAGE, packageData);
+export const updatePackage = (packageData) => put(`${url.UPDATE_PACKAGE}/${packageData._id}`, packageData);
+export const deletePackage= (packageId) => del(url.DELETE_PACKAGE, packageId);
+export const updatePackageStatus=(packageData)=>put(`${url.UPDATE_PACKAGE_STATUS}/${packageData._id}`,packageData)

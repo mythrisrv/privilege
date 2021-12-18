@@ -110,10 +110,31 @@ getCategoryList = (req) => {
     }
   });
 };
+
+getCategoryOptions = (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let category = await models.Customer_type.find({
+        customer_type_status: 0,
+      }).select("customer_type_name")
+      
+        
+
+       resolve(category);
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+}
+
   module.exports={
       getCategoryList,
       createCategory,
       deleteCategory,
-      updateCategory
+      updateCategory,
+      getCategoryOptions
   }
 

@@ -37,6 +37,7 @@ import qrcodes from "./qrCode/reducer"
 import tariff from "./tariff/reducer"
 import invoice from "./invoice/reducer"
 import receipt from "./receipt/reducer"
+import packageList from "./package/reducer"
 
 const rootReducer = combineReducers({
   // public
@@ -61,6 +62,7 @@ Menus,
   tariff,
   invoice,
   receipt,
+  packageList,
 });
 
 export default rootReducer;

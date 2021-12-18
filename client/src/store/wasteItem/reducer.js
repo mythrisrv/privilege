@@ -17,6 +17,9 @@ import{
   DELETE_WASTE_ITEM,
   DELETE_WASTE_ITEM_SUCCESS,
   DELETE_WASTE_ITEM_FAIL,
+  GET_WASTEITEMS_OPTIONS,
+  GET_WASTEITEMS_OPTIONS_SUCCESS,
+  GET_WASTEITEMS_OPTIONS_FAIL
 
 
 } from "./actionTypes"
@@ -33,6 +36,7 @@ updateWasteItemResponse: {},
 deleteWasteItemResponse: {},
 wasteItemIdToBeDeleted: "",
 wasteItem:{},
+wasteItemsOptions:[],
 }
 
 const WasteItems = (state=INIT_STATE, action) => {
@@ -193,7 +197,23 @@ const WasteItems = (state=INIT_STATE, action) => {
                     error: action.payload,
                   };
             
-
+                  case GET_WASTEITEMS_OPTIONS:
+                    return{
+                      ...state,
+                      params:action.payload,
+               
+                    };
+                   case GET_WASTEITEMS_OPTIONS_SUCCESS:
+                     return {
+                       ...state,
+                      wasteItemsOptions: action.payload.data,
+                     };
+               
+                   case GET_WASTEITEMS_OPTIONS_FAIL:
+                     return {
+                       ...state,
+                       error: action.payload,
+                     };
 
 
         

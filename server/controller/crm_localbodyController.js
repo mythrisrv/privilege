@@ -185,6 +185,36 @@ getLocalbodyTypes = (req) => {
   });
 };
 
+getTypesLocalbodies = (req) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if(req.query.id==="undefined")
+      {
+        let localbodies = await models.LocalbodyName.find({
+          localbody_status:0,
+        }).select("localbody_name");
+        console.log(localbodies);
+        resolve(localbodies);
+     
+    }else
+    {
+      let localbodies = await models.LocalbodyName.find({
+        $and:[ {localbody_status:0},{local_body_id:req.query.id}]
+       }).select("localbody_name");
+       console.log(localbodies);
+       resolve(localbodies);
+     
+    }
+    } catch (err) {
+      console.log(err);
+      reject({
+        message: err.message,
+      });
+    }
+  });
+};
+
+
 // getcustomertypeListwithnames = (req) => {
 //   return new Promise(async (resolve, reject) => {
 //     try {
@@ -228,6 +258,7 @@ module.exports = {
     updateLocalbody,
     deleteLocalbody,
     getLocalbodyTypes,
+    getTypesLocalbodies
     // getcustomertypeListwithnames
 
 };

@@ -40,6 +40,7 @@ const tariff=require("./routes/crm_viewTariff");
 const invoice=require("./routes/crm_viewInvoice")
 const customerCategory=require("./routes/crm_custCategory");
 const receipt=require("./routes/crm_viewReceipt")
+const addTariff=require("./routes/crm_addTariff")
 
 app.use(logger("dev"));
 
@@ -91,7 +92,8 @@ app.use("/customerCategory",customerCategory);
 app.use("/qrcode",qrcode)
 app.use("/tariff",tariff)
 app.use("/invoice",invoice)
-app.use("/receipt",receipt)
+app.use("/receipt",receipt);
+app.use("/addTariff",addTariff)
 
 app.listen(port, function () {
   console.log("Runnning on " + port);

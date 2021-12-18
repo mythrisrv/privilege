@@ -13,7 +13,10 @@ import{
     UPDATE_CUST_CATEGORY_FAIL,
     DELETE_CUST_CATEGORY,
     DELETE_CUST_CATEGORY_SUCCESS,
-    DELETE_CUST_CATEGORY_FAIL
+    DELETE_CUST_CATEGORY_FAIL,
+    GET_CUST_CATEGORIES_OPTIONS,
+    GET_CUST_CATEGORIES_OPTIONS_SUCCESS,
+    GET_CUST_CATEGORIES_OPTIONS_FAIL
 
 } from "./actionTypes";
 
@@ -26,7 +29,8 @@ const INIT_STATE={
     addCategoryResponse:{},
     updateCategoryResponse:{},
     deleteCategoryResponse:{},
-    categoryIdToBeDeleted:""
+    categoryIdToBeDeleted:"",
+    categoryOptions:[],
 
 
 
@@ -153,6 +157,23 @@ const Cust_Category = (state = INIT_STATE, action) => {
         },
         error: action.payload,
       };
+      case GET_CUST_CATEGORIES_OPTIONS:
+        return {
+          ...state,
+          params: action.payload,
+        };
+  
+      case GET_CUST_CATEGORIES_OPTIONS_SUCCESS:
+        return {
+          ...state,
+          categoryOptions: action.payload.data,
+        };
+  
+      case GET_CUST_CATEGORIES_OPTIONS_FAIL:
+        return {
+          ...state,
+          error: action.payload,
+        };
      
         default:
             return state;

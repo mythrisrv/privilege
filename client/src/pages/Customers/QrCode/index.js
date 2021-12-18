@@ -7,7 +7,7 @@ import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
 import MyDocument from "./Document";
-import { PDFViewer } from '@react-pdf/renderer';
+import { PDFViewer,Image } from '@react-pdf/renderer';
 import {
   getUsers,
   addUser,
@@ -154,7 +154,18 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
   //     setUserIdToBeUpdated(item._id);
   //     setShowModal(true);
   //   };
+ 
+  function viewpdf(){
+    console.log("hai")
+    return(
+      <Image
+  style={{  width: 500,
+    height: 500,}}
+  src="https://image.shutterstock.com/image-photo/tiny-floating-house-on-lake-600w-1980476267.jpg"
+/> 
+    )
 
+  }
   useEffect(() => {
    
     let qrData = [];
@@ -172,7 +183,7 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
               borderRadius: ".3rem",
               background: "#00bcd4",
             }}
-            //onClick={() => }
+           
           >
               View PDF
           </div>
@@ -486,7 +497,7 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
                              image ?
                              <PDFViewer> <MyDocument src={image}/></PDFViewer> : null
                            }
-                         </div>
+                         </div>*/
                         </div>
                       </Col>
                     </Row>

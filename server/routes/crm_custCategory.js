@@ -4,7 +4,7 @@ const router = express.Router();
 const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 
-const{getCategoryList,deleteCategory,updateCategory}=require("../controller/crm_CustomerCategory")
+const{getCategoryList,deleteCategory,updateCategory,getCategoryOptions}=require("../controller/crm_CustomerCategory")
 
 
 router.get("/list",/*[jwtauth],*/ async (req, res) => {
@@ -70,5 +70,22 @@ router.get("/list",/*[jwtauth],*/ async (req, res) => {
     }
   });
 
+
+  router.get("/list/options",[jwtauth], async (req, res) => {
+    try {
+      // let item = await getDistrictsList(req);
+      let item = await getCategoryOptions(req)
+      console.log(item)
+      res.status(200).json({
+        status: 200,
+        data: item,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  });
 
   module.exports = router;

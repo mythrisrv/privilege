@@ -18,6 +18,22 @@ WasteItemsList = (req) => {
       }
     });
   };
+
+  WasteItemsListOptions= (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let wasteItems = await models.WasteItem.find({
+          waste_items_status: 0,
+        }).select("waste_items_name") 
+         resolve(wasteItems);
+      } catch (err) {
+        console.log(err);
+        reject({
+          message: err.message,
+        });
+      }
+    });
+  };
   WasteTypesList = (req) => {
     return new Promise(async (resolve, reject) => {
       try {

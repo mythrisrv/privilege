@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 const { isInteger } = require("lodash");
+
+
 let Thariff_Schema = new Schema(
     {
         tariff_id: {
@@ -19,32 +21,39 @@ let Thariff_Schema = new Schema(
       },
       createdAt: {
         type: Date,
-        required: true,
+        //required: true,
       },
       updatedAt: {
         type: Date,
-        required: true,
+       // required: true,
       },
       tariff_addedby: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"users"
       },
       tariff_updatedby: {
         type: String,
       },
       tariff_date: {
-        type:Date,
+        type:String,
         required: true,
       },
       tariff_time: {
-        type:Date,
+        type:String,
       },
       tariff_company: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:"tbl_company"
       },
       localbody_type: {
         type: Schema.Types.ObjectId,
         required: true,
         ref:"tbl_local_body"
+      },
+      localbody_name: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref:"tbl_local_body_name"
       },
       package_name: {
         type: String,
@@ -52,7 +61,7 @@ let Thariff_Schema = new Schema(
       },
       cust_type: {
         type: Schema.Types.ObjectId,
-        required: true,
+       required: true,
         ref:"tbl_customer_type"
         
       },
@@ -72,15 +81,22 @@ let Thariff_Schema = new Schema(
         type: Number,
         required: true,
       },
-      package_billing_id: [{
-        type:String,
-        ref: "tbl_waste_items",
+      package_billing_id:[{
+       type:Schema.Types.ObjectId,
+   
+      ref: "tbl_waste_items",
+     
       }],
-      package_bags: {
-        type: String,
-        required: true,
-      },
+    package_bags:[ {
+      type: Number,
+      required: true,
+    }],
+    package_active_status:{
+      type:Number,
+      default:0,
+
     },
+  },
     { timestamps: true ,collection:'tbl_tariff'}
   );
   let Thariff = mongoose.model("tbl_tariff",Thariff_Schema);
