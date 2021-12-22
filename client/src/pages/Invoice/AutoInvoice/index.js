@@ -6,6 +6,8 @@ import toastr from "toastr";
 import { Row, Col, Card, CardBody, Button, Label, Modal } from "reactstrap";
 import SweetAlert from "react-bootstrap-sweetalert";
 import Select from "react-select";
+import LoopIcon from "@mui/icons-material/Loop";
+import moment from "moment";
 import {
   getUsers,
   addUser,
@@ -15,6 +17,8 @@ import {
   getCompaniesOptions,
   getBranchesOptions,
   updateUser,
+  getInvoiceList,
+  getGroupOptions
   //getPrivilagesOptions,
 } from "../../../store/actions";
 
@@ -31,15 +35,16 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 const AutoInvoice = (props) => {
   //  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedPrivilage, setSelectedPrivilage] = useState(null);
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const [selectedBranch, setSelectedBranch] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState({});
   const [userObject, setUserObject] = useState({});
   const [userIdTobeUpdated, setUserIdToBeUpdated] = useState(null);
   const [userIdToBeDeleted, setUserIdToBeDeleted] = useState(null);
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [usersForTable, setUsersForTable] = useState([]);
+  const [invoiceForTable, setInvoiceForTable] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [filteredData, setFilteredData] = useState(null);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -66,8 +71,11 @@ const AutoInvoice = (props) => {
   const companiesOptions = useSelector(
     (state) => state.companies.companiesOptions
   );
-  const branchesOptions = useSelector(
-    (state) => state.branches.branchesOptions
+  const {groupOptions} = useSelector(
+    (state) => state.groups
+  );
+  const {invoiceList} = useSelector(
+    (state) => state.invoice
   );
 
   const dispatch = useDispatch();
@@ -77,20 +85,19 @@ const AutoInvoice = (props) => {
     dispatch(getPrivilagesOptions());
     dispatch(getCompaniesOptions());
     //  dispatch(getDistrictsOptions());
+
+    dispatch(getInvoiceList())
+    dispatch(getGroupOptions())
   }, []);
 
-  useEffect(() => {
-    if (selectedCompany !== null) {
-      dispatch(getBranchesOptions(selectedCompany.value));
-    }
-  }, [selectedCompany]);
+ 
 
   useEffect(() => {
     if (addUserResponse.type === "success") {
       toastr.success(addUserResponse.message);
       setSelectedPrivilage({});
-      setSelectedCompany(null);
-      setSelectedBranch(null);
+      
+      //setSelectedBranch(null);
       //  setSelectedDistrict(null);
     } else if (addUserResponse.type === "failure") {
       toastr.error(error.data.message, addUserResponse.message);
@@ -150,9 +157,9 @@ const AutoInvoice = (props) => {
   //   };
 
   useEffect(() => {
-    let userData = [];
+    let invoiceData = [];
 
-    users.map((item, index) => {
+    invoiceList?.map((item, index) => {
       item.action = (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {/* <i
@@ -163,7 +170,7 @@ const AutoInvoice = (props) => {
             }}
           ></i> */}
           <i
-            className="uil-edit-alt"
+            className="uil uil-eye"
             style={{
               fontSize: "1.3em",
               cursor: "pointer",
@@ -174,26 +181,26 @@ const AutoInvoice = (props) => {
               //   preUpdateUser(item);
             }}
           ></i>
-          <i
-            className="uil-trash-alt"
-            style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={() => {
-              //   setUserIdToBeDeleted(item._id);
-              //   setConfirmDeleteAlert(true);
-            }}
-          ></i>
+         
         </div>
       );
-      //   item.id = index + 1;
+        item.id = index + 1;
+        if(item.invoiceDate){
+          const format2 = "DD-MM-YYYY"
+         
+          
+      item.invoicedate = moment(item.invoiceDate).format(format2);
+
+        }
       //   item.name1 = `${item.firstName} ${item.lastName}`;
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
       //   item.branch1 = item.branch && item.branch.name;
-      //   userData.push(item);
+        invoiceData.push(item);
     });
-    // setUsersForTable(userData);
-  }, [users]);
+     setInvoiceForTable(invoiceData);
+  }, [invoiceList]);
 
   const data = {
     columns: [
@@ -205,68 +212,74 @@ const AutoInvoice = (props) => {
       },
       {
         label: "Date",
-        field: "district",
+        field: "invoicedate",
         sort: "asc",
         width: 400,
       },
       {
-        label: "	Invoice No	",
-        field: "localbodytype",
+        label: "	InvoiceNo	",
+        field: "invoiceNo",
         sort: "asc",
         width: 200,
       },
       {
-        label: "Customer ID	",
-        field: "localbodytype",
+        label: "CustomerID	",
+        field: "customerId",
         sort: "asc",
         width: 200,
       },
       {
         label: "Name	",
-        field: "localbodytype",
+        field: "custName",
         sort: "asc",
         width: 200,
       },
       {
         label: "State	",
-        field: "localbodytype",
+        field: "Kerala",
         sort: "asc",
         width: 200,
       },
       {
         label: "Group	",
-        field: "localbodytype",
+        field: "group",
         sort: "asc",
         width: 200,
       },
       {
         label: "Ward	",
-        field: "localbodytype",
+        field: "ward",
         sort: "asc",
         width: 200,
       },
       {
         label: "	Amount	",
-        field: "localbodytype",
+        field: "amount",
         sort: "asc",
         width: 200,
       },
       {
         label: "Staff",
-        field: "localbodytype",
+        field: "staff",
         sort: "asc",
         width: 200,
       },
       {
         label: "Action",
-        field: "localbodytype",
+        field: "action",
         sort: "asc",
         width: 200,
       },
     ],
-    rows: usersForTable,
+    rows: invoiceForTable,
   };
 
+  
+
+ 
+
+
+ 
   //   let privilagesOptionsData =
   //     privilagesOptions &&
   //     privilagesOptions.data &&
@@ -375,6 +388,38 @@ const AutoInvoice = (props) => {
   //     setShowModal(false);
   //     setUserIdToBeUpdated(null);
   //   };
+  function handleChangeDate(e) {
+   let values=e.target.value
+   let  StartDate = moment(values).format('DD-MM-YYYY');
+   const filter = invoiceList?.filter(element => {
+   
+   
+    return element.invoicedate === StartDate ;
+  });
+  console.log(filter)
+  setInvoiceForTable(filter)
+}
+function handleClick() {
+  setSelectedGroup({})
+  setSelectedStaff({})
+  setInvoiceForTable(invoiceList)
+}
+
+function handleChangeGroup(value){
+  
+  setSelectedGroup(value)
+  let filterData=invoiceList?.filter((item)=>item.group===value.label)
+ setInvoiceForTable(filterData)
+  //setFilteredData(filterData)
+}
+function handleChangeStaff(value){
+  
+  setSelectedStaff(value)
+  let filterData=invoiceList?.filter((item)=>item.staff===value.label)
+ setInvoiceForTable(filterData)
+  //setFilteredData(filterData)
+}
+
 
   return (
     <React.Fragment>
@@ -395,6 +440,7 @@ const AutoInvoice = (props) => {
                           type="date"
                           defaultValue="2019-08-19"
                           id="example-date-input"
+                          onChange={handleChangeDate}
                         />
                       </div>
                     </div>
@@ -409,7 +455,16 @@ const AutoInvoice = (props) => {
                         //     handleSelectedCommunities(value);
                         //   }}
                         //   options={communitiesOptionsGroup}
+                        value={selectedGroup}
                         classNamePrefix="select2-selection"
+                        options={groupOptions?.map((item)=>{
+                          return{
+                            label:item.group_name,
+                            value:item._id,
+                            key:item._id
+                          }
+                        })}
+                        onChange={handleChangeGroup}
                       />
                     </div>
                   </Col>
@@ -424,9 +479,24 @@ const AutoInvoice = (props) => {
                         //   }}
                         //   options={communitiesOptionsGroup}
                         classNamePrefix="select2-selection"
+                        value={selectedStaff}
+                        options={users?.map((item)=>{
+                          return{
+                            label:item.username,
+                            value:item._id,
+                            key:item._id
+                          }
+                        })}
+                        onChange={handleChangeStaff}
                       />
                     </div>
                   </Col>
+                  <Col md="3">
+                        <div className="mb-3" style={{ paddingTop: "30px" }}>
+                          <LoopIcon onClick={handleClick}></LoopIcon>
+                        </div>
+
+                      </Col>
                 </Row>
                 <Col md="1">
                   <div className="mt-4">
@@ -435,14 +505,15 @@ const AutoInvoice = (props) => {
                     </Button>
                   </div>
                 </Col>
+               
                 <MDBDataTable
-                  responsive
-                  bordered
-                  data={data}
-                  searching={true}
-                  paging={false}
-                  info={false}
-                />
+                responsive
+                bordered
+                data={data}
+                searching={true}
+                paging={true}
+                info={false}
+              />
               </CardBody>
             </Card>
           </Col>
@@ -456,7 +527,7 @@ const mapStateToProps = (state) => {};
 
 export default withRouter(connect(mapStateToProps, { apiError })(AutoInvoice));
 
-// Users.propTypes = {
-//   error: PropTypes.any,
-//   users: PropTypes.array,
-// };
+AutoInvoice.propTypes = {
+  error: PropTypes.any,
+   invoiceList: PropTypes.array,
+ };

@@ -70,7 +70,7 @@ getReceiptList = (req) => {
            Amount:"$receipt_amount",
            dueAmount:"$receipt_due_amt",
            date:"$receipt_date",
-
+            time:"$receipt_time",
            custName: "$customer.cust_name",
            customerId: "$customer.cust_reg_no",
            staff: {

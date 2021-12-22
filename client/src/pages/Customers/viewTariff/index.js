@@ -167,7 +167,7 @@ console.log(tariff)
          
         </div>
       );
-      if(item.tariff_assign_active_status===0){
+      if(item.status===0){
       item.activestatus = (
         
         <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -177,7 +177,7 @@ console.log(tariff)
          
         </div>
       );}
-      if(item.tariff_assign_active_status===1){
+      if(item.status===1){
         item.activestatus = (
         
           <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -187,7 +187,7 @@ console.log(tariff)
            
           </div>
         );}
-        if(item.tariff_assign_active_status==2){
+        if(item.status==2){
           item.activestatus = (
           
             <div style={{ display: "flex", justifyContent: "center" ,}}>
@@ -204,50 +204,20 @@ console.log(tariff)
 
       //   item.privilage1 = item.privilage && item.privilage.name;
       //   item.company1 = item.company && item.company.name;
-      if(item.tariff_assign_customer_id.cust_reg_no!=null)
-      item.customerId=item.tariff_assign_customer_id.cust_reg_no
-      if(item.tariff_assign_customer_id.cust_name!=null)
-      item.cust_name=item.tariff_assign_customer_id.cust_name
-      if(item.tariff_assign_pack_id.package_name!=null)
-      item.package=item.tariff_assign_pack_id.package_name
-      if(item.tariff_assign_pack_id.package_validity!=null)
-      item.validity=item.tariff_assign_pack_id.package_validity
-      if(item.tariff_assign_addedby.username!=null)
-      item.staff=item.tariff_assign_addedby.username
-      if(item.tariff_assign_pack_id.package_basic_fee!=null)
-      item.basicfee=item.tariff_assign_pack_id.package_basic_fee
-      if(item.tariff_assign_customer_id.cust_type!=null)
-      item.cust_type=item.tariff_assign_customer_id.cust_type.customer_type_name
-      if(item.tariff_assign_customer_id.localbody_type!=null)
-      item.localbody_type=item.tariff_assign_customer_id.localbody_type.localbody_type_name
-      if(item.tariff_assign_customer_id.localbody_name!=null)
-      item.localbodyName=item.tariff_assign_customer_id.localbody_name.localbody_name
-     if(item.tariff_assign_pack_id.package_visit_month!=null)
-      item.visitperMonth=item.tariff_assign_pack_id.package_visit_month
-      if(item.tariff_assign_pack_id.package_reg_fee!=null)
-      item.regFee=item.tariff_assign_pack_id.package_reg_fee
-      if(item.tariff_assign_pack_id.package_bags!=null)
-      item.freeBags=item.tariff_assign_pack_id.package_bags
-      if(item.tariff_assign_pack_id.package_billing_id!=null)
-      item.wasteItems=item.tariff_assign_pack_id.package_billing_id
-      if(item.tariff_assign_customer_id.cust_group_id!=null)
-      item.groupName=item.tariff_assign_customer_id.cust_group_id.group_name
-      if(item.tariff_assign_customer_id.cust_phone!=null)
-      item.cust_phone=item.tariff_assign_customer_id.cust_phone
-      if(item.tariff_assign_customer_id.cust_address!=null)
-      item.address=item.tariff_assign_customer_id.cust_address
-      if(item.tariff_assign_customer_id.cust_address1!=null)
-      item.address1=item.tariff_assign_customer_id.cust_address1
-      if(item.tariff_assign_customer_id.cust_house_num!=null)
-      item.houseNo=item.tariff_assign_customer_id.cust_house_num
-      if(item.tariff_assign_customer_id.ward!=null)
-      item.ward=item.tariff_assign_customer_id.ward.ward_name
-      if(item.tariff_assign_active_status==0)
-      item.status="Active"
-      else if(item.tariff_assign_active_status==1)
-      item.status="Inactive"
+      if (item.freebags) {
+        const sum = item.freebags.reduce(
+          (partial_sum, a) => partial_sum + a,
+          0
+        );
+        item.freeBags = sum;
+      }
+      
+      if(item.status===0)
+      item.tariffstatus="Active"
+      else if(item.status===1)
+      item.tariffstatus="Inactive"
       else 
-      item.status="Hold"
+      item.tariffstatus="Hold"
     
       
 
@@ -286,13 +256,13 @@ console.log(tariff)
       },
       {
         label: "Date",
-        field: "tariff_assign_date",
+        field: "date",
         sort: "asc",
         width: 400,
       },
       {
         label: "Time",
-        field: "tariff_assign_time",
+        field: "time",
         sort: "asc",
         width: 400,
       },
@@ -349,181 +319,7 @@ console.log(tariff)
     rows: tariffForTable
   };
  
-  useEffect(() => {
-    let newtariffData = [];
-  
-
-    filteredData?.map((item, index) => {
-      item.action = (
-        <div style={{ display: "flex", justifyContent: "center" ,}}>
-          <RemoveRedEye onClick={()=>{handleClickOpenForm(item)}}
-              style={{ cursor: "pointer" }}/>
-         
-        </div>
-      );
-      if(item.tariff_assign_active_status===0){
-        item.activestatus = (
-          
-          <div style={{ display: "flex", justifyContent: "center" ,}}>
-          <Button color="success" size="sm" onClick={()=>{
-            dispatch(updateTariffStatus(item))
-          }}>Active </Button>
-           
-          </div>
-        );}
-        if(item.tariff_assign_active_status===1){
-          item.activestatus = (
-          
-            <div style={{ display: "flex", justifyContent: "center" ,}}>
-            <Button color="danger" size="sm" onClick={()=>{
-              dispatch(updateTariffStatus(item))
-            }}>Inactive</Button>
-             
-            </div>
-          );}
-          if(item.tariff_assign_active_status==2){
-            item.activestatus = (
-            
-              <div style={{ display: "flex", justifyContent: "center" ,}}>
-              <Button color="primary" size="sm" onClick={()=>{
-                dispatch(updateTariffStatus(item))
-              }}>Hold</Button>
-               
-              </div>
-            )}
-  
-        
-      //   item.id = index + 1;
-      //   item.name1 = `${item.firstName} ${item.lastName}`;
-
-      //   item.privilage1 = item.privilage && item.privilage.name;
-      //   item.company1 = item.company && item.company.name;
-      if(item.tariff_assign_customer_id.cust_reg_no!=null)
-      item.customerId=item.tariff_assign_customer_id.cust_reg_no
-      if(item.tariff_assign_customer_id.cust_name!=null)
-      item.cust_name=item.tariff_assign_customer_id.cust_name
-      if(item.tariff_assign_pack_id.package_name!=null)
-      item.package=item.tariff_assign_pack_id.package_name
-      if(item.tariff_assign_pack_id.package_validity!=null)
-      item.validity=item.tariff_assign_pack_id.package_validity
-      if(item.tariff_assign_addedby.username!=null)
-      item.staff=item.tariff_assign_addedby.username
-      if(item.tariff_assign_pack_id.package_basic_fee!=null)
-      item.basicfee=item.tariff_assign_pack_id.package_basic_fee
-      if(item.tariff_assign_customer_id.cust_type!=null)
-      item.cust_type=item.tariff_assign_customer_id.cust_type.customer_type_name
-      if(item.tariff_assign_customer_id.localbody_type!=null)
-      item.localbody_type=item.tariff_assign_customer_id.localbody_type.localbody_type_name
-      if(item.tariff_assign_customer_id.localbody_name!=null)
-      item.localbodyName=item.tariff_assign_customer_id.localbody_name.localbody_name
-     if(item.tariff_assign_pack_id.package_visit_month!=null)
-      item.visitperMonth=item.tariff_assign_pack_id.package_visit_month
-      if(item.tariff_assign_pack_id.package_reg_fee!=null)
-      item.regFee=item.tariff_assign_pack_id.package_reg_fee
-      if(item.tariff_assign_pack_id.package_bags!=null)
-      item.freeBags=item.tariff_assign_pack_id.package_bags
-      if(item.tariff_assign_pack_id.package_billing_id!=null)
-      item.wasteItems=item.tariff_assign_pack_id.package_billing_id
-      if(item.tariff_assign_customer_id.cust_group_id!=null)
-      item.groupName=item.tariff_assign_customer_id.cust_group_id.group_name
-      if(item.tariff_assign_customer_id.cust_phone!=null)
-      item.cust_phone=item.tariff_assign_customer_id.cust_phone
-      if(item.tariff_assign_customer_id.cust_address!=null)
-      item.address=item.tariff_assign_customer_id.cust_address
-      if(item.tariff_assign_customer_id.cust_address1!=null)
-      item.address1=item.tariff_assign_customer_id.cust_address1
-      if(item.tariff_assign_customer_id.cust_house_num!=null)
-      item.houseNo=item.tariff_assign_customer_id.cust_house_num
-      if(item.tariff_assign_customer_id.ward!=null)
-      item.ward=item.tariff_assign_customer_id.ward.ward_name
-      if(item.tariff_assign_active_status==0)
-      item.status="Active"
-      else if(item.tariff_assign_active_status==1)
-      item.status="Inactive"
-      else 
-      item.status="Hold"
-
-
-
-      
-     
-        newtariffData.push(item);
-    });
-     setTariffForTable(newtariffData);
-  }, [filteredData]);
-
-  const fdata = {
-    columns: [
-      {
-        label: "#",
-        field: "id",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Date",
-        field: "tariff_assign_date",
-        sort: "asc",
-        width: 400,
-      },
-      {
-        label: "Time",
-        field: "tariff_assign_time",
-        sort: "asc",
-        width: 400,
-      },
-      {
-        label: "Customer ID",
-        field: "customerId",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Name",
-        field: "cust_name",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Package",
-        field: "package",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Validity",
-        field: "validity",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Staff",
-        field: "staff",
-        sort: "asc",
-        width: 200,
-      },
-
-      {
-        label: "BasicFee		",
-        field: "basicfee",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "Status",
-        field: "activestatus",
-        sort: "asc",
-        width: 200,
-      },
-      {
-        label: "	Action	",
-        field: "action",
-        sort: "asc",
-        width: 200,
-      },
-    ],
-    rows: tariffForTable
-  };
+ 
 
  
     
@@ -538,26 +334,26 @@ function handelChangeLocalbody(value){
    setLocalbody(value);
    dispatch(getGroupOptions(value.value))
 let filterData=tariff?.filter(item=>item.localbodyName===value.label)
-  setFilteredData(filterData)
+  setTariffForTable(filterData)
 }
 function handleChangestatus(values){
   setStatus(values);
   
-let filterData=tariff?.filter(item=>item.tariff_assign_active_status===values.value)
- setFilteredData(filterData)
+let filterData=tariff?.filter(item=>item.status===values.value)
+ setTariffForTable(filterData)
 }
 
 function handleChangeGroup(value){
   setSelectedGroup(value);
   
 let filterData=tariff?.filter(item=>item.groupName===value.label)
- setFilteredData(filterData)
+ setTariffForTable(filterData)
 }
   
 function handleChangepackage(value){
    setSelectedPackage(value);
      let filterData=tariff?.filter(item=>item.package===value.label)
-      setFilteredData(filterData)
+      setTariffForTable(filterData)
      }
  
   
@@ -570,15 +366,16 @@ function handleChangepackage(value){
  let ndate = moment(value).format(format2);
 
     console.log(ndate)
-    let filterData=tariff?.filter(item=>item.tariff_assign_date===ndate)
-    setFilteredData(filterData)
+    let filterData=tariff?.filter(item=>item.date===ndate)
+    setTariffForTable(filterData)
  
 
   }
   function handleClick(){
     setDistrict({});
     setLocalbody({});
-    setFilteredData(tariff);
+    //setFilteredData(tariff);
+    setTariffForTable(tariff)
     setSelectedPackage({})
     setDateValue(null)
     setStatus({})
@@ -741,21 +538,14 @@ function handleChangepackage(value){
       </div>
                   </Col>
                 </Row>
-           {filteredData?  <MDBDataTable
-                responsive
-                bordered
-                data={fdata}
-                searching={true}
-                paging={true}
-                info={false}
-              /> :<MDBDataTable
+          <MDBDataTable
               responsive
               bordered
               data={data}
               searching={true}
               paging={true}
               info={false}
-            />}
+            />
               </CardBody>
             </Card>
           </Col>
@@ -783,11 +573,11 @@ function handleChangepackage(value){
                       <TableCell style={{ fontWeight: "" }}>
                          Date:
                       </TableCell>
-                      <TableCell align="left">{row.tariff_assign_date}</TableCell>
+                      <TableCell align="left">{row.date}</TableCell>
                       <TableCell align="left" style={{ fontWeight: "" }}>
                          Time:
                       </TableCell>
-                      <TableCell align="left">{row.tariff_assign_time}</TableCell>
+                      <TableCell align="left">{row.time}</TableCell>
                       {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
 
                     </TableRow>
@@ -816,10 +606,10 @@ function handleChangepackage(value){
                        <TableCell component="th" scope="row">
                        Customer Type
                        </TableCell>
-                       <TableCell align="left">{row.cust_type}</TableCell>
+                       <TableCell align="left">{row.custType}</TableCell>
                        <TableCell align="left">Localbody Type</TableCell>
                       
-                       <TableCell align="left">{row.localbody_type}</TableCell>
+                       <TableCell align="left">{row.localbodyType}</TableCell>
                       
 
                        
@@ -908,14 +698,38 @@ function handleChangepackage(value){
                    
                       <TableCell style={{ fontWeight: "bold" }}>
                          Item Name
-                      </TableCell>
                     
+                      {row.itemName.map((data)=>{
+                        return (
+                          <TableRow>
+                            <TableCell align="left">
+                              {data}
+                            </TableCell>
+                            </TableRow>
+
+                           
+                        )
+
+                      })}
+                      </TableCell>
                      
                       <TableCell align="left" style={{ fontWeight: "bold" }}>
                          Free Bags
-                      </TableCell>
+                     
                       
-                      {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
+                      {row.freebags.map((data)=>{
+                        return (
+                          <TableRow>
+                            <TableCell align="left">
+                              {data}
+                            </TableCell>
+                            </TableRow>
+
+                           
+                        )
+
+                      })}
+                       </TableCell>
 
                     </TableRow>
                     ))}

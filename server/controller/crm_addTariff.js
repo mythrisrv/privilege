@@ -1,7 +1,7 @@
 let models = require("../model");
 let moment = require("moment");
 
-(getTariffList = (req) => {
+getTariffList = (req) => {
   return new Promise(async (resolve, reject) => {
     try {
       let tariffList = await models.Thariff.find({
@@ -21,8 +21,8 @@ let moment = require("moment");
       });
     }
   });
-}),
-  (createTariff = (req) => {
+}
+  createTariff = (req) => {
     var ip = req.ip;
     const format2 = "DD-MM-YYYY";
     var date2 = new Date();
@@ -59,7 +59,7 @@ let moment = require("moment");
         });
       }
     });
-  });
+  };
 
 updatePackage = (req) => {
   return new Promise(async (resolve, reject) => {

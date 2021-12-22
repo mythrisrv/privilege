@@ -5,7 +5,7 @@ const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const{getTariffDetailes,getPackageOptions,updateTariffAssign}=require("../controller/crm_viewTariff")
 
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list", /*[jwtauth],*/ async (req, res) => {
     try {
     
       let item = await getTariffDetailes(req)

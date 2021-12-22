@@ -1,17 +1,20 @@
 import { takeEvery, put, call, takeLatest } from "redux-saga/effects";
 
 import{
-    GET_INVOICE
+    GET_INVOICE,
+    GET_INVOICE_LIST,
 
 }from "./actionTypes";
 
 import{
     getInvoiceSuccess,
-    getInvoiceFail
+    getInvoiceFail,
+    getInvoiceListSuccess,
+    getInvoiceListFail
 
 }from "./actions";
 
-import {getInvoice}from "../../helpers/backend_helper";
+import {getInvoice,getInvoiceList}from "../../helpers/backend_helper";
 
 function* fetchInvoice() {
     try {
@@ -21,9 +24,18 @@ function* fetchInvoice() {
       yield put(getInvoiceFail(error));
     }
   }
+  function* fetchInvoiceList() {
+    try {
+      const response = yield call(getInvoiceList);
+      yield put(getInvoiceListSuccess(response));
+    } catch (error) {
+      yield put(getInvoiceListFail(error));
+    }
+  }
 
   function* invoiceSaga() {
-    yield takeEvery(GET_INVOICE, fetchInvoice);
+    yield takeEvery(GET_INVOICE, fetchInvoice)
+    yield takeEvery(GET_INVOICE_LIST, fetchInvoiceList);
   }  
 
 

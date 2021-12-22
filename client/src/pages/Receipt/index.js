@@ -9,6 +9,25 @@ import LoopIcon from "@mui/icons-material/Loop";
 import Select from "react-select";
 import moment from "moment"
 import { CSVLink } from "react-csv";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
 import {
   getUsers,
   addUser,
@@ -54,6 +73,8 @@ const ViewReceipt = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [receiptsForTable, setReceiptsForTable] = useState([]);
   const [filteredData, setFilteredData] = useState(null);
+  const [tableData, setTableData] = useState([]);
+  const [form, setForm] = React.useState(false);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -137,15 +158,47 @@ const ViewReceipt = (props) => {
   //     setShowModal(true);
   //   };
 
- 
+  const handleClickOpenForm = (item) => {
+    let itemData = [];
+
+    itemData.push(item);
+    setTableData(itemData);
+
+    setForm(true);
+  };
+  const handleCloseForm = () => {
+    setForm(false);
+  };
 
 
   useEffect(() => {
     let receiptData = [];
 
     receipts?.map((item, index) => {
+      item.action = (
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+           <i
+            className="uil-eye"
+            style={{
+              fontSize: "1.3em",
+              cursor: "pointer",
+              marginLeft: "1rem",
+              marginRight: "1rem",
+            }}
+            onClick={() => {
+              handleClickOpenForm(item);
+            }}
+          ></i>
+        </div>)
      
          item.id = index + 1;
+         if(item.date){
+          const format2 = "DD-MM-YYYY"
+         
+          
+      item.date = moment(item.date).format(format2);
+
+        }
        receiptData.push(item);
     });
      setReceiptsForTable(receiptData);
@@ -227,6 +280,12 @@ const ViewReceipt = (props) => {
         sort: "asc",
         width: 200,
       },
+      {
+        label: "Action",
+        field: "action",
+        sort: "asc",
+        width: 200,
+      },
      
     ],
     rows: receiptsForTable,
@@ -304,6 +363,12 @@ const ViewReceipt = (props) => {
       {
         label: "Staff",
         field: "staff",
+        sort: "asc",
+        width: 200,
+      },
+      {
+        label: "Action",
+        field: "action",
         sort: "asc",
         width: 200,
       },
@@ -417,8 +482,8 @@ const ViewReceipt = (props) => {
       setSelectedDistrict({});
       setSelectedLocalbody({});
       setFilteredData(receipts);
-  setSelectedDate1("");
-  setSelectedDate2("");
+      setSelectedDate1("");
+      setSelectedDate2("");
       setSelectedWard({});
       setSelectedGroup({});
       setSelectedStaff({})
@@ -481,6 +546,7 @@ const ViewReceipt = (props) => {
   //   };
 
   return (
+    <>
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
@@ -675,6 +741,91 @@ const ViewReceipt = (props) => {
         </div>
       </div>
     </React.Fragment>
+     <div>
+     <Dialog open={form} onClose={handleCloseForm}>
+       <DialogTitle style={{ textAlign: "center" }}>
+         <CloseIcon
+           onClick={handleCloseForm}
+           sx={{
+             position: "absolute",
+             right: 8,
+             top: 8,
+             color: (theme) => theme.palette.grey[500],
+           }}
+         />
+       </DialogTitle>
+       <DialogContent>
+         <DialogContentText>
+           <TableContainer component={Paper}>
+             <Table sx={{ minWidth: 650 }} aria-label="caption table">
+               <TableBody>
+                 {tableData.map((row) => (
+                   <TableRow>
+                     <TableCell component="th" scope="row">
+                       Date:
+                     </TableCell>
+                     <TableCell align="left">{row.date}</TableCell>
+                     <TableCell align="left">Time:</TableCell>
+                     <TableCell align="left">{row.time}</TableCell>
+                   </TableRow>
+                 ))}
+                 {tableData.map((row) => (
+                   <TableRow>
+                     <TableCell component="th" scope="row">
+                       Receipt No:
+                     </TableCell>
+                     <TableCell align="left">{row.receiptNo}</TableCell>
+                     <TableCell align="left">Customer Id:</TableCell>
+                     <TableCell align="left">{row.customerId}</TableCell>
+                   </TableRow>
+                 ))}
+                 {tableData.map((row) => (
+                   <TableRow>
+                     <TableCell component="th" scope="row">
+                       Name:
+                     </TableCell>
+                     <TableCell align="left">
+                       {row.custName}
+                     </TableCell>
+                     <TableCell align="left">Group:</TableCell>
+                     <TableCell align="left">
+                       {row.customergroup}
+                     </TableCell>
+                   </TableRow>
+                 ))}
+                 {tableData.map((row) => (
+                   <TableRow>
+                     <TableCell component="th" scope="row">
+                       Ward
+                     </TableCell>
+                     <TableCell align="left">
+                       {row.customerward} 
+                     </TableCell>
+                     <TableCell align="left">Amount:</TableCell>
+                     <TableCell align="left">
+                       {row.Amount}
+                     </TableCell>
+                   </TableRow>
+                 ))}
+                 {tableData.map((row) => (
+                   <TableRow>
+                     <TableCell component="th" scope="row">
+                       DueAmount:
+                     </TableCell>
+                     <TableCell align="left">{row.dueAmount} </TableCell>
+                     <TableCell align="left">Staff:</TableCell>
+                     <TableCell align="left">{row.staff}</TableCell>
+                   </TableRow>
+                 ))}
+               </TableBody>
+             </Table>
+            </TableContainer>
+         </DialogContentText>
+       </DialogContent>
+       <DialogActions></DialogActions>
+     </Dialog>
+   </div>
+   </>
   );
 };
 

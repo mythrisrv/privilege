@@ -28,7 +28,7 @@ let receiptSchema = new Schema(
         type: Number,
       },
       receipt_date: {
-        type: String,
+        type: Date,
         required: true,
       },
       receipt_time: {

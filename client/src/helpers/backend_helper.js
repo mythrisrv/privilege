@@ -141,6 +141,7 @@ export const getTariffOptions=()=>get(url.GET_TARIFF_OPTIONS);
 export const updateTariffStatus = (tariff) => put(`${url.UPDATE_TARIFF_STATUS}/${tariff._id}`,tariff)
 
 export const getInvoice=()=>get(url.GET_INVOICE);
+export const getInvoiceList=()=>get(url.GET_INVOICE_LIST);
 
 export const getReceipts=()=>get(url.GET_RECEIPTS);
 

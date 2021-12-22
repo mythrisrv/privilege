@@ -35,7 +35,7 @@ let Thariff_Schema = new Schema(
         type: String,
       },
       tariff_date: {
-        type:String,
+        type:Date,
         required: true,
       },
       tariff_time: {
