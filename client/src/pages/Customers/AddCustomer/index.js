@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
@@ -23,6 +21,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
+import moment from "moment";
+
 import Select from "react-select";
 import {
   //getCustomerTypesOptions,
@@ -41,6 +41,9 @@ import {
   getBranchesOptions,
   updateUser,
   getCustomers,
+  getCustVisitLog,
+  getCustReceipts,
+  getCustInvoice,
 } from "../../../store/actions";
 
 // Redux
@@ -58,6 +61,10 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+
 import TextField from "@mui/material/TextField";
 
 import Table from "@mui/material/Table";
@@ -74,6 +81,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import List from "@mui/material/List";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import CloseIcon from "@mui/icons-material/Close";
+import Slide from "@mui/material/Slide";
+
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import DescriptionIcon from "@mui/icons-material/Description";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import DetailsIcon from "@mui/icons-material/Details";
+
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const Customers = (props) => {
   const [age, setAge] = React.useState("");
 
@@ -85,6 +113,23 @@ const Customers = (props) => {
 
   const handleModalChange = (event, newValue) => {
     setModal(newValue);
+  };
+
+  const [profileModal, setProfileModal] = React.useState(false);
+
+  const handleClickOpenProfile = (item) => {
+    dispatch(getCustVisitLog(item._id));
+    dispatch(getCustReceipts(item._id));
+    dispatch(getCustInvoice(item._id));
+    let itemData = [];
+    console.log(item);
+    itemData.push(item);
+    setTableData(itemData);
+    setProfileModal(true);
+  };
+
+  const handleClickCloseProfile = () => {
+    setProfileModal(false);
   };
 
   //edited
@@ -106,6 +151,10 @@ const Customers = (props) => {
   const [confirmDeleteAlert, setConfirmDeleteAlert] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [usersForTable, setUsersForTable] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [visitDetailes, setVisitDetailes] = useState([]);
+  const [receiptDetailes, setReceiptDetailes] = useState([]);
+  const [invoiceDetailes, setInvoiceDetailes] = useState([]);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -122,7 +171,9 @@ const Customers = (props) => {
     error,
   } = useSelector((state) => state.users);
 
-  const { customers } = useSelector((state) => state.customers);
+  const { customers, visitLog, custReceipts, custInvoice } = useSelector(
+    (state) => state.customers
+  );
   //edited
 
   // const customertypeOptions = useSelector(
@@ -167,17 +218,6 @@ const Customers = (props) => {
 
   useEffect(() => {
     dispatch(getCustomers());
-    //dispatch(getUsers());
-    //dispatch(getPrivilagesOptions());
-    // dispatch(getCompaniesOptions());
-    //edited
-    //dispatch(getCustomerTypesOptions());
-    //dispatch(getDesignationOptions());
-    //dispatch(getDistrictOptions());
-    //dispatch(getLocalbodyOptions());
-    //dispatch(getWardOptions());
-    //dispatch(getPackageOptions());
-    //dispatch(getBillingtypeOptions());
   }, []);
 
   useEffect(() => {
@@ -192,14 +232,6 @@ const Customers = (props) => {
       setSelectedPrivilage({});
       setSelectedCompany(null);
       setSelectedBranch(null);
-      //edited
-      //setSelectedCustomerType(null);
-      //setSelectedDesignation(null);
-      //setSelectedDistrict(null);
-      //selectedLocalbody(null);
-      //selectedWard(null);
-      //selectedPackage(null);
-      //selectedBillingtype(null);
     } else if (addUserResponse.type === "failure") {
       toastr.error(error.data.message, addUserResponse.message);
     }
@@ -316,6 +348,54 @@ const Customers = (props) => {
   };
 
   useEffect(() => {
+    let visitData = [];
+    visitLog?.map((item, index) => {
+      item.id = index + 1;
+      if (item.waste_clt_addedby != null) {
+        item.addedby = item.waste_clt_addedby.username;
+      } else item.addedby = "";
+      if (item.waste_clt_date) {
+        const format2 = "DD-MM-YYYY";
+        item.date = moment(item.waste_clt_date).format(format2);
+      }
+      visitData.push(item);
+    });
+    setVisitDetailes(visitData);
+  }, [visitLog]);
+
+  useEffect(() => {
+    let receiptData = [];
+    custReceipts?.map((item, index) => {
+      item.id = index + 1;
+      if (item.receipt_addedby != null) {
+        item.addedby = item.receipt_addedby.username;
+      } else item.addedby = "";
+      if (item.receipt_cust_id != null) {
+        item.custName = item.receipt_cust_id.cust_name;
+      } else item.custName = "";
+      if (item.receipt_date) {
+        const format2 = "DD-MM-YYYY";
+        item.date = moment(item.receipt_date).format(format2);
+      }
+      receiptData.push(item);
+    });
+    setReceiptDetailes(receiptData);
+  }, [custReceipts]);
+  useEffect(() => {
+    let invoiceData = [];
+    custInvoice?.map((item, index) => {
+      item.id = index + 1;
+
+      if (item.date) {
+        const format2 = "DD-MM-YYYY";
+        item.date = moment(item.date).format(format2);
+      }
+      invoiceData.push(item);
+    });
+    setInvoiceDetailes(invoiceData);
+  }, [custInvoice]);
+
+  useEffect(() => {
     let customerData = [];
 
     customers.map((item, index) => {
@@ -329,7 +409,7 @@ const Customers = (props) => {
           <i
             className="uil-eye"
             style={{ fontSize: "1.3em", cursor: "pointer" }}
-            onClick={handleClickOpen}
+            onClick={() => handleClickOpenProfile(item)}
           ></i>
           <i
             className="uil-edit-alt"
@@ -360,8 +440,9 @@ const Customers = (props) => {
       item.branch1 = item.branch && item.branch.name;
       // item.type=item.cust_type.customer_type_name;
       // item.district=item.district.district_name
-      if(item.localbody_name!=null)
-      item.localbody = item.localbody_name.localbody_name;
+      if (item.localbody_name != null) {
+        item.localbody_name = item.localbody_name.localbody_name;
+      }
       if (item.ward != null) {
         item.ward = item.ward.ward_name;
       } else {
@@ -425,7 +506,7 @@ const Customers = (props) => {
       },
       {
         label: "Localbody",
-        field: "localbody",
+        field: "localbody_name",
         sort: "asc",
         width: 150,
       },
@@ -847,6 +928,97 @@ const Customers = (props) => {
     ),
   ];
 
+  function createData3(
+    si,
+    date,
+    time,
+    referenceNo,
+    customerId,
+    customerName,
+    amount,
+    comment,
+    due,
+    staff
+  ) {
+    return {
+      si,
+      date,
+      time,
+      referenceNo,
+      customerId,
+      customerName,
+      amount,
+      comment,
+      due,
+      staff,
+    };
+  }
+
+  const rows3 = [
+    createData3(
+      1,
+      "26-11-2020",
+      "11:11:24",
+      123,
+      123,
+      "admin",
+      700,
+      "abc",
+      100,
+      "srv"
+    ),
+  ];
+
+  const [tab3, setTab3] = React.useState("1");
+
+  const handleChangeTab = (event, newValue) => {
+    setTab3(newValue);
+  };
+
+  const [date, setDate] = React.useState(new Date("2014-08-18T21:11:54"));
+
+  const handleChangeDate = (newValue) => {
+    setDate(newValue);
+  };
+
+  function createData4(
+    si,
+    date,
+    time,
+    customerName,
+    type,
+    invoiceNo,
+    debit,
+    credit,
+    balance
+  ) {
+    return {
+      si,
+      date,
+      time,
+      customerName,
+      type,
+      invoiceNo,
+      debit,
+      credit,
+      balance,
+    };
+  }
+
+  const rows4 = [
+    createData4(
+      1,
+      "26-11-2020",
+      "11:11:24",
+      "admin",
+      "Invoice",
+      "SRV123",
+      700,
+      100,
+      100
+    ),
+  ];
+
   return (
     <React.Fragment>
       {confirmDeleteAlert ? (
@@ -865,6 +1037,856 @@ const Customers = (props) => {
           Are you sure you want to delete it?
         </SweetAlert>
       ) : null}
+      {/* First Dialogue */}
+
+      <div>
+        <Dialog
+          fullScreen
+          open={profileModal}
+          onClose={handleClickCloseProfile}
+          TransitionComponent={Transition}
+        >
+          <AppBar
+            sx={{ position: "relative" }}
+            style={{ background: "#f6f6f6", color: "black" }}
+          >
+            <Toolbar>
+              <Typography
+                sx={{ ml: 2, flex: 1 }}
+                style={{ fontFamily: "IBM Plex Sans,sans-serif" }}
+                variant="h6"
+                component="div"
+              >
+                Profile
+              </Typography>
+
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClickCloseProfile}
+                aria-label="close"
+              >
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          {/* <List>
+            <ListItem button>
+              <ListItemText primary="Phone ringtone" secondary="Titania" />
+            </ListItem>
+            <Divider />
+            <ListItem button>
+              <ListItemText
+                primary="Default notification ringtone"
+                secondary="Tethys"
+              />
+            </ListItem>
+          </List> */}
+          <DialogContent style={{ background: "#f6f6f6" }}>
+            <div className="row">
+              <div className="col-xl-4">
+                <div
+                  className="card"
+                  style={{
+                    width: "fit-content",
+                    height: "max-content",
+                    boxShadow: "2px 4px 7px 0px rgb(0 0 0 / 10%)",
+                  }}
+                >
+                  {" "}
+                  {tableData.map((data) => (
+                    <div className="card-body">
+                      <div className="float-end dropdown">
+                        <a
+                          aria-haspopup="true"
+                          className="text-body font-size-16 ddropdown-toggle"
+                          aria-expanded="false"
+                        >
+                          <i className="uil uil-ellipsis-h"></i>
+                        </a>
+                        <div
+                          tabindex="-1"
+                          role="menu"
+                          aria-hidden="true"
+                          className="dropdown-menu-end dropdown-menu"
+                        >
+                          <a
+                            to="/"
+                            tabindex="0"
+                            role="menuitem"
+                            className="dropdown-item"
+                          >
+                            Edit
+                          </a>
+                          <a
+                            to="/"
+                            tabindex="1"
+                            role="menuitem"
+                            className="dropdown-item"
+                          >
+                            Action
+                          </a>
+                          <a
+                            to="/"
+                            tabindex="2"
+                            role="menuitem"
+                            className="dropdown-item"
+                          >
+                            Remove
+                          </a>
+                        </div>
+                        {/* <div className="clearfix"></div> */}
+                        {/* <div>
+                                <img
+                                  alt
+                                  className="avatar-lg rounded-circle img-thumbnail"
+                                  src="/static/media/avatar-4.b23e41d9.jpg"
+                                />
+                              </div> */}
+                      </div>
+                      {/* Customer Details Tab start */}
+
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        style={{ justifyContent: "center" }}
+                      >
+                        <Avatar
+                          alt="Remy Sharp"
+                          src="/static/media/avatar-4.b23e41d9.jpg"
+                          sx={{ width: 56, height: 56 }}
+                          style={{
+                            width: "6rem",
+                            height: "6rem",
+                            marginTop: "20%",
+                            marginBottom: "auto",
+                          }}
+                        />
+                      </Stack>
+                      <h5
+                        className="mt-3 mb-1"
+                        style={{
+                          textAlignLast: "center",
+                          fontFamily: "IBM Plex Sans,sans-serif",
+                        }}
+                      >
+                        {data.cust_name}
+                      </h5>
+                      <p
+                        className="text-muted"
+                        style={{
+                          textAlign: "center",
+                          color: "green !important",
+                          fontFamily: "IBM Plex Sans,sans-serif",
+                        }}
+                      >
+                        {data.cust_designation}
+                        <img
+                          src="https://api.ir.ee/static/ssb_icon.png"
+                          data-regcode="12336685"
+                          style={{ width: "10px", height: "10px" }}
+                        />
+                      </p>
+
+                      <div
+                        className="mt-4 mb-4"
+                        style={{
+                          textAlign: "center",
+                          fontFamily: "IBM Plex Sans,sans-serif",
+                        }}
+                      >
+                        <button type="button" className="btn btn-light btn-sm">
+                          <i className="uil uil-envelope-alt me-2"></i>
+                          Message
+                        </button>
+                      </div>
+                      <Divider />
+                      <br />
+                      <h5 className="font-size-16">About</h5>
+                      <p style={{ fontFamily: "IBM Plex Sans,sans-serif" }}>
+                        Hi I'm Marcus,has been the industry's standard dummy
+                        text To an English person, it will seem like simplified
+                        English, as a skeptical Cambridge.
+                      </p>
+                      <div style={{ fontFamily: "IBM Plex Sans,sans-serif" }}>
+                        <p className="mb-1">Name:</p>
+                        <h5 className="font-size-16">{data.cust_name}</h5>
+                      </div>
+                      <div className="mt-4">
+                        <p className="mb-1">Mobile:</p>
+                        <h5 className="font-size-16">{data.cust_phone}</h5>
+                      </div>
+                      <div className="mt-4">
+                        <p className="mb-1">Email:</p>
+                        <h5 className="font-size-16">{data.cust_email}</h5>
+                      </div>
+                      <div className="mt-4">
+                        <p className="mb-1">Location:</p>
+                        <h5 className="font-size-16">
+                          Kerala({data.district})
+                        </h5>
+                      </div>
+
+                      {/* second paper */}
+
+                      {/* Customer Details Tab end */}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="col-xl-8">
+                <div
+                  className="mb-0 card"
+                  style={{ boxShadow: "2px 4px 7px 0px rgb(0 0 0 / 10%)" }}
+                >
+                  <Box sx={{ width: "100%", typography: "body1" }}>
+                    <TabContext value={tab3}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <TabList
+                          indicatorColor="primary"
+                          textColor="primary"
+                          variant="fullWidth"
+                          onChange={handleChangeTab}
+                          aria-label="lab API tabs example"
+                        >
+                          <Tab
+                            icon={
+                              <LocationCityIcon style={{ fontSize: "20px" }} />
+                            }
+                            label="Visit log"
+                            value="1"
+                            size="small"
+                            style={{
+                              textTransform: "capitalize",
+                              fontFamily: "IBM Plex Sans,sans-serif",
+                            }}
+                          />
+                          <Tab
+                            icon={
+                              <ReceiptLongIcon style={{ fontSize: "20px" }} />
+                            }
+                            label="Receipt"
+                            value="2"
+                            style={{
+                              textTransform: "capitalize",
+                              fontFamily: "IBM Plex Sans,sans-serif",
+                            }}
+                          />
+                          <Tab
+                            icon={
+                              <DescriptionIcon style={{ fontSize: "20px" }} />
+                            }
+                            label="Invoice"
+                            value="3"
+                            style={{
+                              textTransform: "capitalize",
+                              fontFamily: "IBM Plex Sans,sans-serif",
+                            }}
+                          />
+
+                          <Tab
+                            icon={<DetailsIcon style={{ fontSize: "20px" }} />}
+                            label="Statement"
+                            value="4"
+                            style={{
+                              textTransform: "capitalize",
+                              fontFamily: "IBM Plex Sans,sans-serif",
+                            }}
+                          />
+                        </TabList>
+                      </Box>
+                      <TabPanel value="1">
+                        <div className="table-responsive">
+                          <div className="react-bootstrap-table">
+                            <table className="table table table-nowrap table-hover mb-0">
+                              <thead
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                <tr>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    SI
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Date
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Time
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Staff
+                                    <span className="order-4"></span>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                {visitDetailes?.map((data) => (
+                                  <tr>
+                                    <td>{data.id}</td>
+                                    <td>{data.date}</td>
+                                    <td> {data.waste_clt_time}</td>
+                                    <td>{data.addedby}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </TabPanel>
+                      <TabPanel value="2">
+                        <div className="table-responsive">
+                          <div className="react-bootstrap-table">
+                            <table className="table table table-nowrap table-hover mb-0">
+                              <thead
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                <tr>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    SI
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Date
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Receipt No
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Amount
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Due Amount
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Staff
+                                    <span className="order-4"></span>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                {receiptDetailes?.map((data) => (
+                                  <tr>
+                                    <td>{data.id}</td>
+                                    <td>{data.date}</td>
+                                    <td> {data.receipt_no}</td>
+                                    <td>{data.receipt_amount}/-</td>
+                                    <td>{data.receipt_due_amt}/-</td>
+                                    <td>{data.addedby}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </TabPanel>
+                      <TabPanel value="3">
+                        <div className="table-responsive">
+                          <div className="react-bootstrap-table">
+                            <table className="table table table-nowrap table-hover mb-0">
+                              <thead
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                <tr>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    SI
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Date
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Time
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Invoice No.
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Customer Name
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Invoice Amount
+                                    <span className="order-4"></span>
+                                  </th>
+                                  <th
+                                    tabindex="0"
+                                    aria-label="# sortable"
+                                    className="sortable"
+                                  >
+                                    Invoice Period
+                                    <span className="order-4"></span>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody
+                                style={{
+                                  fontFamily: "IBM Plex Sans,sans-serif",
+                                }}
+                              >
+                                {invoiceDetailes?.map((data) => (
+                                  <tr>
+                                    <td>{data.index}</td>
+                                    <td>{data.date}</td>
+                                    <td> {data.time}</td>
+                                    <td>{data.invoiceno}</td>
+                                    <td>{data.custName}</td>
+                                    <td>{data.Amount}/-</td>
+                                    <td>{data.period} days</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </TabPanel>
+                      <TabPanel value="4">
+                        <div className="mb-3">
+                          <a style={{ fontFamily: "IBM Plex Sans,sans-serif" }}>
+                            <i className="fa fa-filter" aria-hidden="true"></i>
+                            &nbsp; Filter
+                          </a>
+                        </div>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                          <Stack spacing={3}>
+                            <Row>
+                              <Col md="3">
+                                <div className="mb-3">
+                                  <DesktopDatePicker
+                                    label="Start Date"
+                                    style={{
+                                      fontFamily: "IBM Plex Sans,sans-serif",
+                                    }}
+                                    inputFormat="MM/dd/yyyy"
+                                    value={date}
+                                    onChange={handleChangeDate}
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="3">
+                                <div className="mb-3">
+                                  <DesktopDatePicker
+                                    label="End Date"
+                                    inputFormat="MM/dd/yyyy"
+                                    size="small"
+                                    value={date}
+                                    onChange={handleChangeDate}
+                                    renderInput={(params) => (
+                                      <TextField {...params} />
+                                    )}
+                                  />
+                                </div>
+                              </Col>
+                              <Col md="3">
+                                <div className="mb-3">
+                                  <Button color="danger" type="reset">
+                                    <Resete></Resete>
+                                    {"  "}
+                                    Reset
+                                  </Button>
+                                </div>
+                              </Col>
+                            </Row>
+                          </Stack>
+                        </LocalizationProvider>
+                        <TableContainer>
+                          <Table
+                            sx={{ minWidth: 700 }}
+                            aria-label="spanning table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <TableCell
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  SI
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Date
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Time
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Customer Name
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Type
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Invoice No/Receipt No
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Debit
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Credit
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: "IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  Balance
+                                </TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {invoiceDetailes?.map((row) => (
+                                <TableRow key={row.index}>
+                                  <TableCell
+                                    style={{
+                                      fontFamily:
+                                        " IBM Plex Sans,sans-serif !important",
+                                    }}
+                                  >
+                                    {row.index}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.date}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.time}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.custName}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    Invoice
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.invoiceno}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.Amount}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.credit}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.balance}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+
+                              {receiptDetailes?.map((row) => (
+                                <TableRow key={row.index}>
+                                  <TableCell
+                                    style={{
+                                      fontFamily:
+                                        " IBM Plex Sans,sans-serif !important",
+                                    }}
+                                  >
+                                    {row.index}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.date}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.receipt_time}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.custName}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    Receipt
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.receipt_no}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.debit}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.receipt_due_amt}
+                                  </TableCell>
+                                  <TableCell
+                                    align="left"
+                                    style={{
+                                      fontFamily: " IBM Plex Sans,sans-serif",
+                                    }}
+                                  >
+                                    {row.balance}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+
+                              <TableRow>
+                                <TableCell colSpan={6} />
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: " IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  556
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: " IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  556
+                                </TableCell>
+                                <TableCell
+                                  align="left"
+                                  style={{
+                                    fontWeight: "600",
+                                    fontFamily: " IBM Plex Sans,sans-serif",
+                                  }}
+                                >
+                                  321
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </TabPanel>
+                    </TabContext>
+                  </Box>
+                  {/* <ul className="nav-tabs-custom nav-justified nav nav-tabs">
+                    <li className="nav-item">
+                      <a className="active nav-link">
+                        <i className="uil uil-user-circle font-size-20"></i>
+                        <span className="d-none d-sm-block">About</span>
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link">
+                        <i className="uil uil-clipboard-notes font-size-20"></i>
+                        <span className="d-none d-sm-block">Task</span>
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link">
+                        <i className="uil uil-envelope-alt font-size-20"></i>
+                        <span className="d-none d-sm-block">Message</span>
+                      </a>
+                    </li>
+                  </ul> */}
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      {/* End */}
 
       <div>
         <Dialog
@@ -873,7 +1895,7 @@ const Customers = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <div className="modal-content">
+          <div className="modal-content" style={{ width: "fit-content" }}>
             <DialogTitle id="alert-dialog-title">
               <Button
                 style={{ float: "right" }}
@@ -1042,265 +2064,6 @@ const Customers = (props) => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-8">
-                          <div className="mb-0 card">
-                            <TabContext value={tab1}>
-                              <TabList
-                                onChange={handleTablChange1}
-                                className="nav-tabs-custom nav-justified nav nav-tabs"
-                              >
-                                <Tab label="Item One" value="1" />
-                                <Tab label="Item Two" value="2" />
-                                <Tab label="Item Three" value="3" />
-                              </TabList>
-                            </TabContext>
-
-                            <div className="tab-content p-4">
-                              <div className="tab-pane active">
-                                <div>
-                                  <div>
-                                    <h5 className="font-size-16 mb-4">
-                                      Experience
-                                    </h5>
-                                    <ul className="activity-feed mb-0 ps-2">
-                                      <li>
-                                        <div className="feed-item-list">
-                                          <p className="text-muted mb-1">
-                                            2019 - 2020
-                                          </p>
-                                          <h5 className="font-size-16">
-                                            UI/
-                                            <span className="ir_external_link ir_score">
-                                              UX Designer
-                                            </span>
-                                          </h5>
-                                          <p>Abc Company</p>
-                                          <p className="text-muted">
-                                            To achieve this, it would be
-                                            necessary to have uniform grammar,
-                                            pronunciation and more common words.
-                                            If several languages coalesce, the
-                                            grammar of the resulting language is
-                                            more simple and regular than that of
-                                            the individual
-                                          </p>
-                                        </div>
-                                      </li>
-                                      <li className="feed-item">
-                                        <div className="feed-item-list">
-                                          <p className="text-muted mb-1">
-                                            2017 - 2019
-                                          </p>
-                                          <h5 className="font-size-16">
-                                            Graphic Designer
-                                          </h5>
-                                          <p className="text-muted">
-                                            It will be as simple as occidental
-                                            in fact, it will be Occidental. To
-                                            an English person, it will seem like
-                                            simplified English, as a skeptical
-                                            Cambridge friend of mine told me
-                                            what Occidental
-                                          </p>
-                                        </div>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                  <div>
-                                    <h5 className="font-size-16 mb-4">
-                                      Projects
-                                    </h5>
-                                    <div className="table-responsive">
-                                      <div className="react-bootstrap-table">
-                                        <table className="table table table-nowrap table-hover mb-0">
-                                          <thead>
-                                            <tr>
-                                              <th
-                                                tabindex="0"
-                                                aria-label="# sortable"
-                                                className="sortable"
-                                              >
-                                                #
-                                                <span className="order-4"></span>
-                                              </th>
-
-                                              <th
-                                                tabindex="0"
-                                                aria-label="Name sortable"
-                                                className="sortable"
-                                              >
-                                                Name
-                                                <span className="order-4"></span>
-                                              </th>
-
-                                              <th
-                                                tabindex="0"
-                                                aria-label="Date sortable"
-                                                className="sortable"
-                                              >
-                                                Date
-                                                <span className="order-4"></span>
-                                              </th>
-                                              <th
-                                                tabindex="0"
-                                                aria-label="Status sortable"
-                                                className="sortable"
-                                              >
-                                                Status
-                                                <span className="order-4"></span>
-                                              </th>
-                                              <th
-                                                tabindex="0"
-                                                // aria-label="# sortable"
-                                                // className="sortable"
-                                              >
-                                                Action
-                                                {/* #<span className="order-4"></span> */}
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td>1</td>
-                                              <td>Brand Logo Design</td>
-                                              <td>18 Jun, 2020</td>
-                                              <td>
-                                                <span className="badge font-size-12 bg-soft-primary">
-                                                  Open
-                                                </span>
-                                              </td>
-                                              <div className="dropdown">
-                                                <a
-                                                  aria-haspopup="true"
-                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
-                                                  aria-expanded="false"
-                                                >
-                                                  <i className="uil uil-ellipsis-v"></i>
-                                                </a>
-                                              </div>
-                                            </tr>
-                                            <tr>
-                                              <td>2</td>
-                                              <td>Minible Admin</td>
-                                              <td>18 Jun, 2020</td>
-                                              <td>
-                                                <span className="badge font-size-12 bg-soft-primary">
-                                                  Open
-                                                </span>
-                                              </td>
-                                              <div className="dropdown">
-                                                <a
-                                                  aria-haspopup="true"
-                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
-                                                  aria-expanded="false"
-                                                >
-                                                  <i className="uil uil-ellipsis-v"></i>
-                                                </a>
-                                              </div>
-                                              {/* <div
-                                                tabindex="-1"
-                                                role="menu"
-                                                aria-hidden="false"
-                                                className="dropdown-menu-end dropdown-menu show"
-                                                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-86px, -55px, 0px);"
-                                                x-placement="top-start"
-                                              >
-                                                <a
-                                                  href="#"
-                                                  tabindex="0"
-                                                  role="menuitem"
-                                                  className="dropdown-item"
-                                                >
-                                                  Action
-                                                </a>
-                                                <a
-                                                  href="#"
-                                                  tabindex="0"
-                                                  role="menuitem"
-                                                  className="dropdown-item"
-                                                >
-                                                  Another action
-                                                </a>
-                                                <a
-                                                  href="#"
-                                                  tabindex="0"
-                                                  role="menuitem"
-                                                  className="dropdown-item"
-                                                >
-                                                  Something else here
-                                                </a>
-                                              </div> */}
-                                            </tr>
-                                            <tr>
-                                              <td>3</td>
-                                              <td>Brand Logo Design</td>
-                                              <td>06 Jun, 2020</td>
-                                              <td>
-                                                <span className="badge font-size-12 bg-soft-success">
-                                                  Completed
-                                                </span>
-                                              </td>
-                                              <div className="dropdown">
-                                                <a
-                                                  aria-haspopup="true"
-                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
-                                                  aria-expanded="false"
-                                                >
-                                                  <i className="uil uil-ellipsis-v"></i>
-                                                </a>
-                                              </div>
-                                            </tr>
-                                            <tr>
-                                              <td>4</td>
-                                              <td>Chat app Design</td>
-                                              <td>28 May, 2020</td>
-                                              <td>
-                                                <span className="badge font-size-12 bg-soft-success">
-                                                  Completed
-                                                </span>
-                                              </td>
-                                              <div className="dropdown">
-                                                <a
-                                                  aria-haspopup="true"
-                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
-                                                  aria-expanded="false"
-                                                >
-                                                  <i className="uil uil-ellipsis-v"></i>
-                                                </a>
-                                              </div>
-                                            </tr>
-                                            <tr>
-                                              <td>5</td>
-                                              <td> Authentication Pages</td>
-                                              <td>06 May, 2020 </td>
-                                              <td>
-                                                <span className="badge font-size-12 bg-soft-success">
-                                                  Completed
-                                                </span>
-                                              </td>
-                                              <div className="dropdown">
-                                                <a
-                                                  aria-haspopup="true"
-                                                  className="text-muted font-size-18 px-2 dropdown-toggle"
-                                                  aria-expanded="false"
-                                                >
-                                                  <i className="uil uil-ellipsis-v"></i>
-                                                </a>
-                                              </div>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div></div>
-                              <div></div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </TabPanel>
 
@@ -1325,16 +2088,16 @@ const Customers = (props) => {
                             </TableRow>
                           </TableHead>
                           <TableBody>
-                            {rows1.map((row) => (
+                            {visitLog?.map((row) => (
                               <StyledTableRow key={row.si}>
                                 <StyledTableCell component="th" scope="row">
                                   {row.si}
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                  {row.date}
+                                  {row.waste_clt_date}
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                  {row.time}
+                                  {row.waste_clt_time}
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
                                   {row.staff}
@@ -1345,7 +2108,97 @@ const Customers = (props) => {
                         </Table>
                       </TableContainer>
                     </TabPanel>
-                    <TabPanel value="3">Item Three</TabPanel>
+                    <TabPanel value="3">
+                      <label>Add Credit Note</label>
+                      <Card sx={{ minWidth: 275 }}>
+                        <CardContent>
+                          <div className="mb-3">
+                            <Typography>Total Due</Typography>
+                          </div>
+                          <div className="mb-3">
+                            <TextField placeholder="-350" color="error" />
+                            <br />
+                          </div>
+                          <div className="mb-3">
+                            <TextField
+                              id="outlined-basic"
+                              label="Credit Note Amount"
+                              type="number"
+                              variant="outlined"
+                            />
+                            <br />
+                          </div>
+                          <div className="mb-3">
+                            <TextField
+                              id="outlined-basic"
+                              label="Credit Note Comment"
+                              variant="outlined"
+                            />
+                          </div>
+                        </CardContent>
+                        <CardActions>
+                          <Button variant="contained" color="primary">
+                            Add Credit Note
+                          </Button>
+                        </CardActions>
+                      </Card>
+                      <TableContainer
+                        component={Paper}
+                        style={{ width: "fit-content" }}
+                      >
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>SI</TableCell>
+                              <TableCell align="right">Date</TableCell>
+                              <TableCell align="right">Time</TableCell>
+                              <TableCell align="right">Reference No</TableCell>
+                              <TableCell align="right">Customer Id</TableCell>
+                              <TableCell align="right">Customer Name</TableCell>
+                              <TableCell align="right">Amount</TableCell>
+                              <TableCell align="right">Comment</TableCell>
+                              <TableCell align="right">Due</TableCell>
+                              <TableCell align="right">Staff</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows3.map((row) => (
+                              <TableRow
+                                key={row.name}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                <TableCell component="th" scope="row">
+                                  {row.si}
+                                </TableCell>
+                                <TableCell align="right">{row.date}</TableCell>
+                                <TableCell align="right">{row.time}</TableCell>
+                                <TableCell align="right">
+                                  {row.referenceNo}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.customerId}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.customerName}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.amount}
+                                </TableCell>
+                                <TableCell align="right">
+                                  {row.comment}
+                                </TableCell>
+                                <TableCell align="right">{row.due}</TableCell>
+                                <TableCell align="right">{row.staff}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </TabPanel>
                     <TabPanel value="4">
                       <TableContainer component={Paper}>
                         <Table
@@ -1435,7 +2288,6 @@ const Customers = (props) => {
                             </Button>
                           </Col>
                         </Row>
-                        
                       </Stack>
                     </TabPanel>
                   </TabContext>

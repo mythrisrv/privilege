@@ -111,6 +111,9 @@ export const getWardsGroupOptions=(wardId)=>get(`${url.GET_WARDS_GROUP_OPTIONS}?
 
 //get customers
 export const getCustomers = () =>get(url.GET_CUSTOMERS);
+export const getCustVisitLog=(custId)=>get(`${url.GET_CUST_VISITLOG}?id=${custId}`)
+export const getCustReceipts=(custId)=>get(`${url.GET_CUST_RECEIPTS}?id=${custId}`)
+export const getCustInvoice=(custId)=>get(`${url.GET_CUST_INVOICE}?id=${custId}`)
 
 export const getWardOptions = (localbodyId) =>
   get(`${url.GET_WARD_OPTIONS}/${localbodyId}`, { localbodyId: localbodyId });

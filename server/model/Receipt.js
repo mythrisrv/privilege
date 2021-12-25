@@ -9,7 +9,7 @@ let receiptSchema = new Schema(
         required: true,
       },
       receipt_status: {
-        type: String,
+        type: Number,
         required: true,
       },
       createdAt: {
@@ -36,7 +36,7 @@ let receiptSchema = new Schema(
         required: true,
       },
       receipt_no: {
-        type: Number,
+        type: String,
       },
       receipt_customer_name: {
         type: String,

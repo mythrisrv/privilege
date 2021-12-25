@@ -2,7 +2,10 @@ import { takeEvery, put, call, takeLatest } from "redux-saga/effects";
 
 
 import{
-    GET_CUSTOMERS
+    GET_CUSTOMERS,
+    GET_CUST_VISITLOG,
+    GET_CUST_RECEIPTS,
+    GET_CUST_INVOICE
     
 } from "./actionTypes";
 
@@ -10,11 +13,22 @@ import{
     
     getCustomersSuccess,
     getCustomersFail,
+    getCustVisitLogSuccess,
+    getCustVisitLogFail,
+    getCustReceiptsSuccess,
+    getCustReceiptsFail,
+    
+    getCustInvoiceSuccess,
+    getCustInvoiceFail
+   
 
 } from "./actions";
 
 import{
-    getCustomers
+    getCustomers,
+    getCustVisitLog,
+    getCustReceipts,
+    getCustInvoice
 
 }from "../../helpers/backend_helper";
 
@@ -28,8 +42,39 @@ function* fetchCustomers(){
     }
 }
 
+function* fetchVisitLog({custId:custId}) {
+    try {
+      const response = yield call(getCustVisitLog,custId)
+      yield put(getCustVisitLogSuccess(response));
+    } catch (error) {
+      yield put(getCustVisitLogFail(error));
+    }
+  }
+
+  function* fetchCustReceipts({custId:custId}) {
+    try {
+      const response = yield call(getCustReceipts,custId)
+      yield put(getCustReceiptsSuccess(response));
+    } catch (error) {
+      yield put(getCustReceiptsFail(error));
+    }
+  }
+  function* fetchCustInvoice({custId:custId}) {
+    try {
+      const response = yield call(getCustInvoice,custId)
+      yield put(getCustInvoiceSuccess(response));
+    } catch (error) {
+      yield put(getCustInvoiceFail(error));
+    }
+  }
+
 function* customerSaga() {
     yield takeEvery(GET_CUSTOMERS, fetchCustomers);
+    yield takeEvery(GET_CUST_VISITLOG, fetchVisitLog);
+    yield takeEvery(GET_CUST_RECEIPTS, fetchCustReceipts);
+    yield takeEvery(GET_CUST_INVOICE, fetchCustInvoice);
+    
+
     
   }
   

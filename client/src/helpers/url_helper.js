@@ -69,6 +69,10 @@ export const GET_GROUP_OPTIONS="/group/list/options"
 export const GET_WARDS_GROUP_OPTIONS="/group/list/options"
 //get customers
 export const GET_CUSTOMERS = "/customer/list_crm";
+export const GET_CUST_VISITLOG = "/customer/visitLog";
+export const GET_CUST_RECEIPTS = "/customer/receipts";
+export const GET_CUST_INVOICE = "/customer/invoice";
+
 
 //get wasteitems
 export const GET_WASTE_ITEMS_OPTIONS="/wasteItems/list/options"
