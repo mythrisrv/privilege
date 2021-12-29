@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { MDBDataTable } from "mdbreact";
@@ -44,6 +44,7 @@ import {
   getCustVisitLog,
   getCustReceipts,
   getCustInvoice,
+  getCustStatement,
 } from "../../../store/actions";
 
 // Redux
@@ -97,6 +98,7 @@ import DetailsIcon from "@mui/icons-material/Details";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import { shuffle } from "lodash";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -121,8 +123,9 @@ const Customers = (props) => {
     dispatch(getCustVisitLog(item._id));
     dispatch(getCustReceipts(item._id));
     dispatch(getCustInvoice(item._id));
+    dispatch(getCustStatement(item._id));
     let itemData = [];
-    console.log(item);
+
     itemData.push(item);
     setTableData(itemData);
     setProfileModal(true);
@@ -155,6 +158,11 @@ const Customers = (props) => {
   const [visitDetailes, setVisitDetailes] = useState([]);
   const [receiptDetailes, setReceiptDetailes] = useState([]);
   const [invoiceDetailes, setInvoiceDetailes] = useState([]);
+  const [statementDetailes, setStatementDetailes] = useState([]);
+  const [statementData, setStatementData] = useState([]);
+  const [balanceTotal, setBalanceTotal] = useState(0);
+  const [creditTotal, setCreditTotal] = useState(0);
+  const [debitTotal, setdebitTotal] = useState(0);
 
   const [passwordObject, setPasswordObject] = useState({
     oldPassword: "",
@@ -171,9 +179,8 @@ const Customers = (props) => {
     error,
   } = useSelector((state) => state.users);
 
-  const { customers, visitLog, custReceipts, custInvoice } = useSelector(
-    (state) => state.customers
-  );
+  const { customers, visitLog, custReceipts, custInvoice, custStatement } =
+    useSelector((state) => state.customers);
   //edited
 
   // const customertypeOptions = useSelector(
@@ -314,7 +321,7 @@ const Customers = (props) => {
     //     value: item.billingtype._id,
     //   };
     //   handleSelectedBillingtype(package);
-    // }
+    // }function subtotal(items) {
 
     if (item.privilage) {
       let privilage = {
@@ -347,6 +354,12 @@ const Customers = (props) => {
     setShowModal(true);
   };
 
+
+  function handleClick(){
+    setDate1(new Date());
+    setDate2(new Date());
+    setStatementDetailes(custStatement);
+  }
   useEffect(() => {
     let visitData = [];
     visitLog?.map((item, index) => {
@@ -394,6 +407,28 @@ const Customers = (props) => {
     });
     setInvoiceDetailes(invoiceData);
   }, [custInvoice]);
+
+  useEffect(() => {
+   
+
+    let statementDatas = [];
+    custStatement?.map((item, index) => {
+      // Total Calories
+
+      item.id = index + 1;
+
+      if (item.date) {
+        const format2 = "DD-MM-YYYY";
+        item.date = moment(item.date).format(format2);
+      }
+      if (item.rdate) {
+        const format2 = "DD-MM-YYYY";
+        item.date = moment(item.rdate).format(format2);
+      }
+      statementDatas.push(item);
+    });
+    setStatementDetailes(statementDatas);
+  }, [custStatement]);
 
   useEffect(() => {
     let customerData = [];
@@ -536,6 +571,28 @@ const Customers = (props) => {
     ],
     rows: usersForTable,
   };
+
+  useEffect(()=>{
+    if(statementDetailes!=null)
+    var totaldebit = 0;
+    var totalcredit = 0;
+    var totalbalance = 0;
+    for (var i = 0; i < statementDetailes.length; i++) {
+      if (statementDetailes[i].debit != null) {
+        totaldebit += parseInt(statementDetailes[i].balance);
+        setdebitTotal(totaldebit);
+      }
+      if (statementDetailes[i].credit != null) {
+        totalcredit += parseInt(statementDetailes[i].credit);
+        setCreditTotal(totalcredit);
+      }
+      if (statementDetailes[i].balance != null) {
+        totalbalance += parseInt(statementDetailes[i].balance);
+        setBalanceTotal(totalbalance);
+      }
+    }
+
+  },[statementDetailes])
 
   //edited
 
@@ -975,10 +1032,42 @@ const Customers = (props) => {
     setTab3(newValue);
   };
 
-  const [date, setDate] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [date1, setDate1] = React.useState(new Date());
+  const [date2, setDate2] = React.useState(new Date());
 
-  const handleChangeDate = (newValue) => {
-    setDate(newValue);
+  const handleChangeDate1 = (newValue) => {
+    var dateString = newValue;
+    var dateObj = new Date(dateString);
+    var momentObj = moment(dateObj);
+    var momentString = momentObj.format("DD-MM-YYYY");
+
+    const filter = custStatement?.filter((element) => {
+      return element.date === momentString;
+    });
+    setStatementDetailes(filter);
+    setDate1(momentString);
+  };
+  const handleChangeDate2 = (newValue) => {
+    var dateString = newValue;
+    var dateObj = new Date(dateString);
+    var momentObj = moment(dateObj);
+    var momentString = momentObj.format("DD-MM-YYYY");
+
+    const filter = custStatement?.filter((element) => {
+      return element.date === momentString;
+    });
+    setStatementDetailes(filter);
+    if (date1) {
+      let start = new Date(date1).getTime();
+      let end = new Date(momentString).getTime();
+      let result = custStatement?.filter((d) => {
+        var time = new Date(d.date).getTime();
+        return start <= time && time <= end;
+      });
+      setStatementDetailes(result);
+    }
+
+    setDate2(momentString);
   };
 
   function createData4(
@@ -1513,7 +1602,7 @@ const Customers = (props) => {
                               >
                                 {invoiceDetailes?.map((data) => (
                                   <tr>
-                                    <td>{data.index}</td>
+                                    <td>{data.id}</td>
                                     <td>{data.date}</td>
                                     <td> {data.time}</td>
                                     <td>{data.invoiceno}</td>
@@ -1545,8 +1634,8 @@ const Customers = (props) => {
                                       fontFamily: "IBM Plex Sans,sans-serif",
                                     }}
                                     inputFormat="MM/dd/yyyy"
-                                    value={date}
-                                    onChange={handleChangeDate}
+                                    value={date1}
+                                    onChange={handleChangeDate1}
                                     renderInput={(params) => (
                                       <TextField {...params} />
                                     )}
@@ -1559,8 +1648,8 @@ const Customers = (props) => {
                                     label="End Date"
                                     inputFormat="MM/dd/yyyy"
                                     size="small"
-                                    value={date}
-                                    onChange={handleChangeDate}
+                                    value={date2}
+                                    onChange={handleChangeDate2}
                                     renderInput={(params) => (
                                       <TextField {...params} />
                                     )}
@@ -1569,7 +1658,7 @@ const Customers = (props) => {
                               </Col>
                               <Col md="3">
                                 <div className="mb-3">
-                                  <Button color="danger" type="reset">
+                                  <Button color="danger" type="reset" onClick={handleClick}>
                                     <Resete></Resete>
                                     {"  "}
                                     Reset
@@ -1669,7 +1758,7 @@ const Customers = (props) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {invoiceDetailes?.map((row) => (
+                              {statementDetailes?.map((row) => (
                                 <TableRow key={row.index}>
                                   <TableCell
                                     style={{
@@ -1677,7 +1766,7 @@ const Customers = (props) => {
                                         " IBM Plex Sans,sans-serif !important",
                                     }}
                                   >
-                                    {row.index}
+                                    {row.id}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1693,7 +1782,7 @@ const Customers = (props) => {
                                       fontFamily: " IBM Plex Sans,sans-serif",
                                     }}
                                   >
-                                    {row.time}
+                                    {row.time ? row.time : row.rtime}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1701,7 +1790,9 @@ const Customers = (props) => {
                                       fontFamily: " IBM Plex Sans,sans-serif",
                                     }}
                                   >
-                                    {row.custName}
+                                    {row.custName
+                                      ? row.custName
+                                      : row.rcustName}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1709,7 +1800,7 @@ const Customers = (props) => {
                                       fontFamily: " IBM Plex Sans,sans-serif",
                                     }}
                                   >
-                                    Invoice
+                                    {row.type ? row.type : row.rtype}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1717,84 +1808,9 @@ const Customers = (props) => {
                                       fontFamily: " IBM Plex Sans,sans-serif",
                                     }}
                                   >
-                                    {row.invoiceno}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.Amount}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.credit}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.balance}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-
-                              {receiptDetailes?.map((row) => (
-                                <TableRow key={row.index}>
-                                  <TableCell
-                                    style={{
-                                      fontFamily:
-                                        " IBM Plex Sans,sans-serif !important",
-                                    }}
-                                  >
-                                    {row.index}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.date}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.receipt_time}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.custName}
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    Receipt
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    style={{
-                                      fontFamily: " IBM Plex Sans,sans-serif",
-                                    }}
-                                  >
-                                    {row.receipt_no}
+                                    {row.invoiceno
+                                      ? row.invoiceno
+                                      : row.receiptno}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1810,7 +1826,7 @@ const Customers = (props) => {
                                       fontFamily: " IBM Plex Sans,sans-serif",
                                     }}
                                   >
-                                    {row.receipt_due_amt}
+                                    {row.credit}
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -1832,7 +1848,7 @@ const Customers = (props) => {
                                     fontFamily: " IBM Plex Sans,sans-serif",
                                   }}
                                 >
-                                  556
+                                  {debitTotal}
                                 </TableCell>
                                 <TableCell
                                   align="left"
@@ -1841,7 +1857,7 @@ const Customers = (props) => {
                                     fontFamily: " IBM Plex Sans,sans-serif",
                                   }}
                                 >
-                                  556
+                                  {creditTotal}
                                 </TableCell>
                                 <TableCell
                                   align="left"
@@ -1850,7 +1866,7 @@ const Customers = (props) => {
                                     fontFamily: " IBM Plex Sans,sans-serif",
                                   }}
                                 >
-                                  321
+                                  {balanceTotal}
                                 </TableCell>
                               </TableRow>
                             </TableBody>

@@ -5,7 +5,8 @@ import{
     GET_CUSTOMERS,
     GET_CUST_VISITLOG,
     GET_CUST_RECEIPTS,
-    GET_CUST_INVOICE
+    GET_CUST_INVOICE,
+    GET_CUST_STATEMENT
     
 } from "./actionTypes";
 
@@ -19,7 +20,9 @@ import{
     getCustReceiptsFail,
     
     getCustInvoiceSuccess,
-    getCustInvoiceFail
+    getCustInvoiceFail,
+    getCustStatementSuccess,
+    getCustStatementFail
    
 
 } from "./actions";
@@ -28,7 +31,8 @@ import{
     getCustomers,
     getCustVisitLog,
     getCustReceipts,
-    getCustInvoice
+    getCustInvoice,
+    getCustStatement
 
 }from "../../helpers/backend_helper";
 
@@ -67,12 +71,21 @@ function* fetchVisitLog({custId:custId}) {
       yield put(getCustInvoiceFail(error));
     }
   }
+  function* fetchCustStatement({custId:custId}) {
+    try {
+      const response = yield call(getCustStatement,custId)
+      yield put(getCustStatementSuccess(response));
+    } catch (error) {
+      yield put(getCustStatementFail(error));
+    }
+  }
 
 function* customerSaga() {
     yield takeEvery(GET_CUSTOMERS, fetchCustomers);
     yield takeEvery(GET_CUST_VISITLOG, fetchVisitLog);
     yield takeEvery(GET_CUST_RECEIPTS, fetchCustReceipts);
     yield takeEvery(GET_CUST_INVOICE, fetchCustInvoice);
+    yield takeEvery(GET_CUST_STATEMENT, fetchCustStatement);
     
 
     

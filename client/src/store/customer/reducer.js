@@ -10,7 +10,10 @@ GET_CUST_RECEIPTS_SUCCESS,
 GET_CUST_RECEIPTS_FAIL,
 GET_CUST_INVOICE,
 GET_CUST_INVOICE_SUCCESS,
-GET_CUST_INVOICE_FAIL
+GET_CUST_INVOICE_FAIL,
+GET_CUST_STATEMENT_FAIL,
+GET_CUST_STATEMENT_SUCCESS,
+GET_CUST_STATEMENT
 }from "./actionTypes";
 
 const INIT_STATE={
@@ -18,6 +21,7 @@ const INIT_STATE={
     visitLog:[],
     custReceipts:[],
     custInvoice:[],
+    custStatement:[],
     error:{},
 }
 
@@ -85,6 +89,21 @@ const Customer=(state=INIT_STATE,action)=>{
                               ...state,
                               error:action.payload,
                           };
+                          case GET_CUST_STATEMENT:
+                            return{
+                                ...state,
+                                params:action.payload,
+                            };
+                        case GET_CUST_STATEMENT_SUCCESS:
+                            return{
+                                ...state,
+                                custStatement:action.payload.data,
+                            };
+                          case GET_CUST_STATEMENT_FAIL:
+                              return{
+                                  ...state,
+                                  error:action.payload,
+                              };
             default:
                 return state;       
     }

@@ -2,6 +2,7 @@ let models = require("../../model");
 let moment = require("moment");
 const multer = require("multer");
 const mongoose = require("mongoose");
+const { shuffle } = require("lodash");
 createCustomer = async (req, res) => {
   var ip = req.ip;
   const format2 = "YYYY-MM-DD";
@@ -546,6 +547,99 @@ customerInvoice = (req) => {
     }
   });
 };
+
+customerStatement=(req)=>{
+  //let statemen=[]
+  let customer_id = req.query.id;
+  try{
+    return new Promise(async (resolve, reject) => {
+      let invoice=await models.Invoice.aggregate([
+        {
+          $match: {
+            $and: [
+              { invoice_status: "0" },
+              { invoice_customer_id: mongoose.Types.ObjectId(customer_id) },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: "tbl_customer",
+            localField: "invoice_customer_id",
+            foreignField: "_id",
+            as: "cust_detailes",
+          }
+        },
+        {
+          $project:{
+            invoiceno: "$invoice_no",
+            date: "$invoice_date",
+            time: "$invoice_time",
+            custName: { $arrayElemAt: ["$cust_detailes.cust_name", 0] },
+
+            debit: "$invoice_total_amt",
+            balance:"$invoice_total_amt",
+            type:"invoice"
+
+
+          }
+        }
+
+      ])
+     let receipt=await models.Receipt.aggregate([
+      {
+        $match: {
+          $and: [
+            { receipt_status: 0 },
+            { receipt_cust_id: mongoose.Types.ObjectId(customer_id) },
+          ],
+        }
+      },
+      {
+        $lookup: {
+          from: "tbl_customer",
+          localField: "receipt_cust_id",
+          foreignField: "_id",
+          as: "cust_detailes",
+        },
+      },{
+        $project:{
+          receiptno: "$receipt_no",
+          rdate: "$receipt_date",
+          rtime: "$receipt_time",
+          rcustName: { $arrayElemAt: ["$cust_detailes.cust_name", 0] },
+
+          credit: "$receipt_due_amt",
+          balance:"$receipt_due_amt",
+         rtype:"receipt"
+
+
+        }
+      }
+
+     ])
+    if(receipt && invoice){
+     let statement=[...invoice,...receipt];
+     let shuffledArray=shuffle(statement);
+     resolve(shuffledArray)
+    } else
+     {
+      reject({ message: "Customer not exist" });
+    }
+    
+    
+        
+    })
+    
+  }catch(err){
+    console.log(err);
+    reject({
+      message: err.message,
+    });
+  }
+  
+}
+
 module.exports = {
   createCustomer,
   // imageUpload,
@@ -557,6 +651,7 @@ module.exports = {
   customerReceipts,
   customerVisitLog,
   customerInvoice,
+  customerStatement
   //uploadCustomerImage,
   //uploadCustomerSingleImage
 };

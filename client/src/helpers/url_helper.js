@@ -72,6 +72,7 @@ export const GET_CUSTOMERS = "/customer/list_crm";
 export const GET_CUST_VISITLOG = "/customer/visitLog";
 export const GET_CUST_RECEIPTS = "/customer/receipts";
 export const GET_CUST_INVOICE = "/customer/invoice";
+export const GET_CUST_STATEMENT = "/customer/statement";
 
 
 //get wasteitems

@@ -10,7 +10,10 @@ import{
     GET_CUST_RECEIPTS_SUCCESS,
     GET_CUST_INVOICE,
     GET_CUST_INVOICE_SUCCESS,
-    GET_CUST_INVOICE_FAIL
+    GET_CUST_INVOICE_FAIL,
+    GET_CUST_STATEMENT,
+    GET_CUST_STATEMENT_SUCCESS,
+    GET_CUST_STATEMENT_FAIL,
 } from "./actionTypes"
 
 export const getCustomers = () => ({
@@ -68,5 +71,20 @@ export const getCustomers = () => ({
   
   export const getCustInvoiceFail = (error) => ({
     type: GET_CUST_INVOICE_FAIL,
+    payload: error,
+  });
+
+  export const getCustStatement = (custId) => ({
+    type: GET_CUST_STATEMENT,
+    custId:custId
+  });
+  
+  export const getCustStatementSuccess = (statement) => ({
+    type: GET_CUST_STATEMENT_SUCCESS,
+    payload:statement,
+  });
+  
+  export const getCustStatementFail = (error) => ({
+    type: GET_CUST_STATEMENT_FAIL,
     payload: error,
   });

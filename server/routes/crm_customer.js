@@ -11,6 +11,7 @@ const {
   customerReceipts,
   customerVisitLog,
   customerInvoice,
+  customerStatement
 } = require("../controller/API/crm_customerController");
 let item;
 router.post(
