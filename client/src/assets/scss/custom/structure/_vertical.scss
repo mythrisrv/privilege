@@ -94,7 +94,7 @@
         padding: 0.6rem 1.1rem;
         color: $sidebar-menu-item-color;
         position: relative;
-        font-size: 15px;
+        font-size: 13px;
         font-weight: 500;
         transition: all 0.4s;
         margin: 0 10px;
@@ -104,7 +104,7 @@
           display: inline-block;
           min-width: 1.5rem;
           padding-bottom: 0.125em;
-          font-size: 1.05rem;
+          font-size: 1rem;
           line-height: 1.40625rem;
           vertical-align: middle;
           color: $sidebar-menu-item-icon-color;
@@ -134,7 +134,7 @@
             color: $sidebar-menu-sub-item-color;
             margin: 0;
             background-color: transparent;
-            font-size: 14.4px;
+            font-size: 13px;
 
             &:hover {
               color: $sidebar-menu-item-hover-color;
