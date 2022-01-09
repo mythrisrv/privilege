@@ -379,7 +379,7 @@ const[districtValue,setdistrictValue]=useState("")
                     bordered
                     data={data}
                     searching={true}
-                    paging={true}
+                    paging={true }
                     info={false}
                    
                   />

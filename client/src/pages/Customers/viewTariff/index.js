@@ -402,9 +402,10 @@ function handleChangepackage(value){
                                   label="Date"
                                   inputFormat="dd/MM/yyyy"
                                  value={datevalue}
+                                 size="large"
                                  onChange={handleChangeDate}
                                  renderInput={(params) => (
-                                  <TextField  {...params} />
+                                  <TextField size="small"  {...params} />
                                 )}
                                 />
                               </Stack>

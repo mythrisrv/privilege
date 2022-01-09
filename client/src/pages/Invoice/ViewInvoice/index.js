@@ -133,6 +133,7 @@ const ViewInvoice = (props) => {
     let invoiceData = [];
 
     invoice?.map((item, index) => {
+      item.id = index + 1
       invoiceData.push(item);
     });
     setInvoiceForTable(invoiceData);
@@ -214,6 +215,7 @@ const ViewInvoice = (props) => {
     let newInvoiceData = [];
 
     filteredData?.map((item, index) => {
+      item.id = index + 1;
       newInvoiceData.push(item);
     });
     setInvoiceForTable(newInvoiceData);

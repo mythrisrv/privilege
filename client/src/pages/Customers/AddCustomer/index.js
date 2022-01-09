@@ -2741,7 +2741,7 @@ const Customers = (props) => {
                     bordered
                     data={data}
                     searching={true}
-                    paging={false}
+                    paging={true}
                     info={false}
                   />
                 </CardBody>

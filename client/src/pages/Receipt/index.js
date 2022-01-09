@@ -439,13 +439,22 @@ const ViewReceipt = (props) => {
      let  StartDate = moment(values).format('DD-MM-YYYY');
      const filter = receipts.filter(element => {
       
-      return element.date === StartDate || element.date === selectedDate1;
+      return element.date === StartDate 
     });
     
-   
-     
-    setFilteredData(filter)
+   setFilteredData(filter)
+    if (selectedDate1) {
+      let start = new Date(selectedDate1).getTime();
+      let end = new Date(StartDate).getTime();
+      let result = receipts?.filter((d) => {
+        var time = new Date(d.date).getTime();
+        return start <= time && time <= end;
+        
+      });
+      
+      setFilteredData(result)
     }
+  }
 
     function handleChangeDistrict(value){
       setSelectedDistrict(value)
@@ -557,7 +566,7 @@ const ViewReceipt = (props) => {
                 <Row>
                   <Col md="3">
                     <div className="mb-3">
-                      <Label htmlFor="validationCustom05">Date</Label>
+                      <Label htmlFor="validationCustom05"> From</Label>
                       <div className="col-md-10">
                         <input
                           className="form-control"
@@ -572,7 +581,7 @@ const ViewReceipt = (props) => {
                   </Col>
                   <Col md="3">
                     <div className="mb-3">
-                      <Label htmlFor="validationCustom05">Date</Label>
+                      <Label htmlFor="validationCustom05">To</Label>
                       <div className="col-md-10">
                         <input
                           className="form-control"

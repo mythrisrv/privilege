@@ -647,6 +647,7 @@ const AddTariff = (props) => {
                               name="package_reg_fee"
                               placeholder="Registration Fee"
                               type="number"
+                              min="0"
                               value={regfee}
                               errorMessage="Enter Registration Fee"
                               className="form-control"
@@ -665,6 +666,7 @@ const AddTariff = (props) => {
                               name="package_basic_fee"
                               placeholder="Basic Fee"
                               type="number"
+                              min="0"
                               value={basicfee}
                               errorMessage="Enter Basic Fee"
                               className="form-control"
@@ -683,6 +685,7 @@ const AddTariff = (props) => {
                               name="package_validity"
                               placeholder="Package Validity in Days"
                               type="number"
+                              min="0"
                               value={validity}
                               errorMessage="Enter Package Validity in Days"
                               className="form-control"
@@ -701,6 +704,7 @@ const AddTariff = (props) => {
                               name="package_visit_month"
                               placeholder="package_visit_month"
                               type="number"
+                              min="0"
                               value={visit}
                               errorMessage="Enter Visit/Month"
                               className="form-control"
@@ -766,6 +770,7 @@ const AddTariff = (props) => {
                                           placeholder=""
                                           value={item.freeBag}
                                           type="number"
+                                          min="0"
                                           errorMessage=""
                                           className="form-control"
                                           validate={{

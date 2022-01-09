@@ -242,7 +242,6 @@ getInvoice = (req) => {
     }
   });
 };
-
 module.exports = {
   getInvoiceList,
   getInvoice,

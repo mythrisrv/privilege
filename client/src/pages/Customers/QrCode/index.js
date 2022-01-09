@@ -331,13 +331,16 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
     setQrObject({ ...qrObject, localbody: newValue });
    }
     function handleChangeStart(e) {
+      
        let name = e.target.name;
       let value = e.target.value;
+      setStart(value)
       setQrObject({ ...qrObject, [name]: value });
      }
      function handleChangeEnd(e) {
       let name = e.target.name;
      let value = e.target.value;
+     setEnd(value) 
      setQrObject({ ...qrObject, [name]: value });
     }
 
@@ -429,6 +432,7 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
                           <Label>Localbody</Label>
                           <Select
                             name="customer_community_id"
+                            value={localbody}
                             //   value={selectCommunity}
                             //   onChange={(value) => {
                             //     handleSelectedCommunities(value);
@@ -450,6 +454,7 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
                           <Label htmlFor="validationCustom05">Start</Label>
                           <AvField
                             name="Start"
+                            value={start}
                             placeholder="Start"
                             type="text"
                             errorMessage="Enter Start"
@@ -466,6 +471,7 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
                           <AvField
                             name="End"
                             placeholder="End"
+                            value={end}
                             type="text"
                             errorMessage="Enter End"
                             className="form-control"
@@ -488,7 +494,9 @@ const {qrcodes,adding,addResponse}=useSelector((state)=>state.qrcodes)
                           <Button
                             color="danger"
                             type="reset"
-                            onClick={() => setAccountType("")}
+                            onClick={() => {setLocalbody(null)
+                            setStart("")
+                            setEnd("")}}
                           >
                             Reset
                           </Button>
