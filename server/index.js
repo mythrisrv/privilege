@@ -41,7 +41,8 @@ const invoice=require("./routes/crm_viewInvoice")
 const customerCategory=require("./routes/crm_custCategory");
 const receipt=require("./routes/crm_viewReceipt")
 const addTariff=require("./routes/crm_addTariff")
-
+const states = require("./routes/states");
+const cities = require("./routes/city");
 app.use(logger("dev"));
 
 const dbUrl = config.dbUrl;
@@ -73,14 +74,16 @@ app.use("/branch", branch);
 app.use("/privilage", privilage);
 app.use("/supplier", supplier);
 app.use("/common", common);
-
+app.use("/state", states);
 app.use("/user", user);
 app.use("/district", district);
 app.use("/ward",Ward);
 app.use("/localbody",Localbody);
 app.use("/api", apiRouter);
-app.use("/group", group);
+app.use("/group",group);
 
+app.use("/city", cities);
+app.use("/district", district);
 app.use("/ListData",listApi)
 app.use("/searchCustomerData",getUserData);
 app.use("/customer",customer);

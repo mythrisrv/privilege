@@ -3,6 +3,10 @@ let Schema = mongoose.Schema;
 
 let branchSchema = new Schema(
   {
+    branch_status: {
+      type: String,
+      default:0,
+    },
     branchId: {
       type: String,
       required: true,
@@ -10,6 +14,7 @@ let branchSchema = new Schema(
     },
     company: {
       type: Schema.Types.ObjectId,
+      ref: "tbl_company",
       required: true,
     },
     name: {
@@ -28,11 +33,13 @@ let branchSchema = new Schema(
       type: String,
     },
     state: {
-      type: String,
+      type:Schema.Types.String,
+      ref: "states",
       required: true,
     },
     city: {
-      type: String,
+      type:Schema.Types.String,
+      ref: "cities",
       required: true,
     },
     address: {
@@ -41,6 +48,7 @@ let branchSchema = new Schema(
     },
     landLineNumber: {
       type: String,
+      required: true,
     },
     mobile: {
       type: String,
@@ -53,45 +61,77 @@ let branchSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     website: {
       type: String,
+      required: true,
     },
     branchLogo: {
       type: String,
-      required: true,
+      // required: true,
     },
     gstin: {
       type: String,
+      required: true,
     },
     panNumber: {
       type: String,
+      required: true,
     },
     cinNumber: {
       type: String,
+      required: true,
     },
     tdsNumber: {
       type: String,
+      required: true,
     },
-    location: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
-    },
+    // location: {
+    //   type: {
+    //     type: String,
+    //     enum: ["Point"],
+    //     required: true,
+    //   },
+    //   coordinates: {
+    //     type: [Number],
+    //     required: true,
+    //   },
+    // },
 
     deliveryArea: {
       type: String,
+      required: true,
     },
-    isListed: {
-      type: Boolean,
-      default: true,
+    deliverytype:{
+      type: String,
+      required: true,
     },
+    deliveryslot:{
+      type: String, 
+      required: true,
+    },
+    branch_latitude: {
+      type: String,
+      required: true,
+    },
+    branch_longitude: {
+      type: String,
+     required: true,
+    },
+    branch_addedby: {
+      type: Schema.Types.ObjectId,
+       ref: "users",
+    },
+    branch_updatedby: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
+
+    // isListed:{
+    //   type: Boolean,
+    //   default: true,
+    // },
   },
   { timestamps: true }
 );

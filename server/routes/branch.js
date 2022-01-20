@@ -4,7 +4,7 @@ const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
   createBranch,
-  getBranchsList,
+  getBranchesList,
   getBranchesListOptions,
   getBranchData,
   updateBranch,
@@ -12,7 +12,7 @@ const {
 } = require("../controller/branchController");
 
 // Create new branch
-router.post("/", [jwtauth], async (req, res) => {
+router.post("/", /*[jwtauth],*/async (req, res) => {
   try {
     let item = await createBranch(req);
     res.status(200).json({
@@ -28,9 +28,9 @@ router.post("/", [jwtauth], async (req, res) => {
 });
 
 // Get branches list
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list",/* [jwtauth],*/async (req, res) => {
   try {
-    let item = await getBranchsList(req);
+    let item = await getBranchesList(req);
     res.status(200).json({
       status: 200,
       data: item,
@@ -44,7 +44,7 @@ router.get("/list", [jwtauth], async (req, res) => {
 });
 
 // Get branches list options
-router.get("/list/options/:companyId", [jwtauth], async (req, res) => {
+router.get("/list/options/:companyId", [jwtauth],async (req, res) => {
   try {
     let item = await getBranchesListOptions(req);
     res.status(200).json({
@@ -60,7 +60,7 @@ router.get("/list/options/:companyId", [jwtauth], async (req, res) => {
 });
 
 // Get branch data
-router.get("/:branchId", [jwtauth], async (req, res) => {
+router.get("/:branchId",[jwtauth],async (req, res) => {
   try {
     let item = await getBranchData(req);
     res.status(200).json({
@@ -76,7 +76,7 @@ router.get("/:branchId", [jwtauth], async (req, res) => {
 });
 
 // Updata branch data
-router.put("/:branchId", [jwtauth], async (req, res) => {
+router.put("/update",/* [jwtauth],*/async (req, res) => {
   try {
     let item = await updateBranch(req);
     res.status(200).json({
@@ -91,12 +91,12 @@ router.put("/:branchId", [jwtauth], async (req, res) => {
   }
 });
 
-router.delete("/:branchId", [jwtauth], async (req, res) => {
+router.delete("/:_id"/*, [jwtauth]*/,async (req, res) => {
   try {
     let item = await deleteBranch(req);
     res.status(200).json({
       status: 200,
-      message: "Item deleted successfully",
+      message: "Branch deleted successfully",
     });
   } catch (err) {
     console.log(err);

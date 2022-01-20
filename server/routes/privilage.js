@@ -13,7 +13,7 @@ const {
 } = require("../controller/privilageController");
 
 // Create new privilage
-router.post("/", [jwtauth], async (req, res) => {
+router.post("/", /*jwtauth],*/ async (req, res) => {
   try {
     let item = await createPrivilage(req);
     res.status(200).json({
@@ -29,7 +29,7 @@ router.post("/", [jwtauth], async (req, res) => {
 });
 
 // Get privilages list options
-router.get("/list/options", [jwtauth], async (req, res) => {
+router.get("/list/options", /*[jwtauth],*/ async (req, res) => {
   try {
     let item = await getPrivilagesListOptions(req);
     res.status(200).json({
@@ -45,7 +45,7 @@ router.get("/list/options", [jwtauth], async (req, res) => {
 });
 
 // Get privilages list
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list",/* [jwtauth],*/async (req, res) => {
   try {
     let item = await getPrivilagesList(req);
     res.status(200).json({
@@ -77,7 +77,7 @@ router.get("/:privilageId", [jwtauth], async (req, res) => {
 });
 
 // Updata privilage data
-router.put("/:privilageId", [jwtauth], async (req, res) => {
+router.put("/update",/* [jwtauth],*/ async (req, res) => {
   try {
     let item = await updatePrivilage(req);
     res.status(200).json({
@@ -92,12 +92,12 @@ router.put("/:privilageId", [jwtauth], async (req, res) => {
   }
 });
 
-router.delete("/:privilageId", [jwtauth], async (req, res) => {
+router.delete("/:_id", /*[jwtauth],*/ async (req, res) => {
   try {
     let item = await deletePrivilage(req);
     res.status(200).json({
       status: 200,
-      message: "Item deleted successfully",
+      message: "Privilege deleted successfully",
     });
   } catch (err) {
     console.log(err);

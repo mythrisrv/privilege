@@ -4,7 +4,7 @@ const models = require("../model");
 const { jwtauth } = require("../lib/jwtlib");
 const {
   createCompany,
-  getCompanysList,
+  getCompaniesList,
   getCompaniesListOptions,
   getCompanyData,
   updateCompany,
@@ -14,7 +14,7 @@ const {
 } = require("../controller/companyController");
 
 // Create new company
-router.post("/", [jwtauth], async (req, res) => {
+router.post("/",/*[jwtauth],*/  async (req, res) => {
   try {
     let item = await createCompany(req);
     res.status(200).json({
@@ -30,9 +30,9 @@ router.post("/", [jwtauth], async (req, res) => {
 });
 
 // Get companies list
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list",/*[jwtauth],*/ async (req, res) => {
   try {
-    let item = await getCompanysList(req);
+    let item = await getCompaniesList(req);
     res.status(200).json({
       status: 200,
       data: item,
@@ -46,7 +46,7 @@ router.get("/list", [jwtauth], async (req, res) => {
 });
 
 // Get companies list options
-router.get("/list/options", [jwtauth], async (req, res) => {
+router.get("/list/options",/*[jwtauth],*/ async (req, res) => {
   try {
     let item = await getCompaniesListOptions(req);
     res.status(200).json({
@@ -60,7 +60,7 @@ router.get("/list/options", [jwtauth], async (req, res) => {
     });
   }
 });
-router.get("/list/single_options", [jwtauth], async (req, res) => {
+router.get("/list/single_options",/*[jwtauth],*/ async (req, res) => {
   try {
     let item = await getMasterCompaniesListOptions(req);
     res.status(200).json({
@@ -75,7 +75,7 @@ router.get("/list/single_options", [jwtauth], async (req, res) => {
     });
   }
 });
-router.get("/list/localbodies", [jwtauth], async (req, res) => {
+router.get("/list/localbodies", /*[jwtauth],*/ async (req, res) => {
   try {
     let item = await getMasterLocalbodiesListOptions(req);
     if(item)
@@ -117,8 +117,27 @@ router.get("/:companyId", [jwtauth], async (req, res) => {
   }
 });
 
+router.get("/companies/local", /*[jwtauth],*/ async (req, res) => {
+  try {
+    let item = await getCompaniesLocalbodies(req);
+    res.status(200).json({
+      status: 200,
+      data: item,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+});
+
+
+
+
+
 // Updata company data
-router.put("/:companyId", [jwtauth], async (req, res) => {
+router.put("/update", /*[jwtauth],*/ async (req, res) => {
   try {
     let item = await updateCompany(req);
     res.status(200).json({
@@ -133,12 +152,12 @@ router.put("/:companyId", [jwtauth], async (req, res) => {
   }
 });
 
-router.delete("/:companyId", [jwtauth], async (req, res) => {
+router.delete("/:_id",/*[jwtauth],*/ async (req, res) => {
   try {
     let item = await deleteCompany(req);
     res.status(200).json({
       status: 200,
-      message: "Item deleted successfully",
+      message: "Company deleted successfully",
     });
   } catch (err) {
     console.log(err);

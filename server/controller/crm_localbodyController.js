@@ -250,6 +250,11 @@ getTypesLocalbodies = (req) => {
 // };
 
 
+
+
+
+
+
 module.exports = {
     createLocalbody,
     getLocalbodiesList,

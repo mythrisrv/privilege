@@ -45,7 +45,7 @@ router.post('/',[validationMiddleware.createDistrict,jwtauth], async (req, res) 
 });
 // getDistrictList
 // Get districts list
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list", async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getDistrictList(req)
@@ -82,7 +82,7 @@ router.get("/list/options", [jwtauth], async (req, res) => {
 
 
 // Get customer data
-router.get("/:districtId", [jwtauth], async (req, res) => {
+router.get("/:districtId", /*[jwtauth],*/ async (req, res) => {
   try {
     let item = await getDistrictData(req);
     res.status(200).json({

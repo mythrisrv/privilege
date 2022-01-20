@@ -25,6 +25,9 @@ const MainMenu=require("./Menu")
 const SubMenu=require("./SubMenu")
 const Qrcode=require("./QrCode")
 const Receipt=require("./Receipt")
+const State= require("./State");
+const Cities= require("./Cities");
+const userActivity=require("./userActivity")
 module.exports = {
   User,
   Privilage,
@@ -53,4 +56,7 @@ module.exports = {
   SubMenu,
   Qrcode,
   Receipt,
+  State,
+  Cities,
+  userActivity,
 };

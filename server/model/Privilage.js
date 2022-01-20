@@ -4,7 +4,8 @@ let Schema = mongoose.Schema;
 let privilageSchema = new Schema(
   {
     status: {
-      type: Number,
+      type: String,
+      default:0,
     },
     privilege_name: {
       type: String,
@@ -14,26 +15,37 @@ let privilageSchema = new Schema(
       type: String,
       required: true,
     },
-    alloted_divisions: {
-      type: String,
-      required: true,
-    },
-    alloted_branches: {
-      type: String,
-      required: true,
-    },
-    alloted_mainmenus: {
-      type: String,
-      required: true,
-    },
-    alloted_submenus: {
-      type: String,
-      required: true,
-    },
-    isListed: {
-      type: Boolean,
-      default: true,
-    },
+    // alloted_divisions: {
+    //   type: String,
+    //   // required: true,
+    // },
+    // alloted_branches: {
+    //   type: String,
+    //   // required: true,
+    // },
+    alloted_mainmenus: [{
+      type:Schema.Types.ObjectId,
+      // required: true,
+    }],
+    alloted_submenus:[{
+      type:Schema.Types.ObjectId,
+      // required: true,
+    }],
+    alloted_companies:[{
+      type:Schema.Types.ObjectId,
+      ref: "tbl_company",
+    }] ,
+    alloted_localbodies:[{
+      type:Schema.Types.ObjectId,
+      ref: "tbl_local_body_name",
+    }] 
+
+
+   
+    // isListed: {
+    //   type: Boolean,
+    //   default: true,
+    // },
   },
   { timestamps: true,collection:'privilege' }
 );

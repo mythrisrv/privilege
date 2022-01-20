@@ -32,7 +32,7 @@ router.post('/',[validationMiddleware.createGroup,jwtauth], async (req, res) => 
 });
 
 //Get localbody list
-router.get("/list", [jwtauth], async (req, res) => {
+router.get("/list", /*[jwtauth],*/ async (req, res) => {
   try {
     // let item = await getDistrictsList(req);
     let item = await getGroupsList(req)
