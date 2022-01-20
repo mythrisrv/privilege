@@ -37,7 +37,7 @@ createCompany = (req) => {
         company_latitude:req.body.company_latitude,
         company_longitude:req.body.company_longitude,
         // company_addedby:req.user._id,
-        company_addedby:req.body._id,
+        company_addedby:req.user._id,
       },
         );
       let numberOfCompanies = await models.Company.countDocuments();
@@ -50,9 +50,9 @@ createCompany = (req) => {
           await models.userActivity({
           activity_ip : req.ip,
           activity_action : "New Company Added",
-          activity_user : req.body.firstname,
-          activity_user_id : req.body._id,
-          activity_desc:'New Company "' +req.body.company_name +'" has been added by ' +req.body.username
+          activity_user : req.user.firstname,
+          activity_user_id : req.user._id,
+          activity_desc:'New Company "' +req.body.company_name +'" has been added by ' +req.user.username
          }).save();
 
          let companys = await models.Company.find({
@@ -267,7 +267,7 @@ updateCompany = (req) => {
         company_logo:req.body.company_logo,
         company_latitude:req.body.company_latitude,
         company_longitude:req.body.company_longitude,
-        company_updatedby:req.body.users_id,
+        company_updatedby:req.user._id,
         
       }
       let company = await models.Company.findByIdAndUpdate(
@@ -284,9 +284,9 @@ updateCompany = (req) => {
         await models.userActivity({
            activity_ip : req.ip,
            activity_action : "Company Edited",
-           activity_user : req.body.firstname,
-           activity_user_id : req.body.users_id,
-           activity_desc:'Company "' +req.body.company_name +'" has been edited by ' +req.body.username
+           activity_user : req.user.firstname,
+           activity_user_id : req.user.users_id,
+           activity_desc:'Company "' +req.body.company_name +'" has been edited by ' +req.user.username
         }).save();
         
        let companys = await models.Company.find({
@@ -318,9 +318,9 @@ deleteCompany = (req) => {
  await models.userActivity({
    activity_ip : req.ip,
    activity_action : "Company Deleted",
-   activity_user : req.body.firstname,
-   activity_user_id : req.body._id,
-   activity_desc:'Company "' +company.company_name +'" has been deleted by ' +req.body.username
+   activity_user : req.user.firstname,
+   activity_user_id : req.user._id,
+   activity_desc:'Company "' +company.company_name +'" has been deleted by ' +req.user.username
   }).save();
     resolve(company);
     } catch (err) {
