@@ -5,7 +5,7 @@ createBranch = (req) => {
     try {
       req.body.name=req.body.name.trim();
       let branchType_info=await models.Branch.findOne({
-        // $and:[ { name:{'$regex':req.body.name,'$options':'i'},company:req.body.company, branch_status:0}] 
+       
         name:{'$regex':req.body.name,'$options':'i'},
        company:req.body.company,
         branch_status:0
@@ -42,7 +42,7 @@ createBranch = (req) => {
         branch_latitude:req.body.branch_latitude,
         branch_longitude:req.body. branch_longitude,
         // branch_addedby:req.user._id,
-        branch_addedby:req.body.usersid,
+        branch_addedby:req.user._id,
       });
       let numberOfBranches = await models.Branch.countDocuments();
       numberOfBranches++;
@@ -55,9 +55,9 @@ createBranch = (req) => {
           await models.userActivity({
           activity_ip : req.ip,
           activity_action : "New Branch Added",
-          activity_user : req.body.firstname,
-          activity_user_id : req.body._id,
-          activity_desc:'New Branch"' + branch.branchId +'" has been added by ' +req.body.username
+          activity_user : req.user.firstname,
+          activity_user_id : req.user._id,
+          activity_desc:'New Branch"' + branch.branchId +'" has been added by ' +req.user.username
          }).save();
          
         let branches = await models.Branch.find({
@@ -174,7 +174,7 @@ updateBranch = (req) => {
         branch_latitude:req.body.branch_latitude,
         branch_longitude:req.body. branch_longitude,
         branch_latitude:req.body.branch_latitude,
-        branch_updatedby:req.body.userid,
+        branch_updatedby:req.user._id,
       }
       let branch = await models.Branch.findByIdAndUpdate(
         req.body._id,
@@ -190,9 +190,9 @@ updateBranch = (req) => {
         await models.userActivity({
            activity_ip : req.ip,
            activity_action : "Branch Edited",
-           activity_user : req.body.firstname,
-           activity_user_id : req.body._id,
-           activity_desc:'Branch "' + branch.branchId +'" has been edited by ' +req.body.username
+           activity_user : req.user.firstname,
+           activity_user_id : req.user._id,
+           activity_desc:'Branch "' + branch.branchId +'" has been edited by ' +req.user.username
         }).save();
         
        let branches = await models.Company.find({
@@ -223,9 +223,9 @@ deleteBranch = (req) => {
       await models.userActivity({
         activity_ip : req.ip,
         activity_action : "Delete Branch",
-        activity_user : req.body.firstname,
-        activity_user_id : req.body._id,
-        activity_desc:'Branch "' + branch.branchId+'" has been deleted by ' +req.body.username
+        activity_user : req.user.firstname,
+        activity_user_id : req.user._id,
+        activity_desc:'Branch "' + branch.branchId+'" has been deleted by ' +req.user.username
        }).save(); 
       resolve(branch);
     } catch (err) {
