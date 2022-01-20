@@ -39,7 +39,14 @@ let privilageSchema = new Schema(
       type:Schema.Types.ObjectId,
       ref: "tbl_local_body_name",
     }] 
-
+ privilege_addedby: {
+      type: Schema.Types.ObjectId,
+       ref: "users",
+    },
+    privilege_updatedby: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
 
    
     // isListed: {
