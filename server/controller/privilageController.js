@@ -23,7 +23,7 @@ createPrivilage = (req) => {
          alloted_localbodies:req.body.alloted_localbodies,
          alloted_submenus:req.body.alloted_submenus,
          alloted_mainmenus:req.body.alloted_mainmenus,
-         privilege_addedby:req.body.usersid,
+         privilege_addedby:req.user._id,
         }
         
       );
@@ -37,9 +37,9 @@ createPrivilage = (req) => {
           await models.userActivity({
           activity_ip : req.ip,
           activity_action : "New Privilege Added",
-          activity_user : req.body.firstname,
-          activity_user_id : req.body._id,
-          activity_desc:'New Privilege "' +req.body.privilege_name +'" has been added by ' +req.body.username
+          activity_user : req.user.firstname,
+          activity_user_id : req.user._id,
+          activity_desc:'New Privilege "' +req.body.privilege_name +'" has been added by ' +req.user.username
          }).save();
 
          let privilages = await models.Privilage.find({
@@ -137,7 +137,7 @@ updatePrivilage = (req) => {
         alloted_localbodies:req.body.alloted_localbodies,
         alloted_submenus:req.body.alloted_submenus,
         alloted_mainmenus:req.body.alloted_mainmenus,
-        privilege_updatedby:req.body.usersid,
+        privilege_updatedby:req.user._id,
       }
       let privilage = await models.Privilage.findByIdAndUpdate(
         req.body._id,
@@ -153,9 +153,9 @@ updatePrivilage = (req) => {
         await models.userActivity({
            activity_ip : req.ip,
            activity_action : "Privilege Edited",
-           activity_user : req.body.firstname,
-           activity_user_id : req.body.users_id,
-           activity_desc:'Privilege "' +req.body.privilege_name +'" has been edited by ' +req.body.username
+           activity_user : req.user.firstname,
+           activity_user_id : req.user.users_id,
+           activity_desc:'Privilege "' +req.body.privilege_name +'" has been edited by ' +req.user.username
         }).save();
         
        let privilages = await models.Privilage.find({
@@ -191,9 +191,9 @@ deletePrivilage = (req) => {
       await models.userActivity({
         activity_ip : req.ip,
         activity_action : "Privilege Deleted",
-        activity_user : req.body.firstname,
-        activity_user_id : req.body._id,
-        activity_desc:'Privilege "' +privilage.privilege_name +'" has been deleted by ' +req.body.username
+        activity_user : req.user.firstname,
+        activity_user_id : req.user._id,
+        activity_desc:'Privilege "' +privilage.privilege_name +'" has been deleted by ' +req.user.username
        }).save();
       resolve(privilage);
     } catch (err) {
